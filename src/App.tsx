@@ -1,7 +1,7 @@
 import React, { Component, FunctionComponent, useState } from 'react';
 import './App.css';
 import 'fontsource-roboto';
-import Dashboard from './components/leftbar/Dashboard';
+import Dashboard from './components/Dashboard';
 
 const App = () => {
   return (
