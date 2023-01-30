@@ -27,7 +27,7 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
 }
 
-const AppBar = styled(MuiAppBar, {
+export const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })<AppBarProps>(({ theme, open }) => ({
   zIndex: theme.zIndex.drawer + 1,
@@ -45,7 +45,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const Drawer = styled(SwipeableDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+export const Drawer = styled(SwipeableDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     '& .MuiDrawer-paper': {
       position: 'relative',
@@ -71,19 +71,19 @@ const Drawer = styled(SwipeableDrawer, { shouldForwardProp: (prop) => prop !== '
   }),
 );
 
-const Logo = () => {
+export const Logo = () => {
   return (
     <img src='https://mafil.ceitec.cz/files/287/thumb/157-logo-mafil-transp2-0x0.png' alt="logo" height={50} />
   )
 }
 
-const mdTheme = createTheme();
+export const mdTheme = createTheme();
 
 interface SingleLineInputProps {
   text: string;
 }
 
-function SingleLineInput({ text }: SingleLineInputProps) {
+export function SingleLineInput({ text }: SingleLineInputProps) {
   return (
     <Grid item xs={4} lg={4}>
       <Box
@@ -102,7 +102,7 @@ interface MultiLineInputProps {
   label: string;
 }
 
-function MultiLineInput({ label }: MultiLineInputProps) {
+export function MultiLineInput({ label }: MultiLineInputProps) {
   return (
     <Grid item xs={8} lg={8}>
       <TextField id='outlined-multiline-static' label={label} multiline variant='outlined' rows={4} fullWidth />
@@ -114,13 +114,13 @@ interface CheckboxInputProps {
   text: string;
 }
 
-function CheckboxInput({ text }: CheckboxInputProps) {
+export function CheckboxInput({ text }: CheckboxInputProps) {
   return (
     <FormControlLabel control={<Checkbox />} label={text} />
   )
 }
 
-function Sequence() {
+export function Sequence() {
   return (
     <Grid item xs={12} lg={12}>
       <Paper
@@ -183,96 +183,4 @@ function Sequence() {
       </Paper>
     </Grid>
   )
-}
-
-function DashboardContent() {
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
-  };
-
-  return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '28px',
-              justifyContent: 'space-between',
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Logo />
-            <IconButton
-              size='large'
-              color='inherit'
-            >
-              <Badge badgeContent={0} color="error">
-                <RefreshIcon />
-              </Badge>
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open} onClose={toggleDrawer} onOpen={toggleDrawer}>
-          <Toolbar
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end',
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <Info />
-        </Drawer>
-        <Box
-          component="main"
-          sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === 'light'
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: '100vh',
-            overflow: 'auto',
-          }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 2, mb: 2 }}>
-            <Grid container spacing={3} textAlign='left'>
-              <Sequence />
-              <Sequence />
-              <Sequence />
-              <Sequence />
-              <Sequence />
-              <Sequence />
-              <Sequence />
-              <Sequence />
-              <Sequence />
-            </Grid>
-          </Container>
-        </Box>
-      </Box>
-    </ThemeProvider>
-  );
-}
-
-export default function Dashboard() {
-  return <DashboardContent />;
 }
