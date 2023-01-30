@@ -11,6 +11,9 @@ import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Badge from '@mui/material/Badge';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
@@ -95,10 +98,14 @@ function SingleLineInput({ text }: SingleLineInputProps) {
   )
 }
 
-function MultiLineInput() {
+interface MultiLineInputProps {
+  label: string;
+}
+
+function MultiLineInput({ label }: MultiLineInputProps) {
   return (
     <Grid item xs={8} lg={8}>
-      <TextField id='outlined-multiline-static' label='Visit notes' multiline variant='outlined' rows={4} fullWidth />
+      <TextField id='outlined-multiline-static' label={label} multiline variant='outlined' rows={4} fullWidth />
     </Grid>
   )
 }
@@ -123,6 +130,7 @@ function Sequence() {
           flexDirection: 'column',
         }}
       >
+        <Box>Last changed 5 hours ago</Box>
         <h3>SpinEchoFieldMap-AP</h3>
         <Grid container spacing={1}
           sx={{
@@ -170,7 +178,7 @@ function Sequence() {
             <CheckboxInput text='GSR' />
             <CheckboxInput text='ACC' />
           </Grid>
-          <MultiLineInput />
+          <MultiLineInput label='Measurement notes' />
         </Grid>
       </Paper>
     </Grid>
@@ -191,6 +199,7 @@ function DashboardContent() {
           <Toolbar
             sx={{
               pr: '28px',
+              justifyContent: 'space-between',
             }}
           >
             <IconButton
@@ -206,6 +215,14 @@ function DashboardContent() {
               <MenuIcon />
             </IconButton>
             <Logo />
+            <IconButton
+              size='large'
+              color='inherit'
+            >
+              <Badge badgeContent={0} color="error">
+                <RefreshIcon />
+              </Badge>
+            </IconButton>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open} onClose={toggleDrawer} onOpen={toggleDrawer}>

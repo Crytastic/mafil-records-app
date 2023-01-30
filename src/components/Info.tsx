@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
+import { BlueButton, RedButton } from './Buttons';
 import TextField from '@mui/material/TextField';
 
 interface Props {
@@ -32,31 +32,12 @@ function InfoItem({ label, text }: Props) {
   )
 }
 
-interface ButtonsProps {
-  text: string;
-}
-
-function BlueButton({ text }: ButtonsProps) {
-  return (
-    <Grid item>
-      <Button variant='contained'>{text}</Button>
-    </Grid >
-  )
-}
-
-function RedButton({ text }: ButtonsProps) {
-  return (
-    <Grid item>
-      <Button variant='outlined' color='error'>{text}</Button>
-    </Grid >
-  )
-}
-
 export default function Info() {
   return (
     <Grid container direction='column' justifyContent='flex-start'>
       <InfoItem label='Measuring operator' text='Franta Vopršálek' />
       <InfoItem label='Visit ID' text='5053B' />
+      <InfoItem label='Study UID' text='1.3.6.2.5050.50505.50505.684832' />
       <InfoItem label='Project / version' text='Brain research 01' />
       <Grid item
         sx={{
