@@ -1,25 +1,14 @@
 import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import MenuIcon from '@mui/icons-material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Badge from '@mui/material/Badge';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Info from './Info'
+import { Link } from 'react-router-dom';
 
 const drawerWidth: number = 380;
 
@@ -120,6 +109,26 @@ export function CheckboxInput({ text }: CheckboxInputProps) {
   )
 }
 
+interface AttributeProps {
+  title: string;
+  text: string;
+}
+
+export function Attribute({ title, text }: AttributeProps) {
+  return (
+    <Grid item xs={4} lg={4}>
+      <Box
+        sx={{
+          fontWeight: 'bold'
+        }}
+      >
+        {title}
+      </Box>
+      <Box>{text}</Box>
+    </Grid>
+  )
+}
+
 export function Sequence() {
   return (
     <Grid item xs={12} lg={12}>
@@ -182,5 +191,47 @@ export function Sequence() {
         </Grid>
       </Paper>
     </Grid>
+  )
+}
+
+export function Visit() {
+  return (
+    <Grid item xs={12} lg={12}>
+      <Link to='/measuring' style={{ textDecoration: 'none' }}>
+        <Paper
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          <Box>Last updated 12 minutes ago</Box>
+          <h3>Marek Ztracený</h3>
+          <Grid container spacing={1}
+            sx={{
+              display: 'flex',
+              justifyContent: 'start',
+              px: [1],
+            }}>
+            <Attribute title='Project' text='Brain Research 01' />
+            <Attribute title='Visit ID' text='5053B' />
+          </Grid>
+        </Paper>
+      </Link>
+    </Grid>
+  )
+}
+
+interface MessageProps {
+  title: string;
+  text: string;
+}
+
+export function Message({ title, text }: MessageProps) {
+  return (
+    <Box sx={{ justifyContent: 'center', textAlign: 'center' }}>
+      <h1>{title}</h1>
+      <Box>{text}</Box>
+    </Box>
   )
 }
