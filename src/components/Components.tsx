@@ -9,6 +9,8 @@ import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Select, MenuItem } from '@mui/material';
 
 const drawerWidth: number = 380;
 
@@ -74,7 +76,7 @@ interface SingleLineInputProps {
 
 export function SingleLineInput({ text }: SingleLineInputProps) {
   return (
-    <Grid item xs={4} lg={4}>
+    <Box m={1} minWidth={240} flexGrow={1}>
       <Box
         sx={{
           fontWeight: 'bold'
@@ -82,8 +84,10 @@ export function SingleLineInput({ text }: SingleLineInputProps) {
       >
         {text}
       </Box>
-      <TextField id='outlined-basic' label='stim_log_file.file' variant='outlined' />
-    </Grid>
+      <Box>
+        <TextField fullWidth id='outlined-basic' label='stim_log_file.file' variant='outlined' />
+      </Box>
+    </Box >
   )
 }
 
@@ -93,9 +97,9 @@ interface MultiLineInputProps {
 
 export function MultiLineInput({ label }: MultiLineInputProps) {
   return (
-    <Grid item xs={8} lg={8}>
-      <TextField id='outlined-multiline-static' label={label} multiline variant='outlined' rows={4} fullWidth />
-    </Grid>
+    <Box m={1} minWidth={240} flexGrow={1}>
+      <TextField fullWidth id='outlined-multiline-static' label={label} multiline variant='outlined' maxRows={4} />
+    </Box>
   )
 }
 
@@ -105,7 +109,9 @@ interface CheckboxInputProps {
 
 export function CheckboxInput({ text }: CheckboxInputProps) {
   return (
-    <FormControlLabel control={<Checkbox />} label={text} />
+    <Box>
+      <FormControlLabel control={<Checkbox />} label={text} />
+    </Box>
   )
 }
 
@@ -130,67 +136,89 @@ export function Attribute({ title, text }: AttributeProps) {
 }
 
 export function Sequence() {
+  type SequenceStateEnum = 'successful' | 'failed' | 'pending';
+  const [state, stateSet] = useState<SequenceStateEnum>('pending');
+  function changeBackgroundColor() {
+
+  }
+
   return (
-    <Grid item xs={12} lg={12}>
-      <Paper
-        sx={{
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        <Box>Last changed 5 hours ago</Box>
-        <h3>SpinEchoFieldMap-AP</h3>
-        <Grid container spacing={1}
-          sx={{
-            display: 'flex',
-            justifyContent: 'start',
-            px: [1],
-          }}>
-          <SingleLineInput text='Stim. protocol' />
-          <SingleLineInput text='Stim. protocol' />
-          <SingleLineInput text='Fyzio raw file' />
-          <Grid item xs={4} lg={4}>
-            <Box
-              sx={{
-                fontWeight: 'bold'
-              }}
-            >
-              General
-            </Box>
+    <Paper
+      sx={{
+        padding: 1,
+        margin: 1,
+        display: 'column',
+        flexDirection: 'row',
+        background: 'rgb(255, 255, 255);',
+      }}
+    >
+      <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
+        <Box fontWeight={'bold'} fontSize={18}>
+          42 - SpinEchoFieldMap-AP
+        </Box>
+        <Box color={'grey'} fontWeight={'lighter'} fontSize={12}>
+          <Box>Measured 1 hour ago</Box>
+          <Box>Last updated 4 minutes ago</Box>
+        </Box>
+        <Box minWidth={140}>
+          <Select fullWidth defaultValue={'pending'} onChange={changeBackgroundColor}>
+            <MenuItem value={'successful'}>Successful</MenuItem>
+            <MenuItem value={'failed'}>Failed</MenuItem>
+            <MenuItem value={'pending'}>Pending</MenuItem>
+          </Select>
+        </Box>
+      </Box>
+
+      <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
+        <SingleLineInput text='Stim. protocol' />
+        <SingleLineInput text='Stim. protocol' />
+        <SingleLineInput text='Fyzio raw file' />
+        <MultiLineInput label='Measurement notes' />
+        <Box m={1}>
+          <Box
+            sx={{
+              fontWeight: 'bold'
+            }}
+          >
+            General
+          </Box>
+          <Box display={'flex'} flexDirection={'row'}>
             <CheckboxInput text='EEG' />
             <CheckboxInput text='ET' />
-          </Grid>
-          <Grid item xs={4} lg={4}>
-            <Box
-              sx={{
-                fontWeight: 'bold'
-              }}
-            >
-              BP ExG
-            </Box>
+          </Box>
+        </Box>
+        <Box m={1}>
+          <Box
+            sx={{
+              fontWeight: 'bold'
+            }}
+          >
+            BP ExG
+          </Box>
+          <Box display={'flex'} flexDirection={'row'}>
             <CheckboxInput text='EKG' />
             <CheckboxInput text='Resp.' />
             <CheckboxInput text='GSR' />
             <CheckboxInput text='ACC' />
-          </Grid>
-          <Grid item xs={4} lg={4}>
-            <Box
-              sx={{
-                fontWeight: 'bold'
-              }}
-            >
-              Siemens
-            </Box>
+          </Box>
+        </Box>
+        <Box m={1}>
+          <Box
+            sx={{
+              fontWeight: 'bold'
+            }}
+          >
+            Siemens
+          </Box>
+          <Box display={'flex'} flexDirection={'row'}>
             <CheckboxInput text='EKG' />
             <CheckboxInput text='Resp.' />
             <CheckboxInput text='GSR' />
             <CheckboxInput text='ACC' />
-          </Grid>
-          <MultiLineInput label='Measurement notes' />
-        </Grid>
-      </Paper>
-    </Grid>
+          </Box>
+        </Box>
+      </Box>
+    </Paper >
   )
 }
 

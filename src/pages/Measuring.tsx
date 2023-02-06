@@ -27,7 +27,7 @@ function Info() {
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <TextField id='outlined-multiline-static' label='Visit notes' multiline variant='outlined' rows={4} />
+        <TextField id='outlined-multiline-static' label='Visit notes' multiline variant='outlined' maxRows={12} />
       </Grid>
       <Grid container direction='row' p={2} justifyContent='space-between'>
         <BlueButton text='Finish visit' path='/success' />
@@ -105,19 +105,17 @@ export default function Measuring() {
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 2, mb: 2 }}>
-          <Grid container spacing={3} textAlign='left'>
-            <Sequence />
-            <Sequence />
-            <Sequence />
-            <Sequence />
-            <Sequence />
-            <Sequence />
-            <Sequence />
-            <Sequence />
-            <Sequence />
-          </Grid>
-        </Container>
+        <Box p={1} m={1} flexDirection={'column'}>
+          <Sequence />
+          <Sequence />
+          <Sequence />
+          <Sequence />
+          <Sequence />
+          <Sequence />
+          <Sequence />
+          <Sequence />
+          <Sequence />
+        </Box>
       </Box>
     </React.Fragment>
   );
