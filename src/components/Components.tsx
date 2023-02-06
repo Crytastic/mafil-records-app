@@ -12,7 +12,8 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import SuccessfulVisit from '../pages/SuccessfulVisit';
-
+import { ThemeContext } from '@emotion/react';
+import { BorderColor } from '@mui/icons-material';
 const drawerWidth: number = 380;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -138,17 +139,34 @@ export function Attribute({ title, text }: AttributeProps) {
 
 export function Sequence() {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
-  const [value, setValue] = useState('pending');
+  const [value, setValue] = useState<SequenceStateEnum>('pending');
+  type SelectColorEnum = 'successf' | 'error' | 'primary';
+  const [selectColor, setSelectColor] = useState('pending');
+
   function handleChange(event: SelectChangeEvent<unknown>) {
     setValue(event.target.value as SequenceStateEnum)
+    setSelectColor(getSelectColor);
   }
-  function getBackgroundColor() {
+
+  function getPaperBackgroundColor() {
     if (value == 'pending') {
       return ('rgb(250, 250, 250);')
     } else if (value == 'failed') {
       return ('rgb(255, 230, 230);')
     } else {
       return ('rgb(230, 255, 230);')
+    }
+  }
+
+  function getSelectColor() {
+    const theme = createTheme();
+    switch (value) {
+      case 'pending':
+        return (theme.palette.grey[700])
+      case 'failed':
+        return (theme.palette.error.main);
+      case 'successful':
+        return (theme.palette.success.main);
     }
   }
 
@@ -159,7 +177,6 @@ export function Sequence() {
         margin: 1,
         display: 'column',
         flexDirection: 'row',
-        background: getBackgroundColor,
       }}
     >
       <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
@@ -170,8 +187,15 @@ export function Sequence() {
           <Box>Measured 1 hour ago</Box>
           <Box>Last updated 4 minutes ago</Box>
         </Box>
-        <Box minWidth={140}>
-          <Select fullWidth defaultValue={'pending'} value={value} onChange={handleChange}>
+        <Box minWidth={140} sx={{
+          background: getPaperBackgroundColor,
+        }}>
+          <Select fullWidth
+            defaultValue={'pending'}
+            value={value}
+            onChange={handleChange}
+            sx={{ color: getSelectColor }}
+          >
             <MenuItem value={'successful'}>Successful</MenuItem>
             <MenuItem value={'failed'}>Failed</MenuItem>
             <MenuItem value={'pending'}>Pending</MenuItem>
