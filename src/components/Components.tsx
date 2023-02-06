@@ -10,7 +10,8 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
-import { Select, MenuItem } from '@mui/material';
+import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import SuccessfulVisit from '../pages/SuccessfulVisit';
 
 const drawerWidth: number = 380;
 
@@ -137,9 +138,18 @@ export function Attribute({ title, text }: AttributeProps) {
 
 export function Sequence() {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
-  const [state, stateSet] = useState<SequenceStateEnum>('pending');
-  function changeBackgroundColor() {
-
+  const [value, setValue] = useState('pending');
+  function handleChange(event: SelectChangeEvent<unknown>) {
+    setValue(event.target.value as SequenceStateEnum)
+  }
+  function getBackgroundColor() {
+    if (value == 'pending') {
+      return ('rgb(250, 250, 250);')
+    } else if (value == 'failed') {
+      return ('rgb(255, 230, 230);')
+    } else {
+      return ('rgb(230, 255, 230);')
+    }
   }
 
   return (
@@ -149,7 +159,7 @@ export function Sequence() {
         margin: 1,
         display: 'column',
         flexDirection: 'row',
-        background: 'rgb(255, 255, 255);',
+        background: getBackgroundColor,
       }}
     >
       <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
@@ -161,7 +171,7 @@ export function Sequence() {
           <Box>Last updated 4 minutes ago</Box>
         </Box>
         <Box minWidth={140}>
-          <Select fullWidth defaultValue={'pending'} onChange={changeBackgroundColor}>
+          <Select fullWidth defaultValue={'pending'} value={value} onChange={handleChange}>
             <MenuItem value={'successful'}>Successful</MenuItem>
             <MenuItem value={'failed'}>Failed</MenuItem>
             <MenuItem value={'pending'}>Pending</MenuItem>
