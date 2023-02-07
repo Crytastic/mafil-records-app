@@ -14,6 +14,9 @@ import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
 import SuccessfulVisit from '../pages/SuccessfulVisit';
 import { ThemeContext } from '@emotion/react';
 import { BorderColor } from '@mui/icons-material';
+import { IconButton, Badge } from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 const drawerWidth: number = 380;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -181,11 +184,23 @@ export function Sequence() {
     >
       <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
         <Box fontWeight={'bold'} fontSize={18}>
-          42 - SpinEchoFieldMap-AP
+          42 | SpinEchoFieldMap-AP
         </Box>
         <Box color={'grey'} fontWeight={'lighter'} fontSize={12}>
           <Box>Measured 1 hour ago</Box>
           <Box>Last updated 4 minutes ago</Box>
+        </Box>
+        <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
+          <Box>
+            <IconButton size='large'>
+              <ContentCopyIcon />
+            </IconButton>
+          </Box>
+          <Box>
+            <IconButton size='large'>
+              <ContentPasteIcon />
+            </IconButton>
+          </Box>
         </Box>
         <Box minWidth={140} sx={{
           background: getPaperBackgroundColor,

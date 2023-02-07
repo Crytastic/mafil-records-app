@@ -105,7 +105,7 @@ export default function Measuring() {
         }}
       >
         <Toolbar />
-        <Box p={1} m={1} flexDirection={'column'}>
+        <Box flexDirection={'column'}>
           <Sequence />
           <Sequence />
           <Sequence />
