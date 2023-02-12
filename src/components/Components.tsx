@@ -17,6 +17,21 @@ import { BorderColor } from '@mui/icons-material';
 import { IconButton, Badge } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
+import { Card } from '@mui/material';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { IconButtonProps } from '@material-ui/core';
+
 const drawerWidth: number = 380;
 
 interface AppBarProps extends MuiAppBarProps {
@@ -140,41 +155,58 @@ export function Attribute({ title, text }: AttributeProps) {
   )
 }
 
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
 export function Sequence() {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
   const [value, setValue] = useState<SequenceStateEnum>('pending');
-  type SelectColorEnum = 'successf' | 'error' | 'primary';
-  const [selectColor, setSelectColor] = useState('pending');
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
   function handleChange(event: SelectChangeEvent<unknown>) {
     setValue(event.target.value as SequenceStateEnum)
-    setSelectColor(getSelectColor);
+  }
+
+  function handleSequenceClick() {
+    setIsExpanded(!isExpanded);
   }
 
   function getPaperBackgroundColor() {
-    if (value == 'pending') {
-      return ('rgb(250, 250, 250);')
-    } else if (value == 'failed') {
-      return ('rgb(255, 230, 230);')
-    } else {
-      return ('rgb(230, 255, 230);')
+    switch (value) {
+      case 'pending':
+        return ('rgb(250, 250, 250);')
+      case 'failed':
+        return ('rgb(255, 230, 230);')
+      case 'successful':
+        return ('rgb(230, 255, 230);')
     }
   }
 
   function getSelectColor() {
-    const theme = createTheme();
     switch (value) {
       case 'pending':
-        return (theme.palette.grey[700])
+        return ('grey')
       case 'failed':
-        return (theme.palette.error.main);
+        return ('red');
       case 'successful':
-        return (theme.palette.success.main);
+        return ('green');
     }
   }
 
   return (
-    <Paper
+    <Card
       sx={{
         padding: 1,
         margin: 1,
@@ -182,92 +214,104 @@ export function Sequence() {
         flexDirection: 'row',
       }}
     >
-      <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
-        <Box fontWeight={'bold'} fontSize={18}>
-          42 | SpinEchoFieldMap-AP
-        </Box>
-        <Box color={'grey'} fontWeight={'lighter'} fontSize={12}>
-          <Box>Measured 1 hour ago</Box>
-          <Box>Last updated 4 minutes ago</Box>
-        </Box>
-        <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
-          <Box>
-            <IconButton size='large'>
-              <ContentCopyIcon />
-            </IconButton>
+      <Box>
+        <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
+          <Box fontWeight={'bold'} fontSize={18}>
+            42 | SpinEchoFieldMap-AP
           </Box>
-          <Box>
-            <IconButton size='large'>
-              <ContentPasteIcon />
-            </IconButton>
+          <Box color={'grey'} fontWeight={'lighter'} fontSize={12}>
+            <Box>Measured 1 hour ago</Box>
+            <Box>Last updated 4 minutes ago</Box>
           </Box>
+          <CardActions disableSpacing>
+            <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
+              <IconButton size='large'>
+                <ContentCopyIcon />
+              </IconButton>
+              <IconButton size='large'>
+                <ContentPasteIcon />
+              </IconButton>
+            </Box>
+          </CardActions>
+          <Box minWidth={140} sx={{
+            background: getPaperBackgroundColor,
+          }}>
+            <Select fullWidth
+              defaultValue={'pending'}
+              value={value}
+              onChange={handleChange}
+              sx={{ color: getSelectColor }}
+            >
+              <MenuItem value={'successful'}>Successful</MenuItem>
+              <MenuItem value={'failed'}>Failed</MenuItem>
+              <MenuItem value={'pending'}>Pending</MenuItem>
+            </Select>
+          </Box>
+          <CardActions disableSpacing>
+            <ExpandMore
+              expand={isExpanded}
+              onClick={handleSequenceClick}
+              aria-expanded={isExpanded}
+            >
+              <ExpandMoreIcon />
+            </ExpandMore>
+          </CardActions>
         </Box>
-        <Box minWidth={140} sx={{
-          background: getPaperBackgroundColor,
-        }}>
-          <Select fullWidth
-            defaultValue={'pending'}
-            value={value}
-            onChange={handleChange}
-            sx={{ color: getSelectColor }}
-          >
-            <MenuItem value={'successful'}>Successful</MenuItem>
-            <MenuItem value={'failed'}>Failed</MenuItem>
-            <MenuItem value={'pending'}>Pending</MenuItem>
-          </Select>
-        </Box>
-      </Box>
 
-      <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
-        <SingleLineInput text='Stim. protocol' />
-        <SingleLineInput text='Stim. protocol' />
-        <SingleLineInput text='Fyzio raw file' />
-        <MultiLineInput label='Measurement notes' />
-        <Box m={1}>
-          <Box
-            sx={{
-              fontWeight: 'bold'
-            }}
-          >
-            General
+        <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+          <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
+            <SingleLineInput text='Stim. protocol' />
+            <SingleLineInput text='Stim. protocol' />
+            <SingleLineInput text='Fyzio raw file' />
+            <MultiLineInput label='Measurement notes' />
+            <Box m={1}>
+              <Box
+                sx={{
+                  fontWeight: 'bold'
+                }}
+              >
+                General
+              </Box>
+              <Box display={'flex'} flexDirection={'row'}>
+                <CheckboxInput text='EEG' />
+                <CheckboxInput text='ET' />
+              </Box>
+            </Box>
+            <Box m={1}>
+              <Box
+                sx={{
+                  fontWeight: 'bold'
+                }}
+              >
+                BP ExG
+              </Box>
+              <Box display={'flex'} flexDirection={'row'}>
+                <CheckboxInput text='EKG' />
+                <CheckboxInput text='Resp.' />
+                <CheckboxInput text='GSR' />
+                <CheckboxInput text='ACC' />
+              </Box>
+            </Box>
+            <Box m={1}>
+              <Box
+                sx={{
+                  fontWeight: 'bold'
+                }}
+              >
+                Siemens
+              </Box>
+              <Box display={'flex'} flexDirection={'row'}>
+                <CheckboxInput text='EKG' />
+                <CheckboxInput text='Resp.' />
+                <CheckboxInput text='GSR' />
+                <CheckboxInput text='ACC' />
+              </Box>
+            </Box>
           </Box>
-          <Box display={'flex'} flexDirection={'row'}>
-            <CheckboxInput text='EEG' />
-            <CheckboxInput text='ET' />
-          </Box>
-        </Box>
-        <Box m={1}>
-          <Box
-            sx={{
-              fontWeight: 'bold'
-            }}
-          >
-            BP ExG
-          </Box>
-          <Box display={'flex'} flexDirection={'row'}>
-            <CheckboxInput text='EKG' />
-            <CheckboxInput text='Resp.' />
-            <CheckboxInput text='GSR' />
-            <CheckboxInput text='ACC' />
-          </Box>
-        </Box>
-        <Box m={1}>
-          <Box
-            sx={{
-              fontWeight: 'bold'
-            }}
-          >
-            Siemens
-          </Box>
-          <Box display={'flex'} flexDirection={'row'}>
-            <CheckboxInput text='EKG' />
-            <CheckboxInput text='Resp.' />
-            <CheckboxInput text='GSR' />
-            <CheckboxInput text='ACC' />
-          </Box>
-        </Box>
+        </Collapse>
+
       </Box>
-    </Paper >
+    </Card >
   )
 }
 
