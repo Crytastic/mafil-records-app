@@ -10,7 +10,8 @@ import Badge from '@mui/material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InfoItem from '../components/InfoItem'
-import { AppBar, mdTheme, Logo, Drawer, Sequence, Visit } from '../components/Components';
+import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
+import { Visit } from '../components/Visit';
 import { TextField } from '@material-ui/core';
 import { BlueButton, RedButton } from '../components/Buttons';
 
@@ -99,9 +100,7 @@ export default function ChooseVisit() {
         }}
       >
         <Toolbar />
-        <Grid container spacing={3} textAlign='left'>
-          <Visit />
-        </Grid>
+        <Visit />
       </Box>
     </React.Fragment >
   );

@@ -10,8 +10,7 @@ import Badge from '@mui/material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InfoItem from '../components/InfoItem'
-import { AppBar, mdTheme, Logo, Drawer, Sequence, Message } from '../components/Components';
-import { TextField } from '@material-ui/core';
+import { AppBar, mdTheme, Logo, Drawer, Message } from '../components/Components';
 import { BlueButton, RedButton } from '../components/Buttons';
 
 function Info() {

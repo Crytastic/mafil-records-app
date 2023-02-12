@@ -3,14 +3,14 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import Badge from '@mui/material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InfoItem from '../components/InfoItem'
-import { AppBar, mdTheme, Logo, Drawer, Sequence } from '../components/Components';
+import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
+import { Sequence } from '../components/Sequence';
 import { TextField } from '@material-ui/core';
 import { BlueButton, RedButton } from '../components/Buttons';
 
