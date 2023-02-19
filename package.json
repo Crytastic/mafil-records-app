@@ -1,0 +1,23 @@
+{
+  "name": "note-taking-measuring-app",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "build": "if-env TYPE=backend && (cd backend && npm install) || (cd frontend && npm install)",
+    "backend": "node ./backend/backend.ts",
+    "frontend": "cd client && npm start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Crytastic/note-taking-measuring-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Crytastic/note-taking-measuring-app/issues"
+  },
+  "homepage": "https://github.com/Crytastic/note-taking-measuring-app#readme",
+  "dependencies": {
+    "if-env": "^1.0.4"
+  }
+}
