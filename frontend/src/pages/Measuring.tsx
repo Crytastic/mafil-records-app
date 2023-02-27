@@ -13,6 +13,7 @@ import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
 import { Sequence } from '../components/Sequence';
 import { TextField } from '@material-ui/core';
 import { BlueButton, RedButton } from '../components/Buttons';
+import { useEffect } from 'react';
 
 function Info() {
   return (
@@ -40,9 +41,26 @@ function Info() {
 
 export default function Measuring() {
   const [open, setOpen] = React.useState(true);
+  const [sequences, setSequences] = React.useState<any[]>([]);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  async function GetSequences() {
+    try {
+      const resp = await fetch(`http://localhost:8000/sequences`)
+      const seqsJson = await resp.json();
+      setSequences(seqsJson);
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  useEffect(() => { GetSequences() }, [])
+
+  const listSequences = sequences.map((sequence) =>
+    <Sequence key={sequence.id} seq={sequence} />
+  );
 
   return (
     <React.Fragment>
@@ -95,7 +113,7 @@ export default function Measuring() {
       <Box
         component="main"
         sx={{
-          backgroundColor: (theme) =>
+          backgroundColor: (theme: any) =>
             theme.palette.mode === 'light'
               ? theme.palette.grey[100]
               : theme.palette.grey[900],
@@ -106,15 +124,7 @@ export default function Measuring() {
       >
         <Toolbar />
         <Box flexDirection={'column'}>
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
+          {listSequences}
         </Box>
       </Box>
     </React.Fragment>

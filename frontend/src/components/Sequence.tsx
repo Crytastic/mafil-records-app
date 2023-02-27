@@ -75,7 +75,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export function Sequence() {
+export function Sequence({ seq }: any) {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
   const [seqState, setSeqState] = useState<SequenceStateEnum>('pending');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -115,7 +115,7 @@ export function Sequence() {
       <Box>
         <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
           <Box fontWeight={'bold'} fontSize={18}>
-            42 | SpinEchoFieldMap-AP
+            {seq.id} | {seq.title}
           </Box>
           <Box color={'grey'} fontWeight={'lighter'} fontSize={12}>
             <Box>Measured 1 hour ago</Box>
