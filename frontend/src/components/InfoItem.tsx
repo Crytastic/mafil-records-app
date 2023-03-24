@@ -1,9 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Grid';
-import { BlueButton, RedButton } from './Buttons';
-import TextField from '@mui/material/TextField';
 
 interface Props {
   label: string;

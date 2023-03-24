@@ -77,32 +77,51 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export function Sequence({ seq }: any) {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
-  const [seqState, setSeqState] = useState<SequenceStateEnum>(() => {
-    const localSeq = localStorage.getItem(seq.id);
-    return localSeq ? JSON.parse(localSeq).seq_state : 'pending';
-  });
 
-  const [isExpanded, setIsExpanded] = useState<boolean>(() => {
-    const localSeq = localStorage.getItem(seq.id);
-    return localSeq ? JSON.parse(localSeq).expanded : false;
+  const [sequenceData, setSequenceData] = useState(() => {
+    const localSeq = localStorage.getItem(`sequence-${seq.id}`);
+    return localSeq ? JSON.parse(localSeq) : {
+      seq_state: 'pending',
+      is_expanded: false,
+      measured: '',
+      last_updated: '',
+      expanded: '',
+      measurement_notes: '',
+      stim_log_file: '',
+      fyzio_raw_file: '',
+      general_eeg: '',
+      general_et: '',
+      bp_ekg: '',
+      bp_resp: '',
+      bp_gsr: '',
+      bp_acc: '',
+      siemens_ekg: '',
+      siemens_resp: '',
+      siemens_gsr: '',
+      siemens_acc: '',
+    };
   });
 
   useEffect(() => {
-    seq.seq_state = seqState;
-    seq.expanded = isExpanded;
-    localStorage.setItem(seq.id, JSON.stringify(seq))
-  }, [seqState, isExpanded]);
+    localStorage.setItem(`sequence-${seq.id}`, JSON.stringify(sequenceData))
+  }, [sequenceData]);
 
   function handleSeqStateChange(event: SelectChangeEvent<unknown>) {
-    setSeqState(event.target.value as SequenceStateEnum)
+    setSequenceData({
+      ...sequenceData,
+      seq_state: event.target.value as SequenceStateEnum
+    });
   }
 
   function handleSequenceClick() {
-    setIsExpanded(!isExpanded);
+    setSequenceData({
+      ...sequenceData,
+      is_expanded: !sequenceData.is_expanded
+    });
   }
 
   function getPaperBackgroundColor() {
-    switch (seqState) {
+    switch (sequenceData.seq_state) {
       case 'pending':
         return ('rgb(250, 250, 250);')
       case 'failed':
@@ -113,7 +132,7 @@ export function Sequence({ seq }: any) {
   }
 
   function getSelectColor() {
-    switch (seqState) {
+    switch (sequenceData.seq_state) {
       case 'pending':
         return ('grey')
       case 'failed':
@@ -149,7 +168,7 @@ export function Sequence({ seq }: any) {
           }}>
             <Select fullWidth
               defaultValue={'pending'}
-              value={seqState}
+              value={sequenceData.seq_state}
               onChange={handleSeqStateChange}
               sx={{ color: getSelectColor }}
             >
@@ -160,16 +179,16 @@ export function Sequence({ seq }: any) {
           </Box>
           <CardActions disableSpacing>
             <ExpandMore
-              expand={isExpanded}
+              expand={sequenceData.is_expanded}
               onClick={handleSequenceClick}
-              aria-expanded={isExpanded}
+              aria-expanded={sequenceData.is_expanded}
             >
               <ExpandMoreIcon />
             </ExpandMore>
           </CardActions>
         </Box>
 
-        <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+        <Collapse in={sequenceData.is_expanded} timeout="auto" unmountOnExit>
           <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
             <SingleLineInput text='Stim. protocol' />
             <SingleLineInput text='Stim. protocol' />
