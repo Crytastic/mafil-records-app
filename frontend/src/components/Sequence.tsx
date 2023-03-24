@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -77,8 +77,21 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 export function Sequence({ seq }: any) {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
-  const [seqState, setSeqState] = useState<SequenceStateEnum>('pending');
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [seqState, setSeqState] = useState<SequenceStateEnum>(() => {
+    const localSeq = localStorage.getItem(seq.id);
+    return localSeq ? JSON.parse(localSeq).seq_state : 'pending';
+  });
+
+  const [isExpanded, setIsExpanded] = useState<boolean>(() => {
+    const localSeq = localStorage.getItem(seq.id);
+    return localSeq ? JSON.parse(localSeq).expanded : false;
+  });
+
+  useEffect(() => {
+    seq.seq_state = seqState;
+    seq.expanded = isExpanded;
+    localStorage.setItem(seq.id, JSON.stringify(seq))
+  }, [seqState, isExpanded]);
 
   function handleSeqStateChange(event: SelectChangeEvent<unknown>) {
     setSeqState(event.target.value as SequenceStateEnum)

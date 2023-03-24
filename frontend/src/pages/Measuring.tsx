@@ -8,6 +8,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Badge from '@mui/material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import InfoItem from '../components/InfoItem'
 import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
 import { Sequence } from '../components/Sequence';
@@ -84,14 +85,24 @@ export default function Measuring() {
             <MenuIcon />
           </IconButton>
           <Logo />
-          <IconButton
-            size='large'
-            color='inherit'
-          >
-            <Badge badgeContent={0} color="error">
-              <RefreshIcon />
-            </Badge>
-          </IconButton>
+          <Box>
+            <IconButton
+              size='large'
+              color='inherit'
+            >
+              <Badge badgeContent={0} color="error">
+                <SaveOutlinedIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size='large'
+              color='inherit'
+            >
+              <Badge badgeContent={0} color="error">
+                <RefreshIcon />
+              </Badge>
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open} onClose={toggleDrawer} onOpen={toggleDrawer}>
