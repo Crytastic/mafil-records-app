@@ -16,10 +16,17 @@ import { IconButtonProps } from '@material-ui/core';
 import CommonCard, { Attribute } from './CommonCard';
 
 interface SingleLineInputProps {
-  text: string;
+  name: string;
+  label: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-export function SingleLineInput({ text }: SingleLineInputProps) {
+function SingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    onChange(event);
+  };
+
   return (
     <Box m={1} minWidth={240} flexGrow={1}>
       <Box
@@ -27,37 +34,56 @@ export function SingleLineInput({ text }: SingleLineInputProps) {
           fontWeight: 'bold'
         }}
       >
-        {text}
+        {label}
       </Box>
       <Box>
-        <TextField fullWidth id='outlined-basic' label='stim_log_file.file' variant='outlined' />
+        <TextField
+          key={`${name}-key`}
+          label={label}
+          name={name}
+          value={value}
+          onChange={handleTextChange}
+          fullWidth
+          variant="outlined"
+        />
       </Box>
     </Box >
   )
 }
 
 interface MultiLineInputProps {
+  name: string;
   label: string;
+  value: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-export function MultiLineInput({ label }: MultiLineInputProps) {
+function MultiLineInput({ name, label, value, onChange }: MultiLineInputProps) {
+  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    onChange(event);
+  };
+
   return (
     <Box m={1} minWidth={240} flexGrow={1}>
-      <TextField fullWidth id='outlined-multiline-static' label={label} multiline variant='outlined' maxRows={4} />
+      <TextField
+        key={`${name}-key`}
+        label={label}
+        name={name}
+        value={value}
+        onChange={handleTextChange}
+        fullWidth
+        multiline
+        variant="outlined"
+        maxRows={5}
+      />
     </Box>
   )
 }
 
 interface CheckboxInputProps {
   text: string;
-}
-
-export function CheckboxInput({ text }: CheckboxInputProps) {
-  return (
-    <Box>
-      <FormControlLabel control={<Checkbox />} label={text} />
-    </Box>
-  )
+  checked: boolean;
+  name: string;
 }
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -78,6 +104,21 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 export function Sequence({ seq }: any) {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
 
+  function CheckboxInput({ text, checked, name }: CheckboxInputProps) {
+    return (
+      <Box>
+        <FormControlLabel control={
+          <Checkbox
+            checked={checked}
+            onChange={handleCheckboxChange}
+            name={name}
+            color="primary"
+          />
+        } label={text} />
+      </Box>
+    )
+  }
+
   const [sequenceData, setSequenceData] = useState(() => {
     const localSeq = localStorage.getItem(`sequence-${seq.id}`);
     return localSeq ? JSON.parse(localSeq) : {
@@ -85,26 +126,37 @@ export function Sequence({ seq }: any) {
       is_expanded: false,
       measured: '',
       last_updated: '',
-      expanded: '',
       measurement_notes: '',
       stim_log_file: '',
       fyzio_raw_file: '',
-      general_eeg: '',
-      general_et: '',
-      bp_ekg: '',
-      bp_resp: '',
-      bp_gsr: '',
-      bp_acc: '',
-      siemens_ekg: '',
-      siemens_resp: '',
-      siemens_gsr: '',
-      siemens_acc: '',
+      general_eeg: false,
+      general_et: false,
+      bp_ekg: false,
+      bp_resp: false,
+      bp_gsr: false,
+      bp_acc: false,
+      siemens_ekg: false,
+      siemens_resp: false,
+      siemens_gsr: false,
+      siemens_acc: false,
     };
   });
 
   useEffect(() => {
     localStorage.setItem(`sequence-${seq.id}`, JSON.stringify(sequenceData))
   }, [sequenceData]);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSequenceData({ ...sequenceData, [event.target.name]: event.target.checked });
+  };
+
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setSequenceData({
+      ...sequenceData,
+      [name]: value,
+    });
+  };
 
   function handleSeqStateChange(event: SelectChangeEvent<unknown>) {
     setSequenceData({
@@ -190,10 +242,10 @@ export function Sequence({ seq }: any) {
 
         <Collapse in={sequenceData.is_expanded} timeout="auto" unmountOnExit>
           <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
-            <SingleLineInput text='Stim. protocol' />
-            <SingleLineInput text='Stim. protocol' />
-            <SingleLineInput text='Fyzio raw file' />
-            <MultiLineInput label='Measurement notes' />
+            <SingleLineInput label='Stim. protocol' name='stim_log_file' value={sequenceData.stim_log_file} onChange={handleTextChange} />
+            <SingleLineInput label='Stim. protocol' name='stim_log_file' value={sequenceData.stim_log_file} onChange={handleTextChange} />
+            <SingleLineInput label='Fyzio raw file' name='fyzio_raw_file' value={sequenceData.fyzio_raw_file} onChange={handleTextChange} />
+            <MultiLineInput label='Measurement notes' name='measurement_notes' value={sequenceData.measurement_notes} onChange={handleTextChange} />
             <Box m={1}>
               <Box
                 sx={{
@@ -203,8 +255,8 @@ export function Sequence({ seq }: any) {
                 General
               </Box>
               <Box display={'flex'} flexDirection={'row'}>
-                <CheckboxInput text='EEG' />
-                <CheckboxInput text='ET' />
+                <CheckboxInput text='EEG' checked={sequenceData.general_eeg} name="general_eeg" />
+                <CheckboxInput text='ET' checked={sequenceData.general_et} name="general_et" />
               </Box>
             </Box>
             <Box m={1}>
@@ -216,10 +268,10 @@ export function Sequence({ seq }: any) {
                 BP ExG
               </Box>
               <Box display={'flex'} flexDirection={'row'}>
-                <CheckboxInput text='EKG' />
-                <CheckboxInput text='Resp.' />
-                <CheckboxInput text='GSR' />
-                <CheckboxInput text='ACC' />
+                <CheckboxInput text='EKG' checked={sequenceData.bp_ekg} name="bp_ekg" />
+                <CheckboxInput text='Resp.' checked={sequenceData.bp_resp} name="bp_resp" />
+                <CheckboxInput text='GSR' checked={sequenceData.bp_gsr} name="bp_gsr" />
+                <CheckboxInput text='ACC' checked={sequenceData.bp_acc} name="bp_acc" />
               </Box>
             </Box>
             <Box m={1}>
@@ -231,10 +283,10 @@ export function Sequence({ seq }: any) {
                 Siemens
               </Box>
               <Box display={'flex'} flexDirection={'row'}>
-                <CheckboxInput text='EKG' />
-                <CheckboxInput text='Resp.' />
-                <CheckboxInput text='GSR' />
-                <CheckboxInput text='ACC' />
+                <CheckboxInput text='EKG' checked={sequenceData.siemens_ekg} name="siemens_ekg" />
+                <CheckboxInput text='Resp.' checked={sequenceData.siemens_resp} name="siemens_resp" />
+                <CheckboxInput text='GSR' checked={sequenceData.siemens_gsr} name="siemens_gsr" />
+                <CheckboxInput text='ACC' checked={sequenceData.siemens_acc} name="siemens_acc" />
               </Box>
             </Box>
           </Box>
