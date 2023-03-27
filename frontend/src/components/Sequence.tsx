@@ -124,9 +124,10 @@ export function Sequence({ seq }: any) {
     return localSeq ? JSON.parse(localSeq) : {
       seq_state: 'pending',
       is_expanded: false,
-      measured: '',
-      last_updated: '',
+      measured: new Date().toLocaleTimeString(),
+      last_updated: new Date().toLocaleTimeString(),
       measurement_notes: '',
+      stim_protocol: '',
       stim_log_file: '',
       fyzio_raw_file: '',
       general_eeg: false,
@@ -147,7 +148,11 @@ export function Sequence({ seq }: any) {
   }, [sequenceData]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSequenceData({ ...sequenceData, [event.target.name]: event.target.checked });
+    setSequenceData({
+      ...sequenceData,
+      [event.target.name]: event.target.checked,
+      last_updated: new Date().toLocaleTimeString()
+    });
   };
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -155,13 +160,15 @@ export function Sequence({ seq }: any) {
     setSequenceData({
       ...sequenceData,
       [name]: value,
+      last_updated: new Date().toLocaleTimeString()
     });
   };
 
   function handleSeqStateChange(event: SelectChangeEvent<unknown>) {
     setSequenceData({
       ...sequenceData,
-      seq_state: event.target.value as SequenceStateEnum
+      seq_state: event.target.value as SequenceStateEnum,
+      last_updated: new Date().toLocaleTimeString()
     });
   }
 
@@ -202,8 +209,8 @@ export function Sequence({ seq }: any) {
             {seq.id} | {seq.title}
           </Box>
           <Box color={'grey'} fontWeight={'lighter'} fontSize={12}>
-            <Box>Measured 1 hour ago</Box>
-            <Box>Last updated 4 minutes ago</Box>
+            <Box>Measured: {sequenceData.measured}</Box>
+            <Box>Last updated: {sequenceData.last_updated}</Box>
           </Box>
           <CardActions disableSpacing>
             <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
@@ -242,9 +249,9 @@ export function Sequence({ seq }: any) {
 
         <Collapse in={sequenceData.is_expanded} timeout="auto" unmountOnExit>
           <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
-            <SingleLineInput label='Stim. protocol' name='stim_log_file' value={sequenceData.stim_log_file} onChange={handleTextChange} />
-            <SingleLineInput label='Stim. protocol' name='stim_log_file' value={sequenceData.stim_log_file} onChange={handleTextChange} />
-            <SingleLineInput label='Fyzio raw file' name='fyzio_raw_file' value={sequenceData.fyzio_raw_file} onChange={handleTextChange} />
+            <SingleLineInput label='Stim. protocol' name='stim_protocol' value={sequenceData.stim_protocol} onChange={handleTextChange} />
+            <SingleLineInput label='Stim. log file' name='stim_log_file' value={sequenceData.stim_log_file} onChange={handleTextChange} />
+            <SingleLineInput label='Fyzio raw file (for Siemens)' name='fyzio_raw_file' value={sequenceData.fyzio_raw_file} onChange={handleTextChange} />
             <MultiLineInput label='Measurement notes' name='measurement_notes' value={sequenceData.measurement_notes} onChange={handleTextChange} />
             <Box m={1}>
               <Box
