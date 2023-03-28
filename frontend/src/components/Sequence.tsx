@@ -101,7 +101,35 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-export function Sequence({ seq }: any) {
+type SequenceProps = {
+  seq: {
+    id: string
+    title: string,
+    seq_state: string,
+    is_selected: boolean,
+    is_expanded: boolean,
+    measured: string,
+    last_updated: string,
+    measurement_notes: string,
+    stim_protocol: string,
+    stim_log_file: string,
+    fyzio_raw_file: string,
+    general_eeg: boolean,
+    general_et: boolean,
+    bp_ekg: boolean,
+    bp_resp: boolean,
+    bp_gsr: boolean,
+    bp_acc: boolean,
+    siemens_ekg: boolean,
+    siemens_resp: boolean,
+    siemens_gsr: boolean,
+    siemens_acc: boolean,
+  };
+  onCopy: (seqId: string) => void; // onCopy handler passed from parent component
+  onPaste: () => string | null; // onPaste handler passed from parent component
+};
+
+export function Sequence({ seq, onCopy, onPaste }: SequenceProps) {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
 
   function CheckboxInput({ text, checked, name }: CheckboxInputProps) {
@@ -123,6 +151,7 @@ export function Sequence({ seq }: any) {
     const localSeq = localStorage.getItem(`sequence-${seq.id}`);
     return localSeq ? JSON.parse(localSeq) : {
       seq_state: 'pending',
+      is_selected: false,
       is_expanded: false,
       measured: new Date().toLocaleTimeString(),
       last_updated: new Date().toLocaleTimeString(),
@@ -179,6 +208,42 @@ export function Sequence({ seq }: any) {
     });
   }
 
+  const handleSequenceCopy = () => {
+    setSequenceData({
+      ...sequenceData,
+      is_selected: !sequenceData.is_selected
+    });
+    onCopy(`sequence-${seq.id}`); // invoke parent onCopy handler
+  };
+
+  const handleSequencePaste = () => {
+    const copyFromSeqId = onPaste();
+    if (copyFromSeqId == null) {
+      throw new Error('Sequence ID to copy from is null.');
+    }
+    const copyFromSeqStr = localStorage.getItem(copyFromSeqId);
+    const copy = copyFromSeqStr ? JSON.parse(copyFromSeqStr) : {}
+
+    setSequenceData({
+      ...sequenceData,
+      measurement_notes: copy.measurement_notes,
+      last_updated: new Date().toLocaleTimeString(),
+      stim_protocol: copy.stim_protocol,
+      stim_log_file: copy.stim_log_file,
+      fyzio_raw_file: copy.fyzio_raw_file,
+      general_eeg: copy.general_eeg,
+      general_et: copy.general_et,
+      bp_ekg: copy.bp_ekg,
+      bp_resp: copy.bp_resp,
+      bp_gsr: copy.bp_gsr,
+      bp_acc: copy.bp_acc,
+      siemens_ekg: copy.siemens_ekg,
+      siemens_resp: copy.siemens_resp,
+      siemens_gsr: copy.siemens_gsr,
+      siemens_acc: copy.siemens_acc,
+    });
+  };
+
   function getPaperBackgroundColor() {
     switch (sequenceData.seq_state) {
       case 'pending':
@@ -214,10 +279,10 @@ export function Sequence({ seq }: any) {
           </Box>
           <CardActions disableSpacing>
             <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
-              <IconButton size='large'>
+              <IconButton size='large' onClick={handleSequenceCopy}>
                 <ContentCopyIcon />
               </IconButton>
-              <IconButton size='large'>
+              <IconButton size='large' onClick={handleSequencePaste}>
                 <ContentPasteIcon />
               </IconButton>
             </Box>

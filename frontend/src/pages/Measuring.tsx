@@ -54,6 +54,7 @@ export async function GetSequences() {
 export default function Measuring() {
   const [open, setOpen] = React.useState(true);
   const [sequences, setSequences] = React.useState<any[]>([]);
+  const [selectedSeqId, setSelectedSeqId] = React.useState<string | null>(null);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -65,8 +66,16 @@ export default function Measuring() {
     });
   }, []);
 
+  const handleSequenceCopy = (seqId: string) => {
+    setSelectedSeqId(seqId);
+  };
+
+  const handleSequencePaste = () => {
+    return selectedSeqId;
+  };
+
   const listSequences = sequences.map((sequence) => (
-    <Sequence key={sequence.id} seq={sequence} />
+    <Sequence key={sequence.id} seq={sequence} onCopy={handleSequenceCopy} onPaste={handleSequencePaste} />
   ));
 
   return (
@@ -140,6 +149,7 @@ export default function Measuring() {
         }}
       >
         <Toolbar />
+        <Box>Selected seq id: {selectedSeqId}</Box>
         <Box flexDirection={'column'}>
           {listSequences}
         </Box>
