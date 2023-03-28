@@ -40,28 +40,34 @@ function Info() {
   )
 }
 
+export async function GetSequences() {
+  try {
+    const resp = await fetch(`http://localhost:8000/sequences`)
+    const seqsJson = await resp.json();
+    return seqsJson;
+  } catch (err) {
+    console.error(err)
+    return [];
+  }
+}
+
 export default function Measuring() {
   const [open, setOpen] = React.useState(true);
   const [sequences, setSequences] = React.useState<any[]>([]);
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
-  async function GetSequences() {
-    try {
-      const resp = await fetch(`http://localhost:8000/sequences`)
-      const seqsJson = await resp.json();
-      setSequences(seqsJson);
-    } catch (err) {
-      console.error(err)
-    }
-  }
+  useEffect(() => {
+    GetSequences().then((seqs) => {
+      setSequences(seqs);
+    });
+  }, []);
 
-  useEffect(() => { GetSequences() }, [])
-
-  const listSequences = sequences.map((sequence) =>
+  const listSequences = sequences.map((sequence) => (
     <Sequence key={sequence.id} seq={sequence} />
-  );
+  ));
 
   return (
     <React.Fragment>

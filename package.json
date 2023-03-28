@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Crytastic/note-taking-measuring-app#readme",
   "dependencies": {
-    "if-env": "^1.0.4"
+    "@react-native-community/clipboard": "^1.5.1",
+    "if-env": "^1.0.4",
+    "react-native": "^0.71.4"
   }
 }
