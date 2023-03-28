@@ -10,15 +10,42 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import InfoItem from '../components/InfoItem'
+import { MultiLineInput, SingleLineInput } from '../components/Inputs'
 import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
 import { Sequence } from '../components/Sequence';
-import { TextField } from '@material-ui/core';
 import { BlueButton, RedButton } from '../components/Buttons';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import { Button, TextField } from "@material-ui/core";
+import AddIcon from '@mui/icons-material/Add';
+
+type VisitProps = {
+  seq: {
+    visit_notes: string,
+  };
+};
 
 function Info() {
+  const [visitData, setVisitData] = useState(() => {
+    const localVisit = localStorage.getItem(`visit-5053b`);
+    return localVisit ? JSON.parse(localVisit) : {
+      visit_notes: '',
+    };
+  });
+
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setVisitData({
+      ...visitData,
+      [name]: value
+    });
+  };
+
+  useEffect(() => {
+    localStorage.setItem(`visit-5053b`, JSON.stringify(visitData))
+  }, [visitData]);
+
   return (
-    <Grid container direction='column' justifyContent='flex-start'>
+    <Box flexDirection='column' justifyContent='flex-start'>
       <InfoItem label='Measuring operator' text='Franta Vopršálek' />
       <InfoItem label='Visit ID' text='5053B' />
       <InfoItem label='Study UID' text='1.3.6.2.5050.50505.50505.684832' />
@@ -29,14 +56,14 @@ function Info() {
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <TextField id='outlined-multiline-static' label='Visit notes' multiline variant='outlined' maxRows={12} />
+        <MultiLineInput label='Visit notes' name='visit_notes' value={visitData.visit_notes} onChange={handleTextChange} />
       </Grid>
       <Grid container direction='row' p={2} justifyContent='space-between'>
         <BlueButton text='Finish visit' path='/success' />
         <RedButton text='Abort visit' path='/abort' />
       </Grid>
       <Divider sx={{ my: 3 }} />
-    </Grid>
+    </Box>
   )
 }
 
@@ -149,7 +176,6 @@ export default function Measuring() {
         }}
       >
         <Toolbar />
-        <Box>Selected seq id: {selectedSeqId}</Box>
         <Box flexDirection={'column'}>
           {listSequences}
         </Box>

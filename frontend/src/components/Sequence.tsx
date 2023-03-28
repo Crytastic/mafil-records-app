@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { useState } from 'react';
@@ -14,67 +13,29 @@ import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { IconButtonProps } from '@material-ui/core';
 import CommonCard, { Attribute } from './CommonCard';
+import { MultiLineInput, SingleLineInput, SingleLineInputProps, MultiLineInputProps } from './Inputs'
 
-interface SingleLineInputProps {
-  name: string;
-  label: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
-
-function SingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
-  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    onChange(event);
-  };
-
+export function SeqSingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
   return (
     <Box m={1} minWidth={240} flexGrow={1}>
-      <Box
-        sx={{
-          fontWeight: 'bold'
-        }}
-      >
-        {label}
-      </Box>
-      <Box>
-        <TextField
-          key={`${name}-key`}
-          label={label}
-          name={name}
-          value={value}
-          onChange={handleTextChange}
-          fullWidth
-          variant="outlined"
-        />
-      </Box>
-    </Box >
-  )
-}
-
-interface MultiLineInputProps {
-  name: string;
-  label: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
-}
-
-function MultiLineInput({ name, label, value, onChange }: MultiLineInputProps) {
-  const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-    onChange(event);
-  };
-
-  return (
-    <Box m={1} minWidth={240} flexGrow={1}>
-      <TextField
-        key={`${name}-key`}
-        label={label}
+      <SingleLineInput
         name={name}
+        label={label}
         value={value}
-        onChange={handleTextChange}
-        fullWidth
-        multiline
-        variant="outlined"
-        maxRows={5}
+        onChange={onChange}
+      />
+    </Box >
+  );
+}
+
+export function SeqMultiLineInput({ name, label, value, onChange }: MultiLineInputProps) {
+  return (
+    <Box m={1} minWidth={240} flexGrow={1}>
+      <MultiLineInput
+        name={name}
+        label={label}
+        value={value}
+        onChange={onChange}
       />
     </Box>
   )
@@ -124,6 +85,7 @@ type SequenceProps = {
     siemens_resp: boolean,
     siemens_gsr: boolean,
     siemens_acc: boolean,
+    instances: number,
   };
   onCopy: (seqId: string) => void; // onCopy handler passed from parent component
   onPaste: () => string | null; // onPaste handler passed from parent component
@@ -270,23 +232,27 @@ export function Sequence({ seq, onCopy, onPaste }: SequenceProps) {
     <CommonCard>
       <Box>
         <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
-          <Box fontWeight={'bold'} fontSize={18}>
+
+          <Box fontWeight={'bold'} fontSize={18} whiteSpace={'break-spaces'}>
             {seq.id} | {seq.title}
           </Box>
-          <Box color={'grey'} fontWeight={'lighter'} fontSize={12}>
+
+          <Box color={'grey'} justifyContent='flex-start' fontWeight={'lighter'} fontSize={12}>
             <Box>Measured: {sequenceData.measured}</Box>
             <Box>Last updated: {sequenceData.last_updated}</Box>
+            <Box>Number of instances: {seq.instances}</Box>
           </Box>
-          <CardActions disableSpacing>
-            <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
+
+          <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
+            <CardActions disableSpacing>
               <IconButton size='large' onClick={handleSequenceCopy}>
                 <ContentCopyIcon />
               </IconButton>
               <IconButton size='large' onClick={handleSequencePaste}>
                 <ContentPasteIcon />
               </IconButton>
-            </Box>
-          </CardActions>
+            </CardActions>
+          </Box>
           <Box minWidth={140} sx={{
             background: getPaperBackgroundColor,
           }}>
@@ -310,14 +276,15 @@ export function Sequence({ seq, onCopy, onPaste }: SequenceProps) {
               <ExpandMoreIcon />
             </ExpandMore>
           </CardActions>
+
         </Box>
 
         <Collapse in={sequenceData.is_expanded} timeout="auto" unmountOnExit>
           <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
-            <SingleLineInput label='Stim. protocol' name='stim_protocol' value={sequenceData.stim_protocol} onChange={handleTextChange} />
-            <SingleLineInput label='Stim. log file' name='stim_log_file' value={sequenceData.stim_log_file} onChange={handleTextChange} />
-            <SingleLineInput label='Fyzio raw file (for Siemens)' name='fyzio_raw_file' value={sequenceData.fyzio_raw_file} onChange={handleTextChange} />
-            <MultiLineInput label='Measurement notes' name='measurement_notes' value={sequenceData.measurement_notes} onChange={handleTextChange} />
+            <SeqSingleLineInput label='Stim. protocol' name='stim_protocol' value={sequenceData.stim_protocol} onChange={handleTextChange} />
+            <SeqSingleLineInput label='Stim. log file' name='stim_log_file' value={sequenceData.stim_log_file} onChange={handleTextChange} />
+            <SeqSingleLineInput label='Fyzio raw file (for Siemens)' name='fyzio_raw_file' value={sequenceData.fyzio_raw_file} onChange={handleTextChange} />
+            <SeqMultiLineInput label='Measurement notes' name='measurement_notes' value={sequenceData.measurement_notes} onChange={handleTextChange} />
             <Box m={1}>
               <Box
                 sx={{
