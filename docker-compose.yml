@@ -1,0 +1,32 @@
+version: '3'
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: frontend.dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    environment:
+      - PORT=3000
+  backend:
+    build:
+      context: ./backend
+      dockerfile: backend.dockerfile
+    ports:
+      - '8000:8000'
+  #   depends_on:
+  #     - db
+  # db:
+  #   image: postgres:14.6
+  #   restart: always
+  #   environment:
+  #     - POSTGRES_PASSWORD=7695
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - '5432:5432'
+  #   volumes:
+  #     - ./sql:/docker-entrypoint-initdb.d
+  
