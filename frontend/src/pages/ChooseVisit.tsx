@@ -10,6 +10,7 @@ import Badge from '@mui/material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InfoItem from '../components/InfoItem'
+import { CircularProgress } from '@material-ui/core';
 import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
 import { Visit, VisitProps } from '../components/Visit';
 import { TextField } from '@material-ui/core';
@@ -38,7 +39,7 @@ function Info() {
 }
 
 export async function fetchVisits() {
-  const url = 'http://devel.mafildb.ics.muni.cz:8000/json?start=2022-11-19T12:00:00&end=2022-11-25T12:00:00&level=STUDY&force_pacs';
+  const url = 'http://devel.mafildb.ics.muni.cz:8000/json?start=2022-11-10T12:00:00&end=2022-11-25T12:00:00&level=STUDY&force_pacs';
 
   try {
     const resp = await fetch(
@@ -52,11 +53,15 @@ export async function fetchVisits() {
         mode: 'cors',
       });
     const json = await resp.json();
-    console.log("FETCH VISITS OK");
-    return json;
+    // console.log("FETCH VISITS OK");
+    const parsedVisits = json.map((visit: any) => {
+      const parsedDate = new Date(visit.StudyDate.substr(0, 4), parseInt(visit.StudyDate.substr(4, 2)) - 1, visit.StudyDate.substr(6, 2));
+      return { ...visit, StudyDate: parsedDate };
+    });
+    return parsedVisits;
   } catch (err) {
     console.error(err)
-    console.log("FETCH VISITS FAILED");
+    // console.log("FETCH VISITS FAILED");
     return [];
   }
 }
@@ -66,16 +71,26 @@ export default function ChooseVisit() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const [loading, setLoading] = useState(true);
 
   const [visitsJson, setVisitsJson] = useState<VisitProps[]>([]);
 
+  async function fetchData() {
+    setLoading(true);
+    const json = await fetchVisits();
+    // Sort the visits by date, newest first
+    json.sort((a: { StudyDate: Date; }, b: { StudyDate: Date; }) => new Date(b.StudyDate).getTime() - new Date(a.StudyDate).getTime());
+    setVisitsJson(json);
+    setLoading(false);
+  }
+
   useEffect(() => {
-    async function fetchData() {
-      const json = await fetchVisits();
-      setVisitsJson(json);
-    }
     fetchData();
   }, []);
+
+  function handleRefresh() {
+    fetchData();
+  };
 
   const visits = visitsJson.map((visit) => (
     <Visit
@@ -121,6 +136,7 @@ export default function ChooseVisit() {
           <IconButton
             size='large'
             color='inherit'
+            onClick={handleRefresh}
           >
             <Badge badgeContent={0} color="error">
               <RefreshIcon />
@@ -157,7 +173,13 @@ export default function ChooseVisit() {
         }}
       >
         <Toolbar />
-        {visits}
+        {loading ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
+            <CircularProgress color="primary" thickness={4} size={80} />
+          </Box>
+        ) : (
+          visits
+        )}
       </Box>
     </React.Fragment>
   );

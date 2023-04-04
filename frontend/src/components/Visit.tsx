@@ -17,7 +17,7 @@ export interface VisitProps {
   PatientName: string;
   PatientSex: string;
   ReferringPhysicianName: string;
-  StudyDate: string;
+  StudyDate: Date;
   StudyTime: string;
   StudyDescription: string;
   StudyID: string;
@@ -34,7 +34,7 @@ export function Visit(props: VisitProps) {
     PatientName,
     PatientSex,
     ReferringPhysicianName,
-    StudyDate = new Date('huehue').toLocaleTimeString(),
+    StudyDate,
     StudyTime,
     StudyDescription,
     StudyID,
@@ -54,7 +54,7 @@ export function Visit(props: VisitProps) {
 
             <Box color={'grey'} justifyContent='flex-start' fontWeight={'lighter'} fontSize={12}>
               <Box>Study UID: {StudyInstanceUID}</Box>
-              <Box>Last updated: {StudyDate} </Box>
+              <Box>Last updated: {StudyDate.toLocaleDateString()} </Box>
             </Box>
 
           </Box>
