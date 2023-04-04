@@ -11,9 +11,13 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InfoItem from '../components/InfoItem'
 import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
-import { Visit } from '../components/Visit';
+import { Visit, VisitProps } from '../components/Visit';
 import { TextField } from '@material-ui/core';
 import { BlueButton, RedButton } from '../components/Buttons';
+import { useEffect, useState } from 'react';
+
+const fetch = require('node-fetch');
+const https = require('https');
 
 function Info() {
   return (
@@ -33,11 +37,64 @@ function Info() {
   )
 }
 
+export async function fetchVisits() {
+  const url = 'http://devel.mafildb.ics.muni.cz:8000/json?start=2022-11-19T12:00:00&end=2022-11-25T12:00:00&level=STUDY&force_pacs';
+
+  try {
+    const resp = await fetch(
+      url,
+      {
+        method: 'GET',
+        withCredentials: true,
+        headers: {
+          'Authorization': 'Token c07d70fd9f56bc470a83c28bcd0a4718ff198570'
+        },
+        mode: 'cors',
+      });
+    const json = await resp.json();
+    console.log("FETCH VISITS OK");
+    return json;
+  } catch (err) {
+    console.error(err)
+    console.log("FETCH VISITS FAILED");
+    return [];
+  }
+}
+
 export default function ChooseVisit() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const [visitsJson, setVisitsJson] = useState<VisitProps[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const json = await fetchVisits();
+      setVisitsJson(json);
+    }
+    fetchData();
+  }, []);
+
+  const visits = visitsJson.map((visit) => (
+    <Visit
+      key={visit.StudyInstanceUID}
+      StudyInstanceUID={visit.StudyInstanceUID}
+      AccessionNumber={visit.AccessionNumber}
+      InstitutionName={visit.InstitutionName}
+      NumberOfStudyRelatedSeries={visit.NumberOfStudyRelatedSeries}
+      PatientBirthDate={visit.PatientBirthDate}
+      PatientID={visit.PatientID}
+      PatientName={visit.PatientName}
+      PatientSex={visit.PatientSex}
+      ReferringPhysicianName={visit.ReferringPhysicianName}
+      StudyDate={visit.StudyDate}
+      StudyTime={visit.StudyTime}
+      StudyDescription={visit.StudyDescription}
+      StudyID={visit.StudyID}
+    />
+  ));
 
   return (
     <React.Fragment>
@@ -100,8 +157,8 @@ export default function ChooseVisit() {
         }}
       >
         <Toolbar />
-        <Visit />
+        {visits}
       </Box>
-    </React.Fragment >
+    </React.Fragment>
   );
 }

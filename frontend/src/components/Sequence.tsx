@@ -11,8 +11,7 @@ import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import CardActions from '@mui/material/CardActions';
 import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { IconButtonProps } from '@material-ui/core';
-import CommonCard, { Attribute } from './CommonCard';
+import CommonCard, { ExpandMore } from './CommonCard';
 import { MultiLineInput, SingleLineInput, SingleLineInputProps, MultiLineInputProps } from './Inputs'
 
 export function SeqSingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
@@ -46,21 +45,6 @@ interface CheckboxInputProps {
   checked: boolean;
   name: string;
 }
-
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
 
 type SequenceProps = {
   seq: {
