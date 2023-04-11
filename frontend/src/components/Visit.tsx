@@ -46,15 +46,17 @@ export function Visit(props: VisitProps) {
         <Box>
           <Box m={1} mb={0} display={'flex'} justifyContent={'flex-start'} flexDirection={'row'} gap={3} flexWrap={'wrap'}>
 
-            <Box fontWeight={'bold'} fontSize={18} whiteSpace={'break-spaces'}>
-              Petr Martin ({PatientName})
-            </Box>
-
+            <Attribute title='Name of patient' text={PatientName} />
             <Attribute title='Visit ID' text={AccessionNumber} />
 
             <Box color={'grey'} justifyContent='flex-start' fontWeight={'lighter'} fontSize={12}>
+              <Box>Date of visit: {StudyDate.toLocaleDateString()}</Box>
+              <Box>Last updated: {StudyDate.toLocaleDateString()} 12:00 </Box>
+            </Box>
+
+            <Box color={'grey'} justifyContent='flex-start' fontWeight={'lighter'} fontSize={12}>
               <Box>Study UID: {StudyInstanceUID}</Box>
-              <Box>Last updated: {StudyDate.toLocaleDateString()} </Box>
+              <Box>Study date: {StudyDate.toLocaleDateString()} 12:00</Box>
             </Box>
 
           </Box>

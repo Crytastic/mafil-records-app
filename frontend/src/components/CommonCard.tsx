@@ -15,13 +15,14 @@ export function Attribute({ title, text }: AttributeProps) {
   return (
     <Grid item xs={4} lg={4}>
       <Box
-        sx={{
-          fontWeight: 'bold'
-        }}
       >
         {title}
       </Box>
-      <Box>{text}</Box>
+      <Box
+        sx={{
+          fontWeight: 'bold'
+        }}
+      >{text}</Box>
     </Grid>
   )
 }

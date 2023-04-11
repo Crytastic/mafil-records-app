@@ -46,36 +46,61 @@ interface CheckboxInputProps {
   name: string;
 }
 
-type SequenceProps = {
-  seq: {
-    id: string
-    title: string,
-    seq_state: string,
-    is_selected: boolean,
-    is_expanded: boolean,
-    measured: string,
-    last_updated: string,
-    measurement_notes: string,
-    stim_protocol: string,
-    stim_log_file: string,
-    fyzio_raw_file: string,
-    general_eeg: boolean,
-    general_et: boolean,
-    bp_ekg: boolean,
-    bp_resp: boolean,
-    bp_gsr: boolean,
-    bp_acc: boolean,
-    siemens_ekg: boolean,
-    siemens_resp: boolean,
-    siemens_gsr: boolean,
-    siemens_acc: boolean,
-    instances: number,
-  };
+export interface SeriesProps {
+  SeriesInstanceUID: string;
+  SequenceFileName: string;
+  AcquisitionMatrix: number[];
+  BodyPartExamined: string;
+  FlipAngle: string;
+  ImageType: string[];
+  InversionTime: number | null;
+  NumberOfSeriesRelatedInstances: number;
+  OperatorsName: string;
+  PAT: string;
+  PatientPosition: string;
+  PercentPhaseFieldOfView: string;
+  ProtocolName: string;
+  RepetitionTime: string;
+  SOPClassUID: string;
+  SeriesDescription: string;
+  SeriesNumber: number;
+  SeriesTime: string;
+  SliceThickness: string;
+  SoftwareVersions: string;
+  SpacingBetweenSlices: number | null;
+  StationName: string;
+
+  id: string
+  title: string,
+  seq_state: string,
+  is_selected: boolean,
+  is_expanded: boolean,
+  measured: string,
+  last_updated: string,
+  measurement_notes: string,
+  stim_protocol: string,
+  stim_log_file: string,
+  fyzio_raw_file: string,
+  general_eeg: boolean,
+  general_et: boolean,
+  bp_ekg: boolean,
+  bp_resp: boolean,
+  bp_gsr: boolean,
+  bp_acc: boolean,
+  siemens_ekg: boolean,
+  siemens_resp: boolean,
+  siemens_gsr: boolean,
+  siemens_acc: boolean,
+  instances: number,
+}
+
+type Series = {
+  seq: SeriesProps;
   onCopy: (seqId: string) => void; // onCopy handler passed from parent component
   onPaste: () => string | null; // onPaste handler passed from parent component
 };
 
-export function Sequence({ seq, onCopy, onPaste }: SequenceProps) {
+export function Sequence({ seq, onCopy, onPaste }: Series) {
   type SequenceStateEnum = 'successful' | 'failed' | 'pending';
 
   function CheckboxInput({ text, checked, name }: CheckboxInputProps) {

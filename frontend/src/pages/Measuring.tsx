@@ -60,12 +60,15 @@ function Info() {
       </Grid>
       <Grid container direction='row' p={2} justifyContent='space-between'>
         <BlueButton text='Finish visit' path='/success' />
-        <RedButton text='Abort visit' path='/abort' />
+        <RedButton text='Back to visits' path='/abort' />
       </Grid>
       <Divider sx={{ my: 3 }} />
     </Box>
   )
 }
+
+// http://devel.mafildb.ics.muni.cz:8000/json?accession_number=6372A&level=SERIES
+
 
 export async function GetSequences() {
   try {
@@ -102,7 +105,11 @@ export default function Measuring() {
   };
 
   const listSequences = sequences.map((sequence) => (
-    <Sequence key={sequence.id} seq={sequence} onCopy={handleSequenceCopy} onPaste={handleSequencePaste} />
+    <Sequence
+      key={sequence.id}
+      seq={sequence}
+      onCopy={handleSequenceCopy}
+      onPaste={handleSequencePaste} />
   ));
 
   return (
