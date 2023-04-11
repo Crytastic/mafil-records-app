@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
-import CommonCard, { ExpandMore, Attribute } from './CommonCard';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CommonCard, { Attribute } from './CommonCard';
+import AppContext from './VisitContext';
 
 export interface VisitProps {
   StudyInstanceUID: string;
@@ -40,8 +38,15 @@ export function Visit(props: VisitProps) {
     StudyID,
   } = props;
 
+  const { setVisit } = useContext(AppContext);
+
+  const handleClick = () => {
+    setVisit(props);
+    localStorage.setItem('currentAccessionNumber', AccessionNumber);
+  };
+
   return (
-    <Link to='/measuring' style={{ textDecoration: 'none' }}>
+    <Link to='/measuring' style={{ textDecoration: 'none' }} onClick={handleClick}>
       <CommonCard>
         <Box>
           <Box m={1} mb={0} display={'flex'} justifyContent={'flex-start'} flexDirection={'row'} gap={3} flexWrap={'wrap'}>

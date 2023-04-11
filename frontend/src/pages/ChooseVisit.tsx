@@ -10,15 +10,12 @@ import Badge from '@mui/material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InfoItem from '../components/InfoItem'
-import { CircularProgress } from '@material-ui/core';
-import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
+import { AppBar, Logo, Drawer } from '../components/Components';
 import { Visit, VisitProps } from '../components/Visit';
-import { TextField } from '@material-ui/core';
 import { BlueButton, RedButton } from '../components/Buttons';
 import { useEffect, useState } from 'react';
-
-const fetch = require('node-fetch');
-const https = require('https');
+import { fetchVisits } from '../components/Fetchers';
+import { LoadingBox } from '../components/LoadingBox';
 
 function Info() {
   return (
@@ -32,35 +29,8 @@ function Info() {
         }}>
         <RedButton text='Log out' path='/' />
       </Grid>
-      <InfoItem label='Visit ID' text='Not selected yet' />
-      <InfoItem label='Project / version' text='Not selected yet' />
     </Grid>
   )
-}
-
-export async function fetchVisits() {
-  const url = 'http://devel.mafildb.ics.muni.cz:8000/json?start=2022-11-10T12:00:00&end=2022-11-25T12:00:00&level=STUDY&force_pacs';
-
-  try {
-    const resp = await fetch(
-      url,
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': 'Token c07d70fd9f56bc470a83c28bcd0a4718ff198570'
-        },
-        mode: 'cors',
-      });
-    const json = await resp.json();
-    const parsedVisits = json.map((visit: any) => {
-      const parsedDate = new Date(visit.StudyDate.substr(0, 4), parseInt(visit.StudyDate.substr(4, 2)) - 1, visit.StudyDate.substr(6, 2));
-      return { ...visit, StudyDate: parsedDate };
-    });
-    return parsedVisits;
-  } catch (err) {
-    console.error(err)
-    return [];
-  }
 }
 
 export default function ChooseVisit() {
@@ -69,7 +39,6 @@ export default function ChooseVisit() {
     setOpen(!open);
   };
   const [loading, setLoading] = useState(true);
-
   const [visitsJson, setVisitsJson] = useState<VisitProps[]>([]);
 
   async function fetchData() {
@@ -171,9 +140,7 @@ export default function ChooseVisit() {
       >
         <Toolbar />
         {loading ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '70vh' }}>
-            <CircularProgress color="primary" thickness={4} size={80} />
-          </Box>
+          <LoadingBox />
         ) : (
           visits
         )}

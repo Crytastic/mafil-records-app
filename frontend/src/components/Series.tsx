@@ -14,7 +14,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CommonCard, { ExpandMore } from './CommonCard';
 import { MultiLineInput, SingleLineInput, SingleLineInputProps, MultiLineInputProps } from './Inputs'
 
-export function SeqSingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
+export function SeriesSingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
   return (
     <Box m={1} minWidth={240} flexGrow={1}>
       <SingleLineInput
@@ -27,7 +27,7 @@ export function SeqSingleLineInput({ name, label, value, onChange }: SingleLineI
   );
 }
 
-export function SeqMultiLineInput({ name, label, value, onChange }: MultiLineInputProps) {
+export function SeriesMultiLineInput({ name, label, value, onChange }: MultiLineInputProps) {
   return (
     <Box m={1} minWidth={240} flexGrow={1}>
       <MultiLineInput
@@ -69,39 +69,12 @@ export interface SeriesProps {
   SoftwareVersions: string;
   SpacingBetweenSlices: number | null;
   StationName: string;
-
-  id: string
-  title: string,
-  seq_state: string,
-  is_selected: boolean,
-  is_expanded: boolean,
-  measured: string,
-  last_updated: string,
-  measurement_notes: string,
-  stim_protocol: string,
-  stim_log_file: string,
-  fyzio_raw_file: string,
-  general_eeg: boolean,
-  general_et: boolean,
-  bp_ekg: boolean,
-  bp_resp: boolean,
-  bp_gsr: boolean,
-  bp_acc: boolean,
-  siemens_ekg: boolean,
-  siemens_resp: boolean,
-  siemens_gsr: boolean,
-  siemens_acc: boolean,
-  instances: number,
+  onCopy: (seriesId: string) => void; // onCopy handler passed from parent component
+  onPaste: () => string | null; // onPaste handler passed from parent component
 }
 
-type Series = {
-  seq: SeriesProps;
-  onCopy: (seqId: string) => void; // onCopy handler passed from parent component
-  onPaste: () => string | null; // onPaste handler passed from parent component
-};
-
-export function Sequence({ seq, onCopy, onPaste }: Series) {
-  type SequenceStateEnum = 'successful' | 'failed' | 'pending';
+export function Series(props: SeriesProps) {
+  type SeriesStateEnum = 'successful' | 'failed' | 'pending';
 
   function CheckboxInput({ text, checked, name }: CheckboxInputProps) {
     return (
@@ -118,8 +91,8 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
     )
   }
 
-  const [sequenceData, setSequenceData] = useState(() => {
-    const localSeq = localStorage.getItem(`sequence-${seq.id}`);
+  const [seriesData, setSeriesData] = useState(() => {
+    const localSeq = localStorage.getItem(`series-${props.SeriesInstanceUID}`);
     return localSeq ? JSON.parse(localSeq) : {
       seq_state: 'pending',
       is_selected: false,
@@ -144,12 +117,12 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
   });
 
   useEffect(() => {
-    localStorage.setItem(`sequence-${seq.id}`, JSON.stringify(sequenceData))
-  }, [sequenceData]);
+    localStorage.setItem(`series-${props.SeriesInstanceUID}`, JSON.stringify(seriesData))
+  }, [seriesData]);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSequenceData({
-      ...sequenceData,
+    setSeriesData({
+      ...seriesData,
       [event.target.name]: event.target.checked,
       last_updated: new Date().toLocaleTimeString()
     });
@@ -157,66 +130,65 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
-    setSequenceData({
-      ...sequenceData,
+    setSeriesData({
+      ...seriesData,
       [name]: value,
       last_updated: new Date().toLocaleTimeString()
     });
   };
 
   function handleSeqStateChange(event: SelectChangeEvent<unknown>) {
-    setSequenceData({
-      ...sequenceData,
-      seq_state: event.target.value as SequenceStateEnum,
+    setSeriesData({
+      ...seriesData,
+      seq_state: event.target.value as SeriesStateEnum,
       last_updated: new Date().toLocaleTimeString()
     });
   }
 
-  function handleSequenceClick() {
-    setSequenceData({
-      ...sequenceData,
-      is_expanded: !sequenceData.is_expanded
+  function handleSeriesClick() {
+    setSeriesData({
+      ...seriesData,
+      is_expanded: !seriesData.is_expanded
     });
   }
 
-  const handleSequenceCopy = () => {
-    setSequenceData({
-      ...sequenceData,
-      is_selected: !sequenceData.is_selected
+  const handleSeriesCopy = () => {
+    setSeriesData({
+      ...seriesData,
+      is_selected: !seriesData.is_selected
     });
-    onCopy(`sequence-${seq.id}`); // invoke parent onCopy handler
+    props.onCopy(`series-${props.SeriesInstanceUID}`); // invoke parent onCopy handler
   };
 
-  const handleSequencePaste = () => {
-    const copyFromSeqId = onPaste();
-    if (copyFromSeqId == null) {
-      throw new Error('Sequence ID to copy from is null.');
-    }
-    const copyFromSeqStr = localStorage.getItem(copyFromSeqId);
-    const copy = copyFromSeqStr ? JSON.parse(copyFromSeqStr) : {}
+  const handleSeriesPaste = () => {
+    const copyFromSeriesId = props.onPaste();
+    if (copyFromSeriesId != null) {
+      const copyFromSeriesStr = localStorage.getItem(copyFromSeriesId);
+      const copy = copyFromSeriesStr ? JSON.parse(copyFromSeriesStr) : {}
 
-    setSequenceData({
-      ...sequenceData,
-      measurement_notes: copy.measurement_notes,
-      last_updated: new Date().toLocaleTimeString(),
-      stim_protocol: copy.stim_protocol,
-      stim_log_file: copy.stim_log_file,
-      fyzio_raw_file: copy.fyzio_raw_file,
-      general_eeg: copy.general_eeg,
-      general_et: copy.general_et,
-      bp_ekg: copy.bp_ekg,
-      bp_resp: copy.bp_resp,
-      bp_gsr: copy.bp_gsr,
-      bp_acc: copy.bp_acc,
-      siemens_ekg: copy.siemens_ekg,
-      siemens_resp: copy.siemens_resp,
-      siemens_gsr: copy.siemens_gsr,
-      siemens_acc: copy.siemens_acc,
-    });
+      setSeriesData({
+        ...seriesData,
+        measurement_notes: copy.measurement_notes,
+        last_updated: new Date().toLocaleTimeString(),
+        stim_protocol: copy.stim_protocol,
+        stim_log_file: copy.stim_log_file,
+        fyzio_raw_file: copy.fyzio_raw_file,
+        general_eeg: copy.general_eeg,
+        general_et: copy.general_et,
+        bp_ekg: copy.bp_ekg,
+        bp_resp: copy.bp_resp,
+        bp_gsr: copy.bp_gsr,
+        bp_acc: copy.bp_acc,
+        siemens_ekg: copy.siemens_ekg,
+        siemens_resp: copy.siemens_resp,
+        siemens_gsr: copy.siemens_gsr,
+        siemens_acc: copy.siemens_acc,
+      });
+    }
   };
 
   function getPaperBackgroundColor() {
-    switch (sequenceData.seq_state) {
+    switch (seriesData.seq_state) {
       case 'pending':
         return ('rgb(250, 250, 250);')
       case 'failed':
@@ -227,7 +199,7 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
   }
 
   function getSelectColor() {
-    switch (sequenceData.seq_state) {
+    switch (seriesData.seq_state) {
       case 'pending':
         return ('grey')
       case 'failed':
@@ -243,21 +215,21 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
         <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
 
           <Box fontWeight={'bold'} fontSize={18} whiteSpace={'break-spaces'}>
-            {seq.id} | {seq.title}
+            {props.SeriesNumber} | {props.SeriesDescription}
           </Box>
 
           <Box color={'grey'} justifyContent='flex-start' fontWeight={'lighter'} fontSize={12}>
-            <Box>Measured: {sequenceData.measured}</Box>
-            <Box>Last updated: {sequenceData.last_updated}</Box>
-            <Box>Number of instances: {seq.instances}</Box>
+            <Box>Measured: {seriesData.measured}</Box>
+            <Box>Last updated: {seriesData.last_updated}</Box>
+            <Box>Number of instances: {props.NumberOfSeriesRelatedInstances}</Box>
           </Box>
 
           <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
             <CardActions disableSpacing>
-              <IconButton size='large' onClick={handleSequenceCopy}>
+              <IconButton size='large' onClick={handleSeriesCopy}>
                 <ContentCopyIcon />
               </IconButton>
-              <IconButton size='large' onClick={handleSequencePaste}>
+              <IconButton size='large' onClick={handleSeriesPaste}>
                 <ContentPasteIcon />
               </IconButton>
             </CardActions>
@@ -267,7 +239,7 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
           }}>
             <Select fullWidth
               defaultValue={'pending'}
-              value={sequenceData.seq_state}
+              value={seriesData.seq_state}
               onChange={handleSeqStateChange}
               sx={{ color: getSelectColor }}
             >
@@ -278,9 +250,9 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
           </Box>
           <CardActions disableSpacing>
             <ExpandMore
-              expand={sequenceData.is_expanded}
-              onClick={handleSequenceClick}
-              aria-expanded={sequenceData.is_expanded}
+              expand={seriesData.is_expanded}
+              onClick={handleSeriesClick}
+              aria-expanded={seriesData.is_expanded}
             >
               <ExpandMoreIcon />
             </ExpandMore>
@@ -288,12 +260,12 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
 
         </Box>
 
-        <Collapse in={sequenceData.is_expanded} timeout="auto" unmountOnExit>
+        <Collapse in={seriesData.is_expanded} timeout="auto" unmountOnExit>
           <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
-            <SeqSingleLineInput label='Stim. protocol' name='stim_protocol' value={sequenceData.stim_protocol} onChange={handleTextChange} />
-            <SeqSingleLineInput label='Stim. log file' name='stim_log_file' value={sequenceData.stim_log_file} onChange={handleTextChange} />
-            <SeqSingleLineInput label='Fyzio raw file (for Siemens)' name='fyzio_raw_file' value={sequenceData.fyzio_raw_file} onChange={handleTextChange} />
-            <SeqMultiLineInput label='Measurement notes' name='measurement_notes' value={sequenceData.measurement_notes} onChange={handleTextChange} />
+            <SeriesSingleLineInput label='Stim. protocol' name='stim_protocol' value={seriesData.stim_protocol} onChange={handleTextChange} />
+            <SeriesSingleLineInput label='Stim. log file' name='stim_log_file' value={seriesData.stim_log_file} onChange={handleTextChange} />
+            <SeriesSingleLineInput label='Fyzio raw file (for Siemens)' name='fyzio_raw_file' value={seriesData.fyzio_raw_file} onChange={handleTextChange} />
+            <SeriesMultiLineInput label='Measurement notes' name='measurement_notes' value={seriesData.measurement_notes} onChange={handleTextChange} />
             <Box m={1}>
               <Box
                 sx={{
@@ -303,8 +275,8 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
                 General
               </Box>
               <Box display={'flex'} flexDirection={'row'}>
-                <CheckboxInput text='EEG' checked={sequenceData.general_eeg} name="general_eeg" />
-                <CheckboxInput text='ET' checked={sequenceData.general_et} name="general_et" />
+                <CheckboxInput text='EEG' checked={seriesData.general_eeg} name="general_eeg" />
+                <CheckboxInput text='ET' checked={seriesData.general_et} name="general_et" />
               </Box>
             </Box>
             <Box m={1}>
@@ -316,10 +288,10 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
                 BP ExG
               </Box>
               <Box display={'flex'} flexDirection={'row'}>
-                <CheckboxInput text='EKG' checked={sequenceData.bp_ekg} name="bp_ekg" />
-                <CheckboxInput text='Resp.' checked={sequenceData.bp_resp} name="bp_resp" />
-                <CheckboxInput text='GSR' checked={sequenceData.bp_gsr} name="bp_gsr" />
-                <CheckboxInput text='ACC' checked={sequenceData.bp_acc} name="bp_acc" />
+                <CheckboxInput text='EKG' checked={seriesData.bp_ekg} name="bp_ekg" />
+                <CheckboxInput text='Resp.' checked={seriesData.bp_resp} name="bp_resp" />
+                <CheckboxInput text='GSR' checked={seriesData.bp_gsr} name="bp_gsr" />
+                <CheckboxInput text='ACC' checked={seriesData.bp_acc} name="bp_acc" />
               </Box>
             </Box>
             <Box m={1}>
@@ -331,10 +303,10 @@ export function Sequence({ seq, onCopy, onPaste }: Series) {
                 Siemens
               </Box>
               <Box display={'flex'} flexDirection={'row'}>
-                <CheckboxInput text='EKG' checked={sequenceData.siemens_ekg} name="siemens_ekg" />
-                <CheckboxInput text='Resp.' checked={sequenceData.siemens_resp} name="siemens_resp" />
-                <CheckboxInput text='GSR' checked={sequenceData.siemens_gsr} name="siemens_gsr" />
-                <CheckboxInput text='ACC' checked={sequenceData.siemens_acc} name="siemens_acc" />
+                <CheckboxInput text='EKG' checked={seriesData.siemens_ekg} name="siemens_ekg" />
+                <CheckboxInput text='Resp.' checked={seriesData.siemens_resp} name="siemens_resp" />
+                <CheckboxInput text='GSR' checked={seriesData.siemens_gsr} name="siemens_gsr" />
+                <CheckboxInput text='ACC' checked={seriesData.siemens_acc} name="siemens_acc" />
               </Box>
             </Box>
           </Box>

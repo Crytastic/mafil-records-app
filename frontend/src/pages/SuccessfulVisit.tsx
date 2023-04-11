@@ -32,7 +32,7 @@ function Info() {
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <BlueButton text='Start visit' path='/choosevisit' />
+        <BlueButton text='Start visit' path='/visits' />
       </Grid>
       <InfoItem label='Project / version' text='Not selected yet' />
     </Grid>

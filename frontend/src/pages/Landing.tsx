@@ -23,10 +23,8 @@ function Info() {
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <BlueButton text='Log in' path='/startvisit' />
+        <BlueButton text='Log in' path='/visits' />
       </Grid>
-      <InfoItem label='Visit ID' text='Not selected yet' />
-      <InfoItem label='Project / version' text='Not selected yet' />
     </Grid>
   )
 }
