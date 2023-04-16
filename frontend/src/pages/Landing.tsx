@@ -1,45 +1,28 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import React from 'react';
+import { Box, Divider, Grid, IconButton, Toolbar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Badge from '@mui/material/Badge';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import InfoItem from '../components/InfoItem'
-import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
-import { BlueButton, RedButton } from '../components/Buttons';
+import InfoItem from '../components/InfoItem';
+import { AppBar, Drawer, Logo, Message } from '../components/Components';
+import { BlueButton } from '../components/Buttons';
 
 function Info() {
   return (
     <Grid container direction='column' justifyContent='flex-start'>
-      <InfoItem label='Measuring operator' text='Franta Vopršálek' />
+      <InfoItem label='Measuring operator' text='Not logged in' />
       <Grid item
         sx={{
           paddingLeft: 2,
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <RedButton text='Log out' path='/' />
+        <BlueButton text='Log in' path='/studies' />
       </Grid>
-      <InfoItem label='Visit ID' text='Not selected yet' />
-      <Grid item
-        sx={{
-          paddingLeft: 2,
-          display: 'flex',
-          flexDirection: 'column',
-        }}>
-        <BlueButton text='Start visit' path='/choosevisit' />
-      </Grid>
-      <InfoItem label='Project / version' text='Not selected yet' />
     </Grid>
   )
 }
 
-export default function StartVisit() {
+export default function Home() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -71,9 +54,6 @@ export default function StartVisit() {
             size='large'
             color='inherit'
           >
-            <Badge badgeContent={0} color="error">
-              <RefreshIcon />
-            </Badge>
           </IconButton>
         </Toolbar>
       </AppBar>
@@ -106,6 +86,7 @@ export default function StartVisit() {
         }}
       >
         <Toolbar />
+        <Message title='Log in to be able to choose a visit.' text='' />
       </Box>
     </React.Fragment >
   );

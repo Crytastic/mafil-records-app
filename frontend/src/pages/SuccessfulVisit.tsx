@@ -1,44 +1,41 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
+import React from 'react';
+import { Box, Divider, Grid, Toolbar } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import Badge from '@mui/material/Badge';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InfoItem from '../components/InfoItem'
-import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
-import { Sequence } from '../components/Sequence';
-import { TextField } from '@material-ui/core';
+import { AppBar, Logo, Drawer, Message } from '../components/Components';
 import { BlueButton, RedButton } from '../components/Buttons';
 
 function Info() {
   return (
     <Grid container direction='column' justifyContent='flex-start'>
       <InfoItem label='Measuring operator' text='Franta Vopršálek' />
-      <InfoItem label='Visit ID' text='5053B' />
-      <InfoItem label='Study UID' text='1.3.6.2.5050.50505.50505.684832' />
-      <InfoItem label='Project / version' text='Brain research 01' />
       <Grid item
         sx={{
-          p: 2,
+          paddingLeft: 2,
           display: 'flex',
           flexDirection: 'column',
         }}>
-        <TextField id='outlined-multiline-static' label='Visit notes' multiline variant='outlined' maxRows={12} />
+        <RedButton text='Log out' path='/' />
       </Grid>
-      <Grid container direction='row' p={2} justifyContent='space-between'>
-        <BlueButton text='Finish visit' path='/success' />
-        <RedButton text='Abort visit' path='/abort' />
+      <InfoItem label='Visit ID' text='Not selected yet' />
+      <Grid item
+        sx={{
+          paddingLeft: 2,
+          display: 'flex',
+          flexDirection: 'column',
+        }}>
+        <BlueButton text='Start visit' path='/studies' />
       </Grid>
-      <Divider sx={{ my: 3 }} />
+      <InfoItem label='Project / version' text='Not selected yet' />
     </Grid>
   )
 }
 
-export default function Measuring() {
+export default function SuccessfulVisit() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -105,18 +102,8 @@ export default function Measuring() {
         }}
       >
         <Toolbar />
-        <Box flexDirection={'column'}>
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-          <Sequence />
-        </Box>
+        <Message title='Visit successful' text='Visit has been successfully saved to the database. You may log out or choose another visit.' />
       </Box>
-    </React.Fragment>
+    </React.Fragment >
   );
 }
