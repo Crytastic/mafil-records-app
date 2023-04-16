@@ -214,7 +214,12 @@ export function Series(props: SeriesProps) {
       <Box>
         <Box m={1} mb={0} display={'flex'} justifyContent={'space-between'} flexDirection={'row'} flexWrap={'wrap'}>
 
-          <Box fontWeight={'bold'} fontSize={18} whiteSpace={'break-spaces'}>
+          <Box
+            fontWeight={'bold'}
+            width={Math.max(38, props.SeriesDescription.length + props.SeriesNumber.toString.length) + 'ch'}
+            fontSize={18}
+            whiteSpace={'break-spaces'}
+          >
             {props.SeriesNumber} | {props.SeriesDescription}
           </Box>
 
