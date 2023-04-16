@@ -1,11 +1,9 @@
-import React, { useContext } from 'react';
-import Grid from '@mui/material/Grid';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import CommonCard, { Attribute } from './CommonCard';
-import AppContext from './VisitContext';
 
-export interface VisitProps {
+export interface StudyProps {
   StudyInstanceUID: string;
   AccessionNumber: string;
   InstitutionName: string;
@@ -21,7 +19,7 @@ export interface VisitProps {
   StudyID: string;
 }
 
-export function Visit(props: VisitProps) {
+export function Study(props: StudyProps) {
   const {
     StudyInstanceUID,
     AccessionNumber,
@@ -38,11 +36,8 @@ export function Visit(props: VisitProps) {
     StudyID,
   } = props;
 
-  const { setVisit } = useContext(AppContext);
-
   const handleClick = () => {
-    setVisit(props);
-    localStorage.setItem('currentAccessionNumber', AccessionNumber);
+    localStorage.setItem('currentStudy', JSON.stringify(props));
   };
 
   return (

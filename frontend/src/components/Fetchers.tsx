@@ -1,26 +1,4 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import MenuIcon from '@mui/icons-material/Menu';
-import Badge from '@mui/material/Badge';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import InfoItem from '../components/InfoItem'
-import { CircularProgress } from '@material-ui/core';
-import { AppBar, mdTheme, Logo, Drawer } from '../components/Components';
-import { Visit, VisitProps } from '../components/Visit';
-import { TextField } from '@material-ui/core';
-import { BlueButton, RedButton } from '../components/Buttons';
-import { useEffect, useState } from 'react';
-
-const fetch = require('node-fetch');
-const https = require('https');
-
-export async function fetchVisits() {
+export async function fetchStudies() {
   const url = 'http://devel.mafildb.ics.muni.cz:8000/json?start=2022-11-10T12:00:00&end=2022-11-25T12:00:00&level=STUDY&force_pacs';
 
   try {
@@ -41,7 +19,7 @@ export async function fetchVisits() {
     return parsedVisits;
   } catch (err) {
     console.error(err)
-    return [];
+    throw err;
   }
 }
 
@@ -63,6 +41,6 @@ export async function fetchSeries(accessionNumber: string) {
     return json[0].series;
   } catch (err) {
     console.error(err)
-    return [];
+    throw err;
   }
 }

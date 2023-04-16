@@ -10,12 +10,12 @@ services:
       - ./frontend:/app
     environment:
       - PORT=3000
-  backend:
-    build:
-      context: ./backend
-      dockerfile: backend.dockerfile
-    ports:
-      - '8000:8000'
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: backend.dockerfile
+  #   ports:
+  #     - '8000:8000'
   #   depends_on:
   #     - db
   # db:
