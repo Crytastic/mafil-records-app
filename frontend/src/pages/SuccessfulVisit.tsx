@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Divider, Grid, Toolbar } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -8,6 +8,10 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import InfoItem from '../components/InfoItem'
 import { AppBar, Logo, Drawer, Message } from '../components/Components';
 import { BlueButton, RedButton } from '../components/Buttons';
+import CommonAppBar from '../components/CommonAppbar';
+import { ResizableSidebar } from '../components/ResizableSidebar';
+import SidebarContext from '../components/SidebarContext';
+import { Stage } from '../components/Stage';
 
 function Info() {
   return (
@@ -40,70 +44,38 @@ export default function SuccessfulVisit() {
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const [sidebarWidth, setSidebarWidth] = useState(380);
+  function handleRefresh() { };
 
   return (
-    <React.Fragment>
-      <AppBar position="absolute" open={open}>
-        <Toolbar
+    <SidebarContext.Provider value={{ sidebarWidth, setSidebarWidth }}>
+      <React.Fragment>
+        <CommonAppBar
+          stage={Stage.Landing}
+          open={open}
+          toggleDrawer={toggleDrawer}
+          handleRefresh={handleRefresh}
+        />
+        <ResizableSidebar
+          stage={Stage.Landing}
+          open={open}
+          toggleDrawer={toggleDrawer}
+        />
+        <Box
+          component="main"
           sx={{
-            pr: '28px',
-            justifyContent: 'space-between',
+            backgroundColor: (theme) =>
+              theme.palette.mode === 'light'
+                ? theme.palette.grey[100]
+                : theme.palette.grey[900],
+            flexGrow: 1,
+            height: '100vh',
+            overflow: 'auto',
           }}
         >
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            onClick={toggleDrawer}
-            sx={{
-              marginRight: '36px',
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Logo />
-          <IconButton
-            size='large'
-            color='inherit'
-          >
-            <Badge badgeContent={0} color="error">
-              <RefreshIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer variant="permanent" open={open} onClose={toggleDrawer} onOpen={toggleDrawer}>
-        <Toolbar
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'flex-end',
-            px: [1],
-          }}
-        >
-          <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
-          </IconButton>
-        </Toolbar>
-        <Divider />
-        <Info />
-      </Drawer>
-      <Box
-        component="main"
-        sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === 'light'
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
-          flexGrow: 1,
-          height: '100vh',
-          overflow: 'auto',
-        }}
-      >
-        <Toolbar />
-        <Message title='Visit successful' text='Visit has been successfully saved to the database. You may log out or choose another visit.' />
-      </Box>
-    </React.Fragment >
+          <Message title='Visit successful' text='Visit has been successfully saved to the database. You may log out or choose another visit.' />
+        </Box>
+      </React.Fragment >
+    </SidebarContext.Provider>
   );
 }

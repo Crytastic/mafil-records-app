@@ -4,14 +4,16 @@ import { fetchStudies } from '../components/Fetchers';
 import { Study, StudyProps } from '../components/Study';
 import CommonAppBar from '../components/CommonAppbar';
 import { Stage } from '../components/Stage';
-import CommonDrawer from '../components/CommonDrawer';
 import ListItems from '../components/ListItems';
+import { ResizableSidebar } from '../components/ResizableSidebar';
+import SidebarContext from '../components/SidebarContext';
 
 export default function Studies() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
+  const [sidebarWidth, setSidebarWidth] = useState(380);
   const [loading, setLoading] = useState(true);
   const [studiesJson, setStudiesJson] = useState<StudyProps[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -59,10 +61,26 @@ export default function Studies() {
   ));
 
   return (
-    <React.Fragment>
-      <CommonAppBar stage={Stage.Studies} open={open} toggleDrawer={toggleDrawer} handleRefresh={handleRefresh} />
-      <CommonDrawer stage={Stage.Studies} open={open} toggleDrawer={toggleDrawer} />
-      <ListItems loading={loading} list={studies} errorMessage={fetchError} loadingMessage='Fetching studies for past 72 hours' />
-    </React.Fragment>
+    <SidebarContext.Provider value={{ sidebarWidth, setSidebarWidth }}>
+      <React.Fragment>
+        <CommonAppBar
+          stage={Stage.Studies}
+          open={open}
+          toggleDrawer={toggleDrawer}
+          handleRefresh={handleRefresh}
+        />
+        <ResizableSidebar
+          stage={Stage.Studies}
+          open={open}
+          toggleDrawer={toggleDrawer}
+        />
+        <ListItems
+          loading={loading}
+          list={studies}
+          errorMessage={fetchError}
+          loadingMessage={'Fetching studies for past 72 hours'}
+        />
+      </React.Fragment>
+    </SidebarContext.Provider>
   );
 }

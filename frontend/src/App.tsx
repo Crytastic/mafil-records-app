@@ -9,6 +9,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Studies from './pages/Studies';
 import SuccessfulVisit from './pages/SuccessfulVisit';
 import { StudyProps } from './components/Study';
+import { ResizableSidebar } from './components/ResizableSidebar';
+import SidebarDemo from './pages/SidebarDemo';
 
 const App = () => {
   return (
@@ -20,6 +22,7 @@ const App = () => {
           <Route path='/studies' element={<Studies />} />
           <Route path='/measuring' element={<Measuring />} />
           <Route path='/success' element={<SuccessfulVisit />} />
+          <Route path='/sidebar' element={<SidebarDemo />} />
         </Routes>
       </BrowserRouter>
     </Box>

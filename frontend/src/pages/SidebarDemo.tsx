@@ -2,12 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { fetchSeries } from '../components/Fetchers';
 import { Series, SeriesProps } from '../components/Series';
 import CommonAppBar from '../components/CommonAppbar';
+import CommonDrawer from '../components/CommonDrawer';
 import { Stage } from '../components/Stage';
 import ListItems from '../components/ListItems';
 import { ResizableSidebar } from '../components/ResizableSidebar';
-import SidebarContext from '../components/SidebarContext';
+import SidebarContext from "../components/SidebarContext";
 
-export default function Measuring() {
+export default function SidebarDemo() {
   const [open, setOpen] = React.useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const [seriesJson, setSeriesJson] = useState<SeriesProps[]>([]);

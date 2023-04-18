@@ -8,23 +8,16 @@ const drawerWidth: number = 380;
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
+  sidebarWidth: number;
 }
 
 export const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-})<AppBarProps>(({ theme, open }) => ({
+  shouldForwardProp: (prop) => prop !== 'open' && prop !== 'sidebarWidth',
+})<AppBarProps>(({ theme, open, sidebarWidth }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  transition: theme.transitions.create(['width', 'margin'], {
-    easing: theme.transitions.easing.sharp,
-    duration: theme.transitions.duration.leavingScreen,
-  }),
   ...(open && {
-    marginLeft: drawerWidth,
-    width: `calc(100% - ${drawerWidth}px)`,
-    transition: theme.transitions.create(['width', 'margin'], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    marginLeft: sidebarWidth,
+    width: `calc(100% - ${sidebarWidth}px)`,
   }),
 }));
 

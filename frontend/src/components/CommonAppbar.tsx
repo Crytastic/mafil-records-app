@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
 import { Box, Badge, Divider, Grid, IconButton, Toolbar } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import { AppBar, Logo, Drawer } from '../components/Components';
 import { Stage } from './Stage';
+import SidebarContext from "./SidebarContext";
+import React, { useContext } from 'react';
 
 interface CommonAppBarProps {
   stage: Stage;
@@ -14,8 +15,10 @@ interface CommonAppBarProps {
 }
 
 export default function CommonAppBar({ stage, open, toggleDrawer, handleRefresh }: CommonAppBarProps) {
+  const { sidebarWidth } = useContext(SidebarContext);
+
   return (
-    <AppBar position="absolute" open={open}>
+    <AppBar position="absolute" sidebarWidth={sidebarWidth} open={open}>
       <Toolbar
         sx={{
           pr: '28px',
