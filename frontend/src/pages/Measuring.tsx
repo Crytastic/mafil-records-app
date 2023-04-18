@@ -22,6 +22,8 @@ export default function Measuring() {
       try {
         const currentStudy = JSON.parse(currentStudyString);
         const json = await fetchSeries(currentStudy.AccessionNumber);
+        // Sort the series by series number, highest (newly added) first
+        json.sort((a: SeriesProps, b: SeriesProps) => b.SeriesNumber - a.SeriesNumber);
         setSeriesJson(json);
         setFetchError(null);
       } catch (error) {
