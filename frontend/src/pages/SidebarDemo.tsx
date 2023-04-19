@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { fetchSeries } from '../components/Fetchers';
 import { Series, SeriesProps } from '../components/Series';
 import CommonAppBar from '../components/CommonAppbar';
-import CommonDrawer from '../components/CommonDrawer';
 import { Stage } from '../components/Stage';
 import ListItems from '../components/ListItems';
 import { ResizableSidebar } from '../components/ResizableSidebar';
