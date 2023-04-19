@@ -5,8 +5,10 @@ import CommonAppBar from '../components/CommonAppbar';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import { Stage } from '../components/Stage';
 import SidebarContext from '../components/SidebarContext';
+import { useAuth } from "react-oidc-context";
 
 export default function Home() {
+  const auth = useAuth();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
