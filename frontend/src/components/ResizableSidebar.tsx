@@ -17,10 +17,17 @@ export function ResizableSidebar({ stage, open, toggleDrawer }: ResizableSidebar
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const { sidebarWidth, setSidebarWidth } = React.useContext(SidebarContext);
   const [isResizing, setIsResizing] = useState(false);
-  const minWidth = window.innerWidth * 0.22;
-  const maxWidth = window.innerWidth * 0.60;
+  const [maxWidth, setMaxWidth] = useState(window.innerWidth * 0.75);
+  const minWidth = 150;
+
+  const updateMaxWidth = () => {
+    if (open && sidebarWidth > window.innerWidth) {
+      setSidebarWidth(window.innerWidth);
+    }
+  };
 
   const startResizing = React.useCallback((mouseDownEvent: React.MouseEvent<HTMLDivElement>) => {
+    mouseDownEvent.preventDefault();
     setIsResizing(true);
   }, []);
 
@@ -48,6 +55,13 @@ export function ResizableSidebar({ stage, open, toggleDrawer }: ResizableSidebar
   );
 
   React.useEffect(() => {
+    window.addEventListener('resize', updateMaxWidth);
+    return () => {
+      window.removeEventListener('resize', updateMaxWidth);
+    };
+  }, []);
+
+  React.useEffect(() => {
     window.addEventListener("mousemove", resize);
     window.addEventListener("mouseup", stopResizing);
     return () => {
@@ -66,7 +80,6 @@ export function ResizableSidebar({ stage, open, toggleDrawer }: ResizableSidebar
           minWidth: open ? sidebarWidth : 0,
           overflowX: "hidden",
         }}
-        onMouseDown={(e) => e.preventDefault()}
       >
         <Box className="app-sidebar-content">
           <Toolbar

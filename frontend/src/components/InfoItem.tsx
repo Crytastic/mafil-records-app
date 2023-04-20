@@ -9,9 +9,8 @@ interface Props {
 
 export default function InfoItem({ label, text }: Props) {
   return (
-    <Grid item
+    <Box
       sx={{
-        p: 2,
         display: 'flex',
         flexDirection: 'column',
       }}>
@@ -20,11 +19,12 @@ export default function InfoItem({ label, text }: Props) {
       </Box>
       <Box
         sx={{
-          fontWeight: 'bold'
+          fontWeight: 'bold',
+          wordBreak: 'break-all'
         }}
       >
         {text}
       </Box>
-    </Grid>
+    </Box>
   )
 }

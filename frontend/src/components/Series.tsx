@@ -16,7 +16,7 @@ import { MultiLineInput, SingleLineInput, SingleLineInputProps, MultiLineInputPr
 
 export function SeriesSingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
   return (
-    <Box m={1} minWidth={240} flexGrow={1}>
+    <Box m={1} flexGrow={1}>
       <SingleLineInput
         name={name}
         label={label}
@@ -29,7 +29,7 @@ export function SeriesSingleLineInput({ name, label, value, onChange }: SingleLi
 
 export function SeriesMultiLineInput({ name, label, value, onChange }: MultiLineInputProps) {
   return (
-    <Box m={1} minWidth={240} flexGrow={1}>
+    <Box m={1} flexGrow={1}>
       <MultiLineInput
         name={name}
         label={label}

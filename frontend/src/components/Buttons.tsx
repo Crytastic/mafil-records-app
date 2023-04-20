@@ -2,6 +2,7 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import { Box } from '@mui/material';
 
 export interface ButtonsProps {
   text: string;
@@ -10,24 +11,24 @@ export interface ButtonsProps {
 
 export function BlueButton({ text, path }: ButtonsProps) {
   return (
-    <Grid item>
+    <Box>
       <Link to={path} style={{ textDecoration: 'none' }}>
         <Button variant='contained' >
           {text}
         </Button>
       </Link>
-    </Grid >
+    </Box >
   )
 }
 
 export function RedButton({ text, path }: ButtonsProps) {
   return (
-    <Grid item>
+    <Box>
       <Link to={path} style={{ textDecoration: 'none' }}>
         <Button variant='outlined' color='error'>
           {text}
         </Button>
       </Link>
-    </Grid >
+    </Box >
   )
 }
