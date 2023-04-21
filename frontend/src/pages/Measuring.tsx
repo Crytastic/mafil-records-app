@@ -10,6 +10,7 @@ import SidebarContext from '../components/SidebarContext';
 export default function Measuring() {
   const [open, setOpen] = React.useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(380);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [seriesJson, setSeriesJson] = useState<SeriesProps[]>([]);
   const [selectedSeqId, setSelectedSeqId] = React.useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -23,9 +24,9 @@ export default function Measuring() {
         const currentStudy = JSON.parse(currentStudyString);
         const json = await fetchSeries(currentStudy.AccessionNumber);
         // Sort the series by series number, highest (newly added) first
-        json.sort((a: SeriesProps, b: SeriesProps) => b.SeriesNumber - a.SeriesNumber);
-        setSeriesJson(json);
+        json.sort((a: SeriesProps, b: SeriesProps) => a.SeriesNumber - b.SeriesNumber);
         setFetchError(null);
+        setSeriesJson(json);
       } catch (error) {
         setFetchError('Fetching series failed, check internet connection and try again. If problem persists, contact your system administrator.');
       }
@@ -35,6 +36,19 @@ export default function Measuring() {
 
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  function toggleSortOrder() {
+    const newSortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newSortOrder);
+
+    const sortedData = [...seriesJson];
+    if (newSortOrder === 'asc') {
+      sortedData.sort((a: SeriesProps, b: SeriesProps) => a.SeriesNumber - b.SeriesNumber);
+    } else {
+      sortedData.sort((a: SeriesProps, b: SeriesProps) => b.SeriesNumber - a.SeriesNumber);
+    }
+    setSeriesJson(sortedData);
   };
 
   useEffect(() => {
@@ -53,35 +67,37 @@ export default function Measuring() {
     return selectedSeqId;
   };
 
-  const listSeries = seriesJson.map((series) => (
-    <Series
-      key={series.SeriesInstanceUID}
-      SeriesInstanceUID={series.SeriesInstanceUID}
-      SequenceFileName={series.SequenceFileName}
-      AcquisitionMatrix={series.AcquisitionMatrix}
-      BodyPartExamined={series.BodyPartExamined}
-      FlipAngle={series.FlipAngle}
-      ImageType={series.ImageType}
-      InversionTime={series.InversionTime}
-      NumberOfSeriesRelatedInstances={series.NumberOfSeriesRelatedInstances}
-      OperatorsName={series.OperatorsName}
-      PAT={series.PAT}
-      PatientPosition={series.PatientPosition}
-      PercentPhaseFieldOfView={series.PercentPhaseFieldOfView}
-      ProtocolName={series.ProtocolName}
-      RepetitionTime={series.RepetitionTime}
-      SOPClassUID={series.SOPClassUID}
-      SeriesDescription={series.SeriesDescription}
-      SeriesNumber={series.SeriesNumber}
-      SeriesTime={series.SeriesTime}
-      SliceThickness={series.SliceThickness}
-      SoftwareVersions={series.SoftwareVersions}
-      SpacingBetweenSlices={series.SpacingBetweenSlices}
-      StationName={series.StationName}
-      onCopy={handleSeriesCopy}
-      onPaste={handleSeriesPaste}
-    />
-  ));
+  function listSeries() {
+    return seriesJson.map((series) => (
+      <Series
+        key={series.SeriesInstanceUID}
+        SeriesInstanceUID={series.SeriesInstanceUID}
+        SequenceFileName={series.SequenceFileName}
+        AcquisitionMatrix={series.AcquisitionMatrix}
+        BodyPartExamined={series.BodyPartExamined}
+        FlipAngle={series.FlipAngle}
+        ImageType={series.ImageType}
+        InversionTime={series.InversionTime}
+        NumberOfSeriesRelatedInstances={series.NumberOfSeriesRelatedInstances}
+        OperatorsName={series.OperatorsName}
+        PAT={series.PAT}
+        PatientPosition={series.PatientPosition}
+        PercentPhaseFieldOfView={series.PercentPhaseFieldOfView}
+        ProtocolName={series.ProtocolName}
+        RepetitionTime={series.RepetitionTime}
+        SOPClassUID={series.SOPClassUID}
+        SeriesDescription={series.SeriesDescription}
+        SeriesNumber={series.SeriesNumber}
+        SeriesTime={series.SeriesTime}
+        SliceThickness={series.SliceThickness}
+        SoftwareVersions={series.SoftwareVersions}
+        SpacingBetweenSlices={series.SpacingBetweenSlices}
+        StationName={series.StationName}
+        onCopy={handleSeriesCopy}
+        onPaste={handleSeriesPaste}
+      />
+    ));
+  }
 
   return (
     <SidebarContext.Provider value={{ sidebarWidth, setSidebarWidth }}>
@@ -89,7 +105,9 @@ export default function Measuring() {
         <CommonAppBar
           stage={Stage.Measuring}
           open={open}
+          sortOrder={sortOrder}
           toggleDrawer={toggleDrawer}
+          toggleSortOrder={toggleSortOrder}
           handleRefresh={handleRefresh}
         />
         <ResizableSidebar
@@ -99,7 +117,7 @@ export default function Measuring() {
         />
         <ListItems
           loading={loading}
-          list={listSeries}
+          list={listSeries()}
           errorMessage={fetchError}
           loadingMessage={`Fetching series`}
         />

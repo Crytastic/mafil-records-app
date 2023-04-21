@@ -37,7 +37,6 @@ export async function fetchSeries(accessionNumber: string) {
         mode: 'cors',
       });
     const json = await resp.json();
-    console.log(json[0].series)
     return json[0].series;
   } catch (err) {
     console.error(err)
