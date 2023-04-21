@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Box from '@mui/material/Box';
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@mui/material";
 
 interface LoadingBoxProps {
   loadingMessage: string;

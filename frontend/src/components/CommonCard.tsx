@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import { Card, IconButton } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/material/styles';
-import { IconButtonProps } from '@material-ui/core';
+import { IconButtonProps } from '@mui/material';
 
 interface AttributeProps {
   title: string;
