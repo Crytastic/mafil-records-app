@@ -1,4 +1,4 @@
-import { Box, Badge, Divider, Grid, IconButton, Toolbar } from '@mui/material';
+import { Box, Badge, Divider, Grid, IconButton, Toolbar, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
@@ -7,7 +7,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { AppBar, Logo, Drawer } from '../components/Components';
 import { Stage } from './Stage';
 import SidebarContext from "./SidebarContext";
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 interface CommonAppBarProps {
   stage: Stage;
@@ -20,6 +20,28 @@ interface CommonAppBarProps {
 
 export default function CommonAppBar({ stage, open, sortOrder, toggleSortOrder, toggleDrawer, handleRefresh }: CommonAppBarProps) {
   const { sidebarWidth } = useContext(SidebarContext);
+  const [showLogo, setShowLogo] = useState(true);
+  const [showTitle, setShowTitle] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const windowWidth = window.innerWidth;
+      const rightSectionWidth = windowWidth - sidebarWidth;
+      sidebarWidth / windowWidth <= 0.5 ? setShowLogo(true) : setShowLogo(false);
+      sidebarWidth / windowWidth <= 0.7 ? setShowTitle(true) : setShowTitle(false);
+      if (open && rightSectionWidth < 600) {
+        setShowLogo(false);
+        setShowTitle(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [sidebarWidth]);
 
   return (
     <AppBar position="absolute" sidebarWidth={sidebarWidth} open={open}>
@@ -41,13 +63,17 @@ export default function CommonAppBar({ stage, open, sortOrder, toggleSortOrder, 
         >
           <MenuIcon />
         </IconButton>
-        {stage === Stage.Measuring && (
-          <Box>Measuring and taking notes</Box>
-        )}
-        {stage === Stage.Studies && (
-          <Box>Choosing a study</Box>
-        )}
-        <Logo />
+        {showTitle ?
+          <React.Fragment>
+            {stage === Stage.Measuring && (
+              <Box>Measuring and taking notes</Box>
+            )}
+            {stage === Stage.Studies && (
+              <Box>Choosing a study</Box>
+            )}
+          </React.Fragment>
+          : <Box />}
+        {showLogo && <Logo />}
         <Box>
           {stage === Stage.Measuring && (
             <React.Fragment>

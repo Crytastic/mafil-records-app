@@ -10,7 +10,7 @@ import SidebarContext from '../components/SidebarContext';
 export default function Measuring() {
   const [open, setOpen] = React.useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(380);
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [seriesJson, setSeriesJson] = useState<SeriesProps[]>([]);
   const [selectedSeqId, setSelectedSeqId] = React.useState<string | null>(null);
   const [loading, setLoading] = useState(true);
