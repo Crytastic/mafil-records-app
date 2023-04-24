@@ -6,10 +6,10 @@ import { Stage } from '../components/Stage';
 import ListItems from '../components/ListItems';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import SidebarContext from '../components/SidebarContext';
+import { SidebarProvider } from '../components/SidebarContext';
 
 export default function Measuring() {
   const [open, setOpen] = React.useState(true);
-  const [sidebarWidth, setSidebarWidth] = useState(380);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [seriesJson, setSeriesJson] = useState<SeriesProps[]>([]);
   const [selectedSeqId, setSelectedSeqId] = React.useState<string | null>(null);
@@ -100,7 +100,7 @@ export default function Measuring() {
   }
 
   return (
-    <SidebarContext.Provider value={{ sidebarWidth, setSidebarWidth }}>
+    <SidebarProvider>
       <React.Fragment>
         <CommonAppBar
           stage={Stage.Measuring}
@@ -122,6 +122,6 @@ export default function Measuring() {
           loadingMessage={`Fetching series`}
         />
       </React.Fragment>
-    </SidebarContext.Provider>
+    </SidebarProvider >
   );
 }

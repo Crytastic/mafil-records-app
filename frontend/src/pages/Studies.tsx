@@ -6,14 +6,13 @@ import CommonAppBar from '../components/CommonAppbar';
 import { Stage } from '../components/Stage';
 import ListItems from '../components/ListItems';
 import { ResizableSidebar } from '../components/ResizableSidebar';
-import SidebarContext from '../components/SidebarContext';
+import SidebarContext, { SidebarProvider } from '../components/SidebarContext';
 
 export default function Studies() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  const [sidebarWidth, setSidebarWidth] = useState(380);
   const [loading, setLoading] = useState(true);
   const [studiesJson, setStudiesJson] = useState<StudyProps[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
@@ -61,7 +60,7 @@ export default function Studies() {
   ));
 
   return (
-    <SidebarContext.Provider value={{ sidebarWidth, setSidebarWidth }}>
+    <SidebarProvider>
       <React.Fragment>
         <CommonAppBar
           stage={Stage.Studies}
@@ -81,6 +80,6 @@ export default function Studies() {
           loadingMessage={'Fetching studies for past 72 hours'}
         />
       </React.Fragment>
-    </SidebarContext.Provider>
+    </SidebarProvider>
   );
 }
