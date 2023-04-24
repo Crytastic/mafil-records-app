@@ -1,5 +1,4 @@
 import React from "react";
-import { isMobile } from 'react-device-detect';
 import { useState, useEffect, useRef } from "react";
 import "./ResizableSidebar.css";
 import { Stage } from "./Stage";
@@ -19,7 +18,7 @@ export function ResizableSidebar({ stage, open, toggleDrawer }: ResizableSidebar
   const { sidebarWidth, setSidebarWidth } = React.useContext(SidebarContext);
   const [isResizing, setIsResizing] = useState(false);
   const [maxWidth, setMaxWidth] = useState(window.innerWidth * 0.75);
-  const minWidth = isMobile ? window.innerWidth : 150;
+  const minWidth = 150;
 
   const updateMaxWidth = () => {
     if (open && sidebarWidth > window.innerWidth) {
