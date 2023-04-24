@@ -4,7 +4,7 @@ import { AppBar, Drawer, Logo, Message } from '../components/Components';
 import CommonAppBar from '../components/CommonAppbar';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import { Stage } from '../components/Stage';
-import SidebarContext from '../components/SidebarContext';
+import { SidebarProvider } from '../components/SidebarContext';
 import { useAuth } from "react-oidc-context";
 
 export default function Home() {
@@ -14,10 +14,9 @@ export default function Home() {
     setOpen(!open);
   };
   function handleRefresh() { };
-  const [sidebarWidth, setSidebarWidth] = useState(380);
 
   return (
-    <SidebarContext.Provider value={{ sidebarWidth, setSidebarWidth }}>
+    <SidebarProvider>
       <React.Fragment>
         <CommonAppBar
           stage={Stage.Landing}
@@ -45,6 +44,6 @@ export default function Home() {
           <Message title='Log in to be able to choose a visit.' text='' />
         </Box>
       </React.Fragment >
-    </SidebarContext.Provider>
+    </SidebarProvider>
   );
 }
