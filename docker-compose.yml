@@ -1,45 +1,22 @@
-version: '3.1'
+version: '3'
 services:
   frontend:
     build:
       context: ./frontend
       dockerfile: frontend.dockerfile
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.frontend.rule=Host(`records.devel.mafildb.ics.muni.cz`)"
-      - "traefik.http.routers.frontend.tls=true"
-      - "traefik.http.routers.frontend.tls.certresolver=mytlschallenge"
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
     environment:
-      - PORT=80
-    expose:
-      - 80
-
+      - PORT=3000
   nginx:
     image: nginx:stable-alpine
+    ports:
+      - "80:80"
     volumes:
       - ./frontend/build:/usr/share/nginx/html
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-    labels:
-      - "traefik.enable=false"
-
-  traefik:
-    image: traefik:v2.6
-    command:
-      - "--log.level=DEBUG"
-      - "--api.insecure=true"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.mytlschallenge.acme.tlschallenge=true"
-      - "--certificatesresolvers.mytlschallenge.acme.email=max.seffer@gmail.com"
-      - "--certificatesresolvers.mytlschallenge.acme.storage=/letsencrypt/acme.json"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - "/var/run/docker.sock:/var/run/docker.sock:ro"
-      - "./letsencrypt:/letsencrypt"
   # backend:
   #   build:
   #     context: ./backend
