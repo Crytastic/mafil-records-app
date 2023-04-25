@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Divider, Grid, IconButton, Toolbar, useTheme } from '@mui/material';
 import { AppBar, Drawer, Logo, Message } from '../components/Components';
 import CommonAppBar from '../components/CommonAppbar';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import { SidebarProvider } from '../components/SidebarContext';
 import { useAuth } from "react-oidc-context";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
   const auth = useAuth();
+  const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
   function handleRefresh() { };
+
+  useEffect(() => {
+    if (auth && auth.user) {
+      navigate('/studies');
+    }
+  }, [auth, navigate]);
 
   return (
     <SidebarProvider>
