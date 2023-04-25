@@ -5,12 +5,11 @@ import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { AppBar, Logo, Drawer } from '../components/Components';
-import { Stage } from './Stage';
 import SidebarContext from "./SidebarContext";
 import React, { useContext, useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface CommonAppBarProps {
-  stage: Stage;
   open: boolean;
   toggleDrawer: () => void;
   handleRefresh: () => void;
@@ -18,7 +17,8 @@ interface CommonAppBarProps {
   toggleSortOrder?: () => void;
 }
 
-export default function CommonAppBar({ stage, open, sortOrder, toggleSortOrder, toggleDrawer, handleRefresh }: CommonAppBarProps) {
+export default function CommonAppBar({ open, sortOrder, toggleSortOrder, toggleDrawer, handleRefresh }: CommonAppBarProps) {
+  const currentPath = useLocation().pathname;
   const { sidebarWidth } = useContext(SidebarContext);
   const [showLogo, setShowLogo] = useState(true);
   const [showTitle, setShowTitle] = useState(true);
@@ -65,17 +65,17 @@ export default function CommonAppBar({ stage, open, sortOrder, toggleSortOrder, 
         </IconButton>
         {showTitle ?
           <React.Fragment>
-            {stage === Stage.Measuring && (
+            {currentPath === "/measuring" && (
               <Box>Measuring and taking notes</Box>
             )}
-            {stage === Stage.Studies && (
+            {currentPath === "/studies" && (
               <Box>Choosing a study</Box>
             )}
           </React.Fragment>
           : <Box />}
         {showLogo && <Logo />}
         <Box>
-          {stage === Stage.Measuring && (
+          {currentPath === "/measuring" && (
             <React.Fragment>
               <IconButton size="large" color="inherit" onClick={toggleSortOrder}>
                 {sortOrder === 'asc' ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}

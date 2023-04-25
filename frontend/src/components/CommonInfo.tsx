@@ -4,15 +4,12 @@ import { BlueButton, RedButton } from './Buttons';
 import InfoItem from './InfoItem';
 import { MultiLineInput } from './Inputs';
 import { StudyProps } from './Study';
-import { Stage } from './Stage';
 import LoginButton from './LoginButton';
 import { useAuth } from 'react-oidc-context';
+import { useLocation } from 'react-router-dom';
 
-interface CommonInfoProps {
-  stage: Stage;
-}
-
-export function CommonInfo({ stage }: CommonInfoProps) {
+export function CommonInfo() {
+  const currentPath = useLocation().pathname;
   const auth = useAuth();
   const [props, setProps] = useState<StudyProps>(() => {
     const localStudy = localStorage.getItem(`currentStudy`);
@@ -39,11 +36,11 @@ export function CommonInfo({ stage }: CommonInfoProps) {
   }, [studyData]);
 
   function renderContent() {
-    if (stage === Stage.Landing) {
+    if (currentPath === "/landing") {
       return (
         <LoginButton />
       );
-    } else if (stage === Stage.Measuring) {
+    } else if (currentPath === "/measuring") {
       return (
         <React.Fragment>
           <InfoItem label="Measuring operator" text={auth.user ? auth.user.profile.name : ''} />
@@ -63,16 +60,20 @@ export function CommonInfo({ stage }: CommonInfoProps) {
           <Divider sx={{ my: 3 }} />
         </React.Fragment>
       );
-    } else if (stage === Stage.Studies) {
+    } else if (currentPath === "/studies") {
       return (
         <LoginButton />
       )
-    } else if (stage === Stage.SuccessfullVisit) {
+    } else if (currentPath === "/success") {
       return (
         <React.Fragment>
           <LoginButton />
           <BlueButton text='Start visit' path='/studies' />
         </React.Fragment>
+      )
+    } else if (currentPath === "/") {
+      return (
+        <LoginButton />
       )
     }
   }

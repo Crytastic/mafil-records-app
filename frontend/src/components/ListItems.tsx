@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Badge, Divider, Grid, IconButton, Toolbar } from '@mui/material';
 import { AppBar, Logo, Drawer, Message } from '../components/Components';
 import { LoadingBox } from '../components/LoadingBox';
+import { useTheme } from '@mui/material';
 
 interface ListItemsProps {
   loading: boolean;
@@ -11,6 +12,8 @@ interface ListItemsProps {
 }
 
 const ListItems: React.FC<ListItemsProps> = ({ loading, list, loadingMessage, errorMessage }) => {
+  const theme = useTheme();
+
   return (
     <Box
       component="main"
@@ -24,7 +27,7 @@ const ListItems: React.FC<ListItemsProps> = ({ loading, list, loadingMessage, er
         overflow: 'auto',
       }}
     >
-      <Toolbar />
+      <Toolbar sx={{ minHeight: theme.mixins.toolbar.minHeight }} />
       {loading ? (
         <LoadingBox loadingMessage={loadingMessage} />
       ) : errorMessage ? (

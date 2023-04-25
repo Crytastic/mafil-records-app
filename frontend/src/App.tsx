@@ -12,6 +12,7 @@ import oidcConfig from './oidc-config';
 import { AuthProvider } from 'react-oidc-context';
 import { useAuth } from "react-oidc-context";
 import OidcLogin from './pages/OidcLogin';
+import OidcLogout from './pages/OidcLogout';
 
 const App = () => {
   return (
@@ -22,6 +23,7 @@ const App = () => {
           <Routes>
             <Route path='/' element={<Landing />} />
             <Route path='/oidc-login' element={<OidcLogin />} />
+            <Route path='/oidc-logout' element={<OidcLogout />} />
             <Route path='/studies' element={<Studies />} />
             <Route path='/measuring' element={<Measuring />} />
             <Route path='/success' element={<SuccessfulVisit />} />
