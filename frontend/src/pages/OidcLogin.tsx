@@ -9,9 +9,7 @@ const OidcLogin: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    //if (auth.user) {
-      navigate("/studies");
-    //}
+    navigate("/studies");
   }, [auth.user, navigate]);
 
   return (

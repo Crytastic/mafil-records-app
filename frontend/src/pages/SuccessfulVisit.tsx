@@ -17,13 +17,13 @@ export default function SuccessfulVisit() {
     <SidebarProvider>
       <React.Fragment>
         <CommonAppBar
-          stage={Stage.Landing}
+          stage={Stage.SuccessfullVisit}
           open={open}
           toggleDrawer={toggleDrawer}
           handleRefresh={handleRefresh}
         />
         <ResizableSidebar
-          stage={Stage.Landing}
+          stage={Stage.SuccessfullVisit}
           open={open}
           toggleDrawer={toggleDrawer}
         />

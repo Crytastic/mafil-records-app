@@ -6,12 +6,14 @@ import { MultiLineInput } from './Inputs';
 import { StudyProps } from './Study';
 import { Stage } from './Stage';
 import LoginButton from './LoginButton';
+import { useAuth } from 'react-oidc-context';
 
 interface CommonInfoProps {
   stage: Stage;
 }
 
 export function CommonInfo({ stage }: CommonInfoProps) {
+  const auth = useAuth();
   const [props, setProps] = useState<StudyProps>(() => {
     const localStudy = localStorage.getItem(`currentStudy`);
     return localStudy ? JSON.parse(localStudy) : {};
@@ -39,55 +41,39 @@ export function CommonInfo({ stage }: CommonInfoProps) {
   function renderContent() {
     if (stage === Stage.Landing) {
       return (
+        <LoginButton />
+      );
+    } else if (stage === Stage.Measuring) {
+      return (
         <React.Fragment>
-          <InfoItem label="Measuring operator" text="Not logged in" />
-          <Box>
-            <BlueButton text="Log in" path="/studies" />
+          <InfoItem label="Measuring operator" text={auth.user ? auth.user.profile.name : ''} />
+          <InfoItem label="Visit ID" text={props.AccessionNumber} />
+          <InfoItem label="Study UID" text={props.StudyInstanceUID} />
+          <InfoItem label="Patient name" text={props.PatientName} />
+          <MultiLineInput
+            label="General comment to visit"
+            name="general_comment"
+            value={studyData.general_comment}
+            onChange={handleTextChange}
+          />
+          <Box gap={2} display='flex' flexDirection="row" flexWrap='wrap' justifyContent="space-between">
+            <BlueButton text="Finish study" path="/success" />
+            <RedButton text="Back to studies" path="/studies" />
           </Box>
-          <LoginButton />
+          <Divider sx={{ my: 3 }} />
         </React.Fragment>
       );
-    } else {
-      const measuringOperator = <InfoItem label="Measuring operator" text="Franta Vopršálek" />;
-
-      if (stage === Stage.Measuring) {
-        return (
-          <React.Fragment>
-            {measuringOperator}
-            <InfoItem label="Visit ID" text={props.AccessionNumber} />
-            <InfoItem label="Study UID" text={props.StudyInstanceUID} />
-            <InfoItem label="Patient name" text={props.PatientName} />
-            <MultiLineInput
-              label="General comment to visit"
-              name="general_comment"
-              value={studyData.general_comment}
-              onChange={handleTextChange}
-            />
-            <Box gap={2} display='flex' flexDirection="row" flexWrap='wrap' justifyContent="space-between">
-              <BlueButton text="Finish study" path="/success" />
-              <RedButton text="Back to studies" path="/studies" />
-            </Box>
-            <Divider sx={{ my: 3 }} />
-          </React.Fragment>
-        );
-      } else if (stage === Stage.Studies) {
-        return (
-          <React.Fragment>
-            {measuringOperator}
-            <Box>
-              <RedButton text="Log out" path="/" />
-            </Box>
-          </React.Fragment>
-        )
-      } else if (stage === Stage.SuccessfullVisit) {
+    } else if (stage === Stage.Studies) {
+      return (
+        <LoginButton />
+      )
+    } else if (stage === Stage.SuccessfullVisit) {
+      return (
         <React.Fragment>
-          {measuringOperator}
-          <Box>
-            <RedButton text="Log out" path="/" />
-          </Box>
+          <LoginButton />
           <BlueButton text='Start visit' path='/studies' />
         </React.Fragment>
-      }
+      )
     }
   }
 

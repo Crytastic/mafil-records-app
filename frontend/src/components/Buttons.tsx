@@ -4,31 +4,48 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { Box } from '@mui/material';
 
-export interface ButtonsProps {
+interface ButtonsProps {
   text: string;
-  path: string;
+  path?: string;
+  onClick?: () => void;
 }
 
-export function BlueButton({ text, path }: ButtonsProps) {
-  return (
-    <Box>
-      <Link to={path} style={{ textDecoration: 'none' }}>
-        <Button variant='contained' >
-          {text}
-        </Button>
-      </Link>
-    </Box >
-  )
+export function BlueButton({ text, path, onClick }: ButtonsProps) {
+  const button = (
+    <Button variant='contained' onClick={onClick}>
+      {text}
+    </Button>
+  );
+
+  if (path) {
+    return (
+      <Box>
+        <Link to={path} style={{ textDecoration: 'none' }}>
+          {button}
+        </Link>
+      </Box>
+    );
+  }
+
+  return <Box>{button}</Box>;
 }
 
-export function RedButton({ text, path }: ButtonsProps) {
-  return (
-    <Box>
-      <Link to={path} style={{ textDecoration: 'none' }}>
-        <Button variant='outlined' color='error'>
-          {text}
-        </Button>
-      </Link>
-    </Box >
-  )
+export function RedButton({ text, path, onClick }: ButtonsProps) {
+  const button = (
+    <Button variant='outlined' color='error' onClick={onClick}>
+      {text}
+    </Button>
+  );
+
+  if (path) {
+    return (
+      <Box>
+        <Link to={path} style={{ textDecoration: 'none' }}>
+          {button}
+        </Link>
+      </Box>
+    );
+  }
+
+  return <Box>{button}</Box>;
 }
