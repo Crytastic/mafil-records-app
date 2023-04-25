@@ -1,19 +1,17 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
 import "./ResizableSidebar.css";
-import { Stage } from "./Stage";
 import { Box, Divider, IconButton, Toolbar } from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import { CommonInfo } from "./CommonInfo";
 import SidebarContext from "./SidebarContext";
 
 interface ResizableSidebarProps {
-  stage: Stage;
   open: boolean;
   toggleDrawer: () => void;
 }
 
-export function ResizableSidebar({ stage, open, toggleDrawer }: ResizableSidebarProps) {
+export function ResizableSidebar({ open, toggleDrawer }: ResizableSidebarProps) {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const { sidebarWidth, setSidebarWidth } = React.useContext(SidebarContext);
   const [isResizing, setIsResizing] = useState(false);
@@ -95,7 +93,7 @@ export function ResizableSidebar({ stage, open, toggleDrawer }: ResizableSidebar
             </IconButton>
           </Toolbar>
           <Divider />
-          <CommonInfo stage={stage} />
+          <CommonInfo />
         </Box>
         <Box className="app-sidebar-resizer" onMouseDown={startResizing} />
       </Box>

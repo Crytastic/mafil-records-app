@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { fetchStudies } from '../components/Fetchers';
 import { Study, StudyProps } from '../components/Study';
 import CommonAppBar from '../components/CommonAppbar';
-import { Stage } from '../components/Stage';
 import ListItems from '../components/ListItems';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import SidebarContext, { SidebarProvider } from '../components/SidebarContext';
@@ -63,13 +62,11 @@ export default function Studies() {
     <SidebarProvider>
       <React.Fragment>
         <CommonAppBar
-          stage={Stage.Studies}
           open={open}
           toggleDrawer={toggleDrawer}
           handleRefresh={handleRefresh}
         />
         <ResizableSidebar
-          stage={Stage.Studies}
           open={open}
           toggleDrawer={toggleDrawer}
         />

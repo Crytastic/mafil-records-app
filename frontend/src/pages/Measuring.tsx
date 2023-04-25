@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { fetchSeries } from '../components/Fetchers';
 import { Series, SeriesProps } from '../components/Series';
 import CommonAppBar from '../components/CommonAppbar';
-import { Stage } from '../components/Stage';
 import ListItems from '../components/ListItems';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import SidebarContext from '../components/SidebarContext';
 import { SidebarProvider } from '../components/SidebarContext';
+import { useLocation } from 'react-router-dom';
 
 export default function Measuring() {
   const [open, setOpen] = React.useState(true);
@@ -103,7 +103,6 @@ export default function Measuring() {
     <SidebarProvider>
       <React.Fragment>
         <CommonAppBar
-          stage={Stage.Measuring}
           open={open}
           sortOrder={sortOrder}
           toggleDrawer={toggleDrawer}
@@ -111,7 +110,6 @@ export default function Measuring() {
           handleRefresh={handleRefresh}
         />
         <ResizableSidebar
-          stage={Stage.Measuring}
           open={open}
           toggleDrawer={toggleDrawer}
         />

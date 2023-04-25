@@ -4,7 +4,6 @@ import { Message } from '../components/Components';
 import CommonAppBar from '../components/CommonAppbar';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import { SidebarProvider } from '../components/SidebarContext';
-import { Stage } from '../components/Stage';
 
 export default function SuccessfulVisit() {
   const [open, setOpen] = React.useState(true);
@@ -17,13 +16,11 @@ export default function SuccessfulVisit() {
     <SidebarProvider>
       <React.Fragment>
         <CommonAppBar
-          stage={Stage.SuccessfullVisit}
           open={open}
           toggleDrawer={toggleDrawer}
           handleRefresh={handleRefresh}
         />
         <ResizableSidebar
-          stage={Stage.SuccessfullVisit}
           open={open}
           toggleDrawer={toggleDrawer}
         />

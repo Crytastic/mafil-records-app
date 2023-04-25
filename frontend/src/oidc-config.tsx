@@ -7,7 +7,7 @@ const oidcConfig = {
   redirect_uri: 'https://records.devel.mafildb.ics.muni.cz/oidc-login',
   response_type: 'code',
   scope: 'openid profile email eduperson_entitlement',
-  // post_logout_redirect_uri: 'https://records.devel.mafildb.ics.muni.cz/',
+  // post_logout_redirect_uri: 'https://records.devel.mafildb.ics.muni.cz/oidc-logout',
   automaticSilentRenew: false,
   // silent_redirect_uri: 'http://localhost:3000/silent-renew.html',
 };
