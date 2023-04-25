@@ -1,10 +1,9 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 
 interface Props {
   label: string;
-  text: string;
+  text: string | undefined;
 }
 
 export default function InfoItem({ label, text }: Props) {
@@ -23,7 +22,7 @@ export default function InfoItem({ label, text }: Props) {
           wordBreak: 'break-all'
         }}
       >
-        {text}
+        {text ? text : ''}
       </Box>
     </Box>
   )
