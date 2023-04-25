@@ -8,21 +8,24 @@ import Box from '@mui/material/Box';
 import CssBaseline from '@mui/material/CssBaseline';
 import Studies from './pages/Studies';
 import SuccessfulVisit from './pages/SuccessfulVisit';
-import { StudyProps } from './components/Study';
-import { ResizableSidebar } from './components/ResizableSidebar';
+import oidcConfig from './oidc-config';
+import { AuthProvider } from 'react-oidc-context';
+import { useAuth } from "react-oidc-context";
 
 const App = () => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Landing />} />
-          <Route path='/studies' element={<Studies />} />
-          <Route path='/measuring' element={<Measuring />} />
-          <Route path='/success' element={<SuccessfulVisit />} />
-        </Routes>
-      </BrowserRouter>
+      <AuthProvider {...oidcConfig}>
+        <BrowserRouter>
+          <Routes>
+            <Route path='/' element={<Landing />} />
+            <Route path='/studies' element={<Studies />} />
+            <Route path='/measuring' element={<Measuring />} />
+            <Route path='/success' element={<SuccessfulVisit />} />
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
     </Box>
   );
 }
