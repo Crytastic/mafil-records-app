@@ -5,6 +5,7 @@ import InfoItem from './InfoItem';
 import { MultiLineInput } from './Inputs';
 import { StudyProps } from './Study';
 import { Stage } from './Stage';
+import LoginButton from './LoginButton';
 
 interface CommonInfoProps {
   stage: Stage;
@@ -43,6 +44,7 @@ export function CommonInfo({ stage }: CommonInfoProps) {
           <Box>
             <BlueButton text="Log in" path="/studies" />
           </Box>
+          <LoginButton />
         </React.Fragment>
       );
     } else {
