@@ -9,9 +9,10 @@ import SidebarContext from "./SidebarContext";
 interface ResizableSidebarProps {
   open: boolean;
   toggleDrawer: () => void;
+  content?: React.ReactNode;
 }
 
-export function ResizableSidebar({ open, toggleDrawer }: ResizableSidebarProps) {
+export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSidebarProps) {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const { sidebarWidth, setSidebarWidth } = React.useContext(SidebarContext);
   const [isResizing, setIsResizing] = useState(false);
@@ -93,7 +94,7 @@ export function ResizableSidebar({ open, toggleDrawer }: ResizableSidebarProps) 
             </IconButton>
           </Toolbar>
           <Divider />
-          <CommonInfo />
+          <CommonInfo content={content} />
         </Box>
         <Box className="app-sidebar-resizer" onMouseDown={startResizing} />
       </Box>

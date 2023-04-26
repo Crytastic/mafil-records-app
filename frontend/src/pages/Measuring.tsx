@@ -117,7 +117,7 @@ export default function Measuring() {
           loading={loading}
           list={listSeries()}
           errorMessage={fetchError}
-          loadingMessage={`Fetching series`}
+          loadingMessage={`Fetching series...`}
         />
       </React.Fragment>
     </SidebarProvider >

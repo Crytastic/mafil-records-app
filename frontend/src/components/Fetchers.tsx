@@ -1,5 +1,7 @@
-export async function fetchStudies() {
-  const url = 'http://devel.mafildb.ics.muni.cz:8000/json?start=2022-11-10T12:00:00&end=2022-11-25T12:00:00&level=STUDY&force_pacs';
+import DateRange from './DateRange';
+
+export async function fetchStudies(dateRange: DateRange) {
+  const url = `http://devel.mafildb.ics.muni.cz:8000/json?start=${dateRange.start}&end=${dateRange.end}&level=STUDY&force_pacs`;
 
   try {
     const resp = await fetch(

@@ -6,6 +6,11 @@ import CommonAppBar from '../components/CommonAppbar';
 import ListItems from '../components/ListItems';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import SidebarContext, { SidebarProvider } from '../components/SidebarContext';
+import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Box } from '@mui/material';
+import { formatDateToISOString } from '../components/Utils';
+import { DateRangeSelector } from '../components/DateRangeSelector';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
 export default function Studies() {
   const [open, setOpen] = React.useState(true);
@@ -15,11 +20,12 @@ export default function Studies() {
   const [loading, setLoading] = useState(true);
   const [studiesJson, setStudiesJson] = useState<StudyProps[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  const [dateRange, setDateRange] = useState({ start: '2022-11-10T12:00:00', end: '2022-11-25T12:00:00' });
 
   async function fetchData() {
     setLoading(true);
     try {
-      const json = await fetchStudies();
+      const json = await fetchStudies(dateRange);
       // Sort the studies by date, newest first
       json.sort((a: { StudyDate: Date; }, b: { StudyDate: Date; }) => new Date(b.StudyDate).getTime() - new Date(a.StudyDate).getTime());
       setStudiesJson(json);
@@ -33,7 +39,7 @@ export default function Studies() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [dateRange]);
 
   function handleRefresh() {
     fetchData();
@@ -60,23 +66,28 @@ export default function Studies() {
 
   return (
     <SidebarProvider>
-      <React.Fragment>
-        <CommonAppBar
-          open={open}
-          toggleDrawer={toggleDrawer}
-          handleRefresh={handleRefresh}
-        />
-        <ResizableSidebar
-          open={open}
-          toggleDrawer={toggleDrawer}
-        />
-        <ListItems
-          loading={loading}
-          list={studies}
-          errorMessage={fetchError}
-          loadingMessage={'Fetching studies for past 72 hours'}
-        />
-      </React.Fragment>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <React.Fragment>
+          <CommonAppBar
+            open={open}
+            toggleDrawer={toggleDrawer}
+            handleRefresh={handleRefresh}
+          />
+          <ResizableSidebar
+            open={open}
+            toggleDrawer={toggleDrawer}
+            content={
+              <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
+            }
+          />
+          <ListItems
+            loading={loading}
+            list={studies}
+            errorMessage={fetchError}
+            loadingMessage={'Fetching studies...'}
+          />
+        </React.Fragment>
+      </LocalizationProvider>
     </SidebarProvider>
   );
 }
