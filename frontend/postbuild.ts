@@ -19,7 +19,7 @@ function updateIndexHTML(): void {
 
     updatedData = updatedData.replace(
       /<link rel="icon"[\s\S]*?\/>/,
-      '<link rel="icon" type="image/png" href="%PUBLIC_URL%/favicon.png" />'
+      '<link rel="icon" type="image/png" href="/favicon.png" />'
     );
 
     fs.writeFile(indexPath, updatedData, 'utf8', (err) => {
