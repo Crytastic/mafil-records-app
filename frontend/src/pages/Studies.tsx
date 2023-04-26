@@ -7,8 +7,7 @@ import ListItems from '../components/ListItems';
 import { ResizableSidebar } from '../components/ResizableSidebar';
 import SidebarContext, { SidebarProvider } from '../components/SidebarContext';
 import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Box } from '@mui/material';
-import { formatDateToISOString } from '../components/Utils';
-import { DateRangeSelector } from '../components/DateRangeSelector';
+import { DateRangeSelector, formatDateToISOString } from '../components/DateRangeSelector';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 
@@ -20,7 +19,14 @@ export default function Studies() {
   const [loading, setLoading] = useState(true);
   const [studiesJson, setStudiesJson] = useState<StudyProps[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
-  const [dateRange, setDateRange] = useState({ start: '2022-11-10T12:00:00', end: '2022-11-25T12:00:00' });
+
+  const endDate = new Date();
+  const startDate = new Date(endDate);
+  startDate.setHours(endDate.getHours() - 72);
+  const [dateRange, setDateRange] = useState({
+    start: formatDateToISOString(startDate),
+    end: formatDateToISOString(endDate),
+  });
 
   async function fetchData() {
     setLoading(true);
