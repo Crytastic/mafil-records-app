@@ -1,7 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, FormControl, InputLabel, Select, SelectChangeEvent, MenuItem, TextField } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers';
-import { formatDateToISOString } from './Utils';
+import SidebarContext from "./SidebarContext";
+
+export function formatDateToISOString(date: Date | null): string {
+  if (!date || isNaN(date.getTime())) {
+    return '';
+  }
+
+  const dateString = date.toISOString();
+  const hasMilliseconds = /\.\d{3}Z$/;
+
+  if (hasMilliseconds.test(dateString)) {
+    return dateString.slice(0, -5); // Remove the milliseconds and 'Z' at the end
+  }
+
+  return dateString;
+}
 
 type DateRange = {
   start: string;
@@ -16,60 +31,66 @@ interface DateRangeSelectorProps {
 }
 
 export function DateRangeSelector({ setDateRange, dateRange }: DateRangeSelectorProps) {
-  const [currentChoice, setCurrentChoice] = useState<DateRangeChoice>('hardcoded');
+  const [currentChoice, setCurrentChoice] = useState<DateRangeChoice>('past72Hours');
+  const { sidebarWidth } = useContext(SidebarContext);
+
+  // Get past 72 hours on refresh
+  useEffect(() => {
+    setCurrentChoice('past72Hours');
+    setDateRangeChoice(currentChoice);
+  }, []); // The empty array as a dependency ensures this only runs once when the component mounts
 
   function setDateRangeChoice(choice: DateRangeChoice) {
     setCurrentChoice(choice);
-    if (choice === 'hardcoded') {
-      setDateRange({ start: '2022-11-10T12:00:00', end: '2022-11-25T12:00:00' });
-    } else if (choice === 'past72Hours') {
+    if (choice === 'past72Hours') {
       const endDate = new Date();
       const startDate = new Date(endDate);
       startDate.setHours(endDate.getHours() - 72);
-      setDateRange({
-        start: formatDateToISOString(startDate),
-        end: formatDateToISOString(endDate),
-      });
+      handleCustomDateChange(formatDateToISOString(startDate), formatDateToISOString(endDate));
     }
-    console.log({ choice });
   }
 
   const handleCustomDateChange = (start: string, end: string) => {
-    setDateRange({ start, end });
+    const startDate = new Date(start);
+    const endDate = new Date(end);
+    if (!(isNaN(startDate.getTime()) || isNaN(endDate.getTime()))) {
+      setDateRange({ start, end });
+    }
   };
 
   return (
-    <Box>
-      <Box paddingBottom={2}>
+    <Box
+      gap={2}
+      display='flex'
+      flexWrap='wrap'
+      flexDirection='row'
+    >
+      <Box>
         <FormControl>
           <InputLabel>Date Range</InputLabel>
           <Select
+            label={'Date Range'}
             value={currentChoice}
             onChange={(e: SelectChangeEvent<DateRangeChoice>) =>
               setDateRangeChoice(e.target.value as DateRangeChoice)
             }
+            style={{
+              maxWidth: `${sidebarWidth - 40}px`,
+            }}
           >
-            <MenuItem value={'hardcoded'}>2022-11-10 to 2022-11-25</MenuItem>
             <MenuItem value={'past72Hours'}>Past 72 Hours</MenuItem>
             <MenuItem value={'custom'}>Custom</MenuItem>
           </Select>
         </FormControl>
       </Box>
       {currentChoice === 'custom' && (
-        <Box
-          gap={2}
-          display='flex'
-          flexWrap='wrap'
-          flexDirection='row'
-        >
+        <React.Fragment>
           <Box>
             <DatePicker
               label="Start Date"
               value={new Date(dateRange.start)}
               onChange={(newValue: Date | null) => {
-                if (newValue) {
-                  handleCustomDateChange(formatDateToISOString(newValue), dateRange.end);
-                }
+                handleCustomDateChange(formatDateToISOString(newValue), dateRange.end);
               }}
             />
           </Box>
@@ -78,13 +99,11 @@ export function DateRangeSelector({ setDateRange, dateRange }: DateRangeSelector
               label="End Date"
               value={new Date(dateRange.end)}
               onChange={(newValue: Date | null) => {
-                if (newValue) {
-                  handleCustomDateChange(dateRange.start, formatDateToISOString(newValue));
-                }
+                handleCustomDateChange(dateRange.start, formatDateToISOString(newValue));
               }}
             />
           </Box>
-        </Box>
+        </React.Fragment>
       )}
     </Box>
   );

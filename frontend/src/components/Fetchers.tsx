@@ -1,4 +1,4 @@
-import DateRange from './DateRange';
+import DateRange from './DateRangeSelector';
 
 export async function fetchStudies(dateRange: DateRange) {
   const url = `http://devel.mafildb.ics.muni.cz:8000/json?start=${dateRange.start}&end=${dateRange.end}&level=STUDY&force_pacs`;
