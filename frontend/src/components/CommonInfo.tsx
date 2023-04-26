@@ -8,7 +8,11 @@ import LoginButton from './LoginButton';
 import { useAuth } from 'react-oidc-context';
 import { useLocation } from 'react-router-dom';
 
-export function CommonInfo() {
+interface CommonInfoProps {
+  content?: React.ReactNode;
+}
+
+export function CommonInfo({ content }: CommonInfoProps) {
   const currentPath = useLocation().pathname;
   const auth = useAuth();
   const [props, setProps] = useState<StudyProps>(() => {
@@ -86,5 +90,6 @@ export function CommonInfo() {
     justifyContent="flex-start"
   >
     {renderContent()}
+    {content}
   </Box >;
 }
