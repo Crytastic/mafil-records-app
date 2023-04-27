@@ -1,17 +1,15 @@
-import React from 'react';
-import { useEffect, useState } from 'react';
-import { fetchStudies } from '../components/Fetchers';
-import { Study, StudyProps } from '../components/Study';
-import CommonAppBar from '../components/CommonAppbar';
-import ListItems from '../components/ListItems';
-import { ResizableSidebar } from '../components/ResizableSidebar';
-import SidebarContext, { SidebarProvider } from '../components/SidebarContext';
-import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, Box } from '@mui/material';
-import { DateRangeSelector, formatDateToISOString } from '../components/DateRangeSelector';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import React, { useEffect, useState } from 'react';
+import ListItems from '../components/common/ListItems';
+import CommonAppBar from '../components/global/CommonAppbar';
+import { ResizableSidebar } from '../components/global/ResizableSidebar';
+import { DateRangeSelector, formatDateToISOString } from '../components/studies/DateRangeSelector';
+import { Study, StudyProps } from '../components/studies/Study';
+import { SidebarProvider } from '../contexts/SidebarContext';
+import { fetchStudies } from '../utils/Fetchers';
 
-export default function Studies() {
+function Studies() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -97,3 +95,5 @@ export default function Studies() {
     </SidebarProvider>
   );
 }
+
+export default Studies;

@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Divider, Grid, IconButton, Toolbar, useTheme } from '@mui/material';
-import { AppBar, Drawer, Logo, Message } from '../components/Components';
-import CommonAppBar from '../components/CommonAppbar';
-import { ResizableSidebar } from '../components/ResizableSidebar';
-import { SidebarProvider } from '../components/SidebarContext';
+import { Box, Toolbar, useTheme } from '@mui/material';
+import React, { useEffect } from 'react';
 import { useAuth } from "react-oidc-context";
 import { useNavigate } from "react-router-dom";
+import Message from '../components/common/Message';
+import CommonAppBar from '../components/global/CommonAppbar';
+import { ResizableSidebar } from '../components/global/ResizableSidebar';
+import { SidebarProvider } from '../contexts/SidebarContext';
 
-export default function Home() {
+function Landing() {
   const auth = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
@@ -54,3 +54,5 @@ export default function Home() {
     </SidebarProvider>
   );
 }
+
+export default Landing;

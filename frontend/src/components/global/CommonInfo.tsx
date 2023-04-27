@@ -1,12 +1,13 @@
+import { Box, Divider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { Box, Badge, Divider, Grid, IconButton, Toolbar } from '@mui/material';
-import { BlueButton, RedButton } from './Buttons';
-import InfoItem from './InfoItem';
-import { MultiLineInput } from './Inputs';
-import { StudyProps } from './Study';
-import LoginButton from './LoginButton';
 import { useAuth } from 'react-oidc-context';
 import { useLocation } from 'react-router-dom';
+
+import { MultiLineInput } from '../common/Inputs';
+import { StudyProps } from '../studies/Study';
+import { BlueButton, RedButton } from '../common/Buttons';
+import InfoItem from '../common/InfoItem';
+import LoginButton from '../common/LoginButton';
 
 interface CommonInfoProps {
   content?: React.ReactNode;

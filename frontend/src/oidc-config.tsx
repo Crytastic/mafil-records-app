@@ -1,6 +1,3 @@
-import React from "react";
-import { UserManagerSettings } from 'oidc-client';
-
 const oidcConfig = {
   authority: 'https://oidc.muni.cz/oidc',
   client_id: '39a00844-84a6-4459-85fb-91d29539088c',

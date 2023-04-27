@@ -1,10 +1,8 @@
-import React, { ReactNode } from 'react';
+import { Card, IconButton, IconButtonProps } from '@mui/material';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { Card, IconButton } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { styled } from '@mui/material/styles';
-import { IconButtonProps } from '@mui/material';
+import { ReactNode } from 'react';
 
 interface AttributeProps {
   title: string;
@@ -46,7 +44,7 @@ interface AnyProps {
   children?: ReactNode
 }
 
-export default function CommonCard({ children }: AnyProps) {
+function CommonCard({ children }: AnyProps) {
   return (
     <Card
       sx={{
@@ -60,3 +58,5 @@ export default function CommonCard({ children }: AnyProps) {
     </Card>
   )
 }
+
+export default CommonCard;

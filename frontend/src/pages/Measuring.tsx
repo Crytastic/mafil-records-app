@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { fetchSeries } from '../components/Fetchers';
-import { Series, SeriesProps } from '../components/Series';
-import CommonAppBar from '../components/CommonAppbar';
-import ListItems from '../components/ListItems';
-import { ResizableSidebar } from '../components/ResizableSidebar';
-import SidebarContext from '../components/SidebarContext';
-import { SidebarProvider } from '../components/SidebarContext';
-import { useLocation } from 'react-router-dom';
+import ListItems from '../components/common/ListItems';
+import CommonAppBar from '../components/global/CommonAppbar';
+import { ResizableSidebar } from '../components/global/ResizableSidebar';
+import { Series, SeriesProps } from '../components/series/Series';
+import { SidebarProvider } from '../contexts/SidebarContext';
+import { fetchSeries } from '../utils/Fetchers';
 
-export default function Measuring() {
+function Measuring() {
   const [open, setOpen] = React.useState(true);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [seriesJson, setSeriesJson] = useState<SeriesProps[]>([]);
@@ -123,3 +121,5 @@ export default function Measuring() {
     </SidebarProvider >
   );
 }
+
+export default Measuring;

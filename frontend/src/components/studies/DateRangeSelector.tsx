@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Box, FormControl, InputLabel, Select, SelectChangeEvent, MenuItem, TextField } from "@mui/material";
+import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from "@mui/material";
 import { DatePicker } from '@mui/x-date-pickers';
-import SidebarContext from "./SidebarContext";
+import React, { useContext, useEffect, useState } from 'react';
+import SidebarContext from "../../contexts/SidebarContext";
 
 export function formatDateToISOString(date: Date | null): string {
   if (!date || isNaN(date.getTime())) {
