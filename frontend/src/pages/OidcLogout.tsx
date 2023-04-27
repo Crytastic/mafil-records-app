@@ -8,6 +8,10 @@ const OidcLogout: React.FC = () => {
   const auth = useAuth();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    navigate("/");
+  }, []);
+
   return (
     <Container>
       <LoadingBox loadingMessage='Signing out...' />
