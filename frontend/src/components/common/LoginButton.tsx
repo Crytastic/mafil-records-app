@@ -1,6 +1,7 @@
-import { Box, Button } from "@mui/material";
+import { Box } from "@mui/material";
 import React from "react";
 import { useAuth } from "react-oidc-context";
+
 import { BlueButton, RedButton } from "./Buttons";
 import InfoItem from "./InfoItem";
 

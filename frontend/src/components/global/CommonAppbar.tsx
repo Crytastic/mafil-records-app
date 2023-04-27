@@ -1,13 +1,15 @@
-import { Box, Badge, Divider, Grid, IconButton, Toolbar, useMediaQuery } from '@mui/material';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import MenuIcon from '@mui/icons-material/Menu';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { AppBar, Logo, Drawer } from '../components/Components';
-import SidebarContext from "./SidebarContext";
+import { Badge, Box, IconButton, Toolbar } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
+import SidebarContext from "../../contexts/SidebarContext";
+import Logo from '../common/Logo';
+import AppBar from './AppBar';
 
 interface CommonAppBarProps {
   open: boolean;
@@ -17,7 +19,7 @@ interface CommonAppBarProps {
   toggleSortOrder?: () => void;
 }
 
-export default function CommonAppBar({ open, sortOrder, toggleSortOrder, toggleDrawer, handleRefresh }: CommonAppBarProps) {
+function CommonAppBar({ open, sortOrder, toggleSortOrder, toggleDrawer, handleRefresh }: CommonAppBarProps) {
   const currentPath = useLocation().pathname;
   const { sidebarWidth } = useContext(SidebarContext);
   const [showLogo, setShowLogo] = useState(true);
@@ -97,3 +99,5 @@ export default function CommonAppBar({ open, sortOrder, toggleSortOrder, toggleD
     </AppBar>
   );
 }
+
+export default CommonAppBar;

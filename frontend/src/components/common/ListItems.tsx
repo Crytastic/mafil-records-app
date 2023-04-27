@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Badge, Divider, Grid, IconButton, Toolbar } from '@mui/material';
-import { AppBar, Logo, Drawer, Message } from '../components/Components';
-import { LoadingBox } from '../components/LoadingBox';
-import { useTheme } from '@mui/material';
+import { Box, Toolbar, useTheme } from '@mui/material';
+import React from 'react';
+
+import LoadingBox from './LoadingBox';
+import Message from './Message';
 
 interface ListItemsProps {
   loading: boolean;

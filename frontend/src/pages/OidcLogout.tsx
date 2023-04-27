@@ -1,11 +1,9 @@
-import React, { useEffect } from "react";
-import { useAuth } from "react-oidc-context";
-import { useNavigate } from "react-router-dom";
-import { LoadingBox } from "../components/LoadingBox";
 import { Container } from "@mui/material";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import LoadingBox from "../components/common/LoadingBox";
 
 const OidcLogout: React.FC = () => {
-  const auth = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {

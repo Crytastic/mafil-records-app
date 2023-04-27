@@ -1,10 +1,10 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import "./ResizableSidebar.css";
-import { Box, Divider, IconButton, Toolbar } from "@mui/material";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import { Box, Divider, IconButton, Toolbar } from "@mui/material";
+import React, { useRef, useState } from "react";
+import "./ResizableSidebar.css";
+
+import SidebarContext from "../../contexts/SidebarContext";
 import { CommonInfo } from "./CommonInfo";
-import SidebarContext from "./SidebarContext";
 
 interface ResizableSidebarProps {
   open: boolean;

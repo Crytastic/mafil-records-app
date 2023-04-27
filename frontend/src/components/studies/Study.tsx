@@ -1,7 +1,7 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import CommonCard, { Attribute } from './CommonCard';
+import { Link } from 'react-router-dom';
+import CommonCard, { Attribute } from '../common/CommonCard';
+import React from 'react';
 
 export interface StudyProps {
   StudyInstanceUID: string;

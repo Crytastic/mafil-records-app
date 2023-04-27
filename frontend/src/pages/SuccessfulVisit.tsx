@@ -1,11 +1,11 @@
-import React from 'react';
 import { Box } from '@mui/material';
-import { Message } from '../components/Components';
-import CommonAppBar from '../components/CommonAppbar';
-import { ResizableSidebar } from '../components/ResizableSidebar';
-import { SidebarProvider } from '../components/SidebarContext';
+import React from 'react';
+import Message from '../components/common/Message';
+import CommonAppBar from '../components/global/CommonAppbar';
+import { ResizableSidebar } from '../components/global/ResizableSidebar';
+import { SidebarProvider } from '../contexts/SidebarContext';
 
-export default function SuccessfulVisit() {
+function SuccessfulVisit() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -42,3 +42,5 @@ export default function SuccessfulVisit() {
     </SidebarProvider>
   );
 }
+
+export default SuccessfulVisit;

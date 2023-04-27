@@ -6,7 +6,7 @@ interface Props {
   text: string | undefined;
 }
 
-export default function InfoItem({ label, text }: Props) {
+function InfoItem({ label, text }: Props) {
   return (
     <Box
       sx={{
@@ -27,3 +27,5 @@ export default function InfoItem({ label, text }: Props) {
     </Box>
   )
 }
+
+export default InfoItem;

@@ -1,18 +1,15 @@
-import React, { useEffect } from 'react';
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Checkbox from '@mui/material/Checkbox';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import { useState } from 'react';
-import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
-import { IconButton } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
-import CardActions from '@mui/material/CardActions';
-import Collapse from '@mui/material/Collapse';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CommonCard, { ExpandMore } from './CommonCard';
-import { MultiLineInput, SingleLineInput, SingleLineInputProps, MultiLineInputProps } from './Inputs'
+import { IconButton, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import Box from '@mui/material/Box';
+import CardActions from '@mui/material/CardActions';
+import Checkbox from '@mui/material/Checkbox';
+import Collapse from '@mui/material/Collapse';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import React, { useEffect, useState } from 'react';
+import CommonCard, { ExpandMore } from '../common/CommonCard';
+import { MultiLineInput, MultiLineInputProps, SingleLineInput, SingleLineInputProps } from '../common/Inputs';
 
 export function SeriesSingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
   return (

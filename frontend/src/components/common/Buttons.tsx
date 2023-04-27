@@ -1,8 +1,7 @@
 import React from 'react';
-import Grid from '@mui/material/Grid';
+import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
-import { Box } from '@mui/material';
 
 interface ButtonsProps {
   text: string;
