@@ -43,7 +43,7 @@ function Studies() {
 
   useEffect(() => {
     fetchData();
-  }, [dateRange]);
+  }, []);
 
   function handleRefresh() {
     fetchData();
@@ -81,7 +81,11 @@ function Studies() {
             open={open}
             toggleDrawer={toggleDrawer}
             content={
-              <DateRangeSelector dateRange={dateRange} setDateRange={setDateRange} />
+              <DateRangeSelector
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                fetchData={fetchData}
+              />
             }
           />
           <ListItems
