@@ -2,6 +2,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } fro
 import { DatePicker } from '@mui/x-date-pickers';
 import React, { useContext, useEffect, useState } from 'react';
 import SidebarContext from "../../contexts/SidebarContext";
+import { BlueButton } from "../common/Buttons";
 
 export function formatDateToISOString(date: Date | null): string {
   if (!date || isNaN(date.getTime())) {
@@ -28,9 +29,10 @@ type DateRangeChoice = 'hardcoded' | 'past72Hours' | 'custom';
 interface DateRangeSelectorProps {
   setDateRange: React.Dispatch<React.SetStateAction<{ start: string; end: string }>>;
   dateRange: { start: string; end: string };
+  fetchData: () => void;
 }
 
-export function DateRangeSelector({ setDateRange, dateRange }: DateRangeSelectorProps) {
+export function DateRangeSelector({ setDateRange, dateRange, fetchData }: DateRangeSelectorProps) {
   const [currentChoice, setCurrentChoice] = useState<DateRangeChoice>('past72Hours');
   const { sidebarWidth } = useContext(SidebarContext);
 
@@ -47,6 +49,7 @@ export function DateRangeSelector({ setDateRange, dateRange }: DateRangeSelector
       const startDate = new Date(endDate);
       startDate.setHours(endDate.getHours() - 72);
       handleCustomDateChange(formatDateToISOString(startDate), formatDateToISOString(endDate));
+      fetchData();
     }
   }
 
@@ -58,54 +61,61 @@ export function DateRangeSelector({ setDateRange, dateRange }: DateRangeSelector
     }
   };
 
+  const handleFetchButtonClick = () => {
+    fetchData();
+  };
+
   return (
-    <Box
-      gap={2}
-      display='flex'
-      flexWrap='wrap'
-      flexDirection='row'
-    >
-      <Box>
-        <FormControl>
-          <InputLabel>Date Range</InputLabel>
-          <Select
-            label={'Date Range'}
-            value={currentChoice}
-            onChange={(e: SelectChangeEvent<DateRangeChoice>) =>
-              setDateRangeChoice(e.target.value as DateRangeChoice)
-            }
-            style={{
-              maxWidth: `${sidebarWidth - 40}px`,
-            }}
-          >
-            <MenuItem value={'past72Hours'}>Past 72 Hours</MenuItem>
-            <MenuItem value={'custom'}>Custom</MenuItem>
-          </Select>
-        </FormControl>
+    <React.Fragment>
+      <Box
+        gap={2}
+        display='flex'
+        flexWrap='wrap'
+        flexDirection='row'
+      >
+        <Box>
+          <FormControl>
+            <InputLabel>Date Range</InputLabel>
+            <Select
+              label={'Date Range'}
+              value={currentChoice}
+              onChange={(e: SelectChangeEvent<DateRangeChoice>) =>
+                setDateRangeChoice(e.target.value as DateRangeChoice)
+              }
+              style={{
+                maxWidth: `${sidebarWidth - 40}px`,
+              }}
+            >
+              <MenuItem value={'past72Hours'}>Past 72 Hours</MenuItem>
+              <MenuItem value={'custom'}>Custom</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
+        {currentChoice === 'custom' && (
+          <React.Fragment>
+            <Box>
+              <DatePicker
+                label="Start Date"
+                value={new Date(dateRange.start)}
+                onChange={(newValue: Date | null) => {
+                  handleCustomDateChange(formatDateToISOString(newValue), dateRange.end);
+                }}
+              />
+            </Box>
+            <Box>
+              <DatePicker
+                label="End Date"
+                value={new Date(dateRange.end)}
+                onChange={(newValue: Date | null) => {
+                  handleCustomDateChange(dateRange.start, formatDateToISOString(newValue));
+                }}
+              />
+            </Box>
+          </React.Fragment>
+        )}
       </Box>
-      {currentChoice === 'custom' && (
-        <React.Fragment>
-          <Box>
-            <DatePicker
-              label="Start Date"
-              value={new Date(dateRange.start)}
-              onChange={(newValue: Date | null) => {
-                handleCustomDateChange(formatDateToISOString(newValue), dateRange.end);
-              }}
-            />
-          </Box>
-          <Box>
-            <DatePicker
-              label="End Date"
-              value={new Date(dateRange.end)}
-              onChange={(newValue: Date | null) => {
-                handleCustomDateChange(dateRange.start, formatDateToISOString(newValue));
-              }}
-            />
-          </Box>
-        </React.Fragment>
-      )}
-    </Box>
+      <BlueButton onClick={handleFetchButtonClick} text="Fetch studies" />
+    </React.Fragment>
   );
 }
 
