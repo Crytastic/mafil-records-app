@@ -1,8 +1,9 @@
 import React from "react";
+import logo from "../../assets/images/mafil-logo.png";
 
 function Logo() {
   return (
-    <img src='https://mafil.ceitec.cz/files/287/thumb/157-logo-mafil-transp2-0x0.png' alt="logo" height={45} />
+    <img src={logo} alt="logo" height={45} />
   )
 }
 
