@@ -25,7 +25,7 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
     }
   };
 
-  const startResizing = React.useCallback((mouseDownEvent: React.MouseEvent<HTMLDivElement>) => {
+  const startResizing = React.useCallback((mouseDownEvent: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
     mouseDownEvent.preventDefault();
     setIsResizing(true);
   }, []);
@@ -34,24 +34,39 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
     setIsResizing(false);
   }, []);
 
-  const resize = React.useCallback(
+  const resizeMouse = React.useCallback(
     (mouseMoveEvent: MouseEvent) => {
       if (isResizing && sidebarRef.current) {
         const newWidth =
           mouseMoveEvent.clientX - sidebarRef.current.getBoundingClientRect().left;
-        if (typeof setSidebarWidth === "function") {
-          if (newWidth < minWidth) {
-            setSidebarWidth(minWidth);
-          } else if (newWidth > maxWidth) {
-            setSidebarWidth(maxWidth);
-          } else {
-            setSidebarWidth(newWidth);
-          }
-        }
+        updateWidth(newWidth);
       }
     },
     [isResizing]
   );
+
+  const resizeTouch = React.useCallback(
+    (touchMoveEvent: TouchEvent) => {
+      if (isResizing && sidebarRef.current) {
+        const newWidth =
+          touchMoveEvent.touches[0].clientX - sidebarRef.current.getBoundingClientRect().left;
+        updateWidth(newWidth);
+      }
+    },
+    [isResizing]
+  );
+
+  const updateWidth = (newWidth: number) => {
+    if (typeof setSidebarWidth === "function") {
+      if (newWidth < minWidth) {
+        setSidebarWidth(minWidth);
+      } else if (newWidth > maxWidth) {
+        setSidebarWidth(maxWidth);
+      } else {
+        setSidebarWidth(newWidth);
+      }
+    }
+  };
 
   React.useEffect(() => {
     window.addEventListener('resize', updateMaxWidth);
@@ -61,13 +76,17 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
   }, []);
 
   React.useEffect(() => {
-    window.addEventListener("mousemove", resize);
+    window.addEventListener("mousemove", resizeMouse);
     window.addEventListener("mouseup", stopResizing);
+    window.addEventListener("touchmove", resizeTouch);
+    window.addEventListener("touchend", stopResizing);
     return () => {
-      window.removeEventListener("mousemove", resize);
+      window.removeEventListener("mousemove", resizeMouse);
       window.removeEventListener("mouseup", stopResizing);
+      window.removeEventListener("touchmove", resizeTouch);
+      window.removeEventListener("touchend", stopResizing);
     };
-  }, [resize, stopResizing]);
+  }, [resizeMouse, stopResizing, resizeTouch]);
 
   return (
     <Box className="app-container">
@@ -96,7 +115,7 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
           <Divider />
           <SidebarContent content={content} />
         </Box>
-        <Box className="app-sidebar-resizer" onMouseDown={startResizing} />
+        <Box className="app-sidebar-resizer" onMouseDown={startResizing} onTouchStart={startResizing} />
       </Box>
       <Box className="app-frame" />
     </Box>
