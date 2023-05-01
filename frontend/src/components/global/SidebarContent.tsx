@@ -12,6 +12,10 @@ export function SidebarContent({ content }: SidebarContentProps) {
     display="flex"
     flexDirection="column"
     justifyContent="flex-start"
+    sx={{
+      height: '100vh',
+      overflow: 'auto',
+    }}
   >
     {content}
   </Box >;

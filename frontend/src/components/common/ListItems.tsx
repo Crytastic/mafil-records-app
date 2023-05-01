@@ -23,8 +23,8 @@ const ListItems: React.FC<ListItemsProps> = ({ loading, list, loadingMessage, er
             ? theme.palette.grey[100]
             : theme.palette.grey[900],
         flexGrow: 1,
-        height: '100vh',
         overflow: 'auto',
+        height: '100vh',
       }}
     >
       <Toolbar sx={{ minHeight: theme.mixins.toolbar.minHeight }} />
