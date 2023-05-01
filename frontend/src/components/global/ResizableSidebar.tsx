@@ -19,9 +19,25 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
   const [maxWidth, setMaxWidth] = useState(window.innerWidth * 0.75);
   const minWidth = 150;
 
+  const handleOrientationChange = () => {
+    updateMaxWidth();
+  };
+
   const updateMaxWidth = () => {
-    if (open && sidebarWidth > window.innerWidth) {
-      setSidebarWidth(window.innerWidth);
+    const newMaxWidth = window.innerWidth * 0.75;
+    setMaxWidth(newMaxWidth);
+    if (sidebarWidth > newMaxWidth) {
+      setSidebarWidth(newMaxWidth)
+    }
+  };
+
+  const updateWidth = (newWidth: number) => {
+    if (newWidth < minWidth) {
+      setSidebarWidth(minWidth);
+    } else if (newWidth > maxWidth) {
+      setSidebarWidth(maxWidth);
+    } else {
+      setSidebarWidth(newWidth);
     }
   };
 
@@ -56,24 +72,19 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
     [isResizing]
   );
 
-  const updateWidth = (newWidth: number) => {
-    if (typeof setSidebarWidth === "function") {
-      if (newWidth < minWidth) {
-        setSidebarWidth(minWidth);
-      } else if (newWidth > maxWidth) {
-        setSidebarWidth(maxWidth);
-      } else {
-        setSidebarWidth(newWidth);
-      }
-    }
-  };
-
   React.useEffect(() => {
     window.addEventListener('resize', updateMaxWidth);
     return () => {
       window.removeEventListener('resize', updateMaxWidth);
     };
-  }, []);
+  }, [updateMaxWidth]);
+
+  React.useEffect(() => {
+    window.addEventListener("orientationchange", handleOrientationChange);
+    return () => {
+      window.removeEventListener("orientationchange", handleOrientationChange);
+    };
+  }, [handleOrientationChange]);
 
   React.useEffect(() => {
     window.addEventListener("mousemove", resizeMouse);
