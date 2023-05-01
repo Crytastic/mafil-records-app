@@ -1,26 +1,26 @@
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import MenuIcon from '@mui/icons-material/Menu';
-import RefreshIcon from '@mui/icons-material/Refresh';
-import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
-import { Badge, Box, IconButton, Toolbar } from '@mui/material';
+import { Box, IconButton, Toolbar } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 import SidebarContext from "../../contexts/SidebarContext";
 import Logo from '../common/Logo';
 import AppBar from './AppBar';
+import RefreshButton from '../common/RefreshButton';
+import SaveButton from '../common/SaveButton';
+import SortButton from '../common/SortButton';
+import { ContentCutTwoTone } from '@mui/icons-material';
 
-interface CommonAppBarProps {
+interface AppBarContentProps {
   open: boolean;
   toggleDrawer: () => void;
-  handleRefresh: () => void;
-  sortOrder?: 'asc' | 'desc';
-  toggleSortOrder?: () => void;
+  pageTitle?: string;
+  content?: React.ReactNode;
 }
 
-function CommonAppBar({ open, sortOrder, toggleSortOrder, toggleDrawer, handleRefresh }: CommonAppBarProps) {
-  const currentPath = useLocation().pathname;
+function AppBarContent({ open, pageTitle, content, toggleDrawer }: AppBarContentProps) {
   const { sidebarWidth } = useContext(SidebarContext);
   const [showLogo, setShowLogo] = useState(true);
   const [showTitle, setShowTitle] = useState(true);
@@ -66,38 +66,15 @@ function CommonAppBar({ open, sortOrder, toggleSortOrder, toggleDrawer, handleRe
           <MenuIcon />
         </IconButton>
         {showTitle ?
-          <React.Fragment>
-            {currentPath === "/measuring" && (
-              <Box>Measuring and taking notes</Box>
-            )}
-            {currentPath === "/studies" && (
-              <Box>Choosing a study</Box>
-            )}
-          </React.Fragment>
+          <Box>{pageTitle}</Box>
           : <Box />}
         {showLogo && <Logo />}
         <Box>
-          {currentPath === "/measuring" && (
-            <React.Fragment>
-              <IconButton size="large" color="inherit" onClick={toggleSortOrder}>
-                {sortOrder === 'asc' ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
-              </IconButton>
-              <IconButton size="large" color="inherit">
-                <Badge badgeContent={0} color="error">
-                  <SaveOutlinedIcon />
-                </Badge>
-              </IconButton>
-            </React.Fragment>
-          )}
-          <IconButton size="large" color="inherit" onClick={handleRefresh}>
-            <Badge badgeContent={0} color="error">
-              <RefreshIcon />
-            </Badge>
-          </IconButton>
+          {content}
         </Box>
       </Toolbar>
     </AppBar>
   );
 }
 
-export default CommonAppBar;
+export default AppBarContent;

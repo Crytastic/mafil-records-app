@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import "./ResizableSidebar.css";
 
 import SidebarContext from "../../contexts/SidebarContext";
-import { CommonInfo } from "./CommonInfo";
+import { SidebarContent } from "./SidebarContent";
 
 interface ResizableSidebarProps {
   open: boolean;
@@ -94,7 +94,7 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
             </IconButton>
           </Toolbar>
           <Divider />
-          <CommonInfo content={content} />
+          <SidebarContent content={content} />
         </Box>
         <Box className="app-sidebar-resizer" onMouseDown={startResizing} />
       </Box>
