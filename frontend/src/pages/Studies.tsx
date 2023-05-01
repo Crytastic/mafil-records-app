@@ -2,12 +2,14 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import React, { useEffect, useState } from 'react';
 import ListItems from '../components/common/ListItems';
-import CommonAppBar from '../components/global/CommonAppbar';
+import CommonAppBar from '../components/global/AppBarContent';
 import { ResizableSidebar } from '../components/global/ResizableSidebar';
 import { DateRangeSelector, formatDateToISOString } from '../components/studies/DateRangeSelector';
 import { Study, StudyProps } from '../components/studies/Study';
 import { SidebarProvider } from '../contexts/SidebarContext';
 import { fetchStudies } from '../utils/Fetchers';
+import LoginButton from '../components/common/LoginButton';
+import RefreshButton from '../components/common/RefreshButton';
 
 function Studies() {
   const [open, setOpen] = React.useState(true);
@@ -75,17 +77,23 @@ function Studies() {
           <CommonAppBar
             open={open}
             toggleDrawer={toggleDrawer}
-            handleRefresh={handleRefresh}
+            pageTitle='Choosing a study'
+            content={
+              <RefreshButton onClick={handleRefresh} />
+            }
           />
           <ResizableSidebar
             open={open}
             toggleDrawer={toggleDrawer}
             content={
-              <DateRangeSelector
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                fetchData={fetchData}
-              />
+              <React.Fragment>
+                <LoginButton />
+                <DateRangeSelector
+                  dateRange={dateRange}
+                  setDateRange={setDateRange}
+                  fetchData={fetchData}
+                />
+              </React.Fragment>
             }
           />
           <ListItems

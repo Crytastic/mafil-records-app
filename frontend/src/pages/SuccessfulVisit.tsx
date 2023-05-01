@@ -1,16 +1,17 @@
 import { Box } from '@mui/material';
 import React from 'react';
 import Message from '../components/common/Message';
-import CommonAppBar from '../components/global/CommonAppbar';
+import CommonAppBar from '../components/global/AppBarContent';
 import { ResizableSidebar } from '../components/global/ResizableSidebar';
 import { SidebarProvider } from '../contexts/SidebarContext';
+import { BlueButton } from '../components/common/Buttons';
+import LoginButton from '../components/common/LoginButton';
 
 function SuccessfulVisit() {
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-  function handleRefresh() { };
 
   return (
     <SidebarProvider>
@@ -18,11 +19,16 @@ function SuccessfulVisit() {
         <CommonAppBar
           open={open}
           toggleDrawer={toggleDrawer}
-          handleRefresh={handleRefresh}
         />
         <ResizableSidebar
           open={open}
           toggleDrawer={toggleDrawer}
+          content={
+            <React.Fragment>
+              <LoginButton />
+              <BlueButton text='Start visit' path='/studies' />
+            </React.Fragment>
+          }
         />
         <Box
           component="main"

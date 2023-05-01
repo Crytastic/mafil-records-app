@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import ListItems from '../components/common/ListItems';
-import CommonAppBar from '../components/global/CommonAppbar';
+import CommonAppBar from '../components/global/AppBarContent';
 import { ResizableSidebar } from '../components/global/ResizableSidebar';
 import { Series, SeriesProps } from '../components/series/Series';
 import { SidebarProvider } from '../contexts/SidebarContext';
 import { fetchSeries } from '../utils/Fetchers';
+import { Box, Divider } from '@mui/material';
+import { BlueButton, RedButton } from '../components/common/Buttons';
+import InfoItem from '../components/common/InfoItem';
+import { MultiLineInput } from '../components/common/Inputs';
+import { StudyProps } from '../components/studies/Study';
+import { useAuth } from 'react-oidc-context';
+import RefreshButton from '../components/common/RefreshButton';
+import SaveButton from '../components/common/SaveButton';
+import SortButton from '../components/common/SortButton';
 
 function Measuring() {
+  const auth = useAuth();
   const [open, setOpen] = React.useState(true);
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [seriesJson, setSeriesJson] = useState<SeriesProps[]>([]);
@@ -97,19 +107,67 @@ function Measuring() {
     ));
   }
 
+  const [props, setProps] = useState<StudyProps>(() => {
+    const localStudy = localStorage.getItem(`currentStudy`);
+    return localStudy ? JSON.parse(localStudy) : {};
+  });
+
+  const [studyData, setStudyData] = useState(() => {
+    const localStudy = localStorage.getItem(`study-${props.StudyInstanceUID}`);
+    return localStudy ? JSON.parse(localStudy) : {
+      general_comment: '',
+    };
+  });
+
+  const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = event.target;
+    setStudyData({
+      ...studyData,
+      [name]: value,
+    });
+  };
+
+  useEffect(() => {
+    localStorage.setItem(`study-${props.StudyInstanceUID}`, JSON.stringify({ ...studyData }))
+  }, [studyData]);
+
   return (
     <SidebarProvider>
       <React.Fragment>
         <CommonAppBar
           open={open}
-          sortOrder={sortOrder}
           toggleDrawer={toggleDrawer}
-          toggleSortOrder={toggleSortOrder}
-          handleRefresh={handleRefresh}
+          pageTitle='Measuring and taking notes'
+          content={
+            <React.Fragment>
+              <SortButton sortOrder={sortOrder} onClick={toggleSortOrder} />
+              <SaveButton />
+              <RefreshButton onClick={handleRefresh} />
+            </React.Fragment>
+          }
         />
         <ResizableSidebar
           open={open}
           toggleDrawer={toggleDrawer}
+          content={
+            <React.Fragment>
+              <InfoItem label="Measuring operator" text={auth.user ? auth.user.profile.name : ''} />
+              <InfoItem label="Visit ID" text={props.AccessionNumber} />
+              <InfoItem label="Study UID" text={props.StudyInstanceUID} />
+              <InfoItem label="Patient name" text={props.PatientName} />
+              <MultiLineInput
+                label="General comment to visit"
+                name="general_comment"
+                value={studyData.general_comment}
+                onChange={handleTextChange}
+              />
+              <Box gap={2} display='flex' flexDirection="row" flexWrap='wrap' justifyContent="space-between">
+                <BlueButton text="Finish study" path="/success" />
+                <RedButton text="Back to studies" path="/studies" />
+              </Box>
+              <Divider sx={{ my: 3 }} />
+            </React.Fragment>
+          }
         />
         <ListItems
           loading={loading}
