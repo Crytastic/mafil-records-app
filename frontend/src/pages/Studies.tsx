@@ -9,7 +9,7 @@ import { Study, StudyProps } from '../components/studies/Study';
 import { SidebarProvider } from '../contexts/SidebarContext';
 import { fetchStudies } from '../utils/Fetchers';
 import LoginButton from '../components/common/LoginButton';
-import RefreshButton from '../components/common/RefreshButton';
+import RefreshButton from '../components/common/AppBarButton';
 
 function Studies() {
   const [open, setOpen] = React.useState(true);

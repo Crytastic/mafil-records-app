@@ -11,5 +11,7 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": ["postbuild.ts"]
+  "include": [
+    "postbuild.ts"
+  ]
 }
