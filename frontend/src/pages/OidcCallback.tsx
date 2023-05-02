@@ -1,7 +1,9 @@
 // OIDCCallback.tsx
+import { Container } from "@mui/material";
 import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
 import { useNavigate, useLocation } from "react-router-dom";
+import LoadingBox from "../components/common/LoadingBox";
 
 export function useUserManager() {
   const auth = useAuth();
@@ -27,20 +29,24 @@ function OIDCCallback() {
           console.log(accessToken)
           const user = await userManager._loadUser(accessToken, false);
           userManager.events.load(user);
-          navigate("/"); // Redirect to the main page or any other page
+          navigate("/studies"); // Redirect to studies page if user is loaded
         } catch (error) {
           console.error("Error processing access token:", error);
         }
       } else {
         // Redirect to the login page if the access_token is not present
-        navigate("/login");
+        navigate("/");
       }
     };
 
     processAccessToken();
   }, [auth, history, location]);
 
-  return <div>Processing...</div>;
+  return (
+    <Container>
+      <LoadingBox loadingMessage='Signing in...' />
+    </Container>
+  );
 }
 
 export default OIDCCallback;

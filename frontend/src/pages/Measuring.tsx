@@ -11,7 +11,7 @@ import InfoItem from '../components/common/InfoItem';
 import { MultiLineInput } from '../components/common/Inputs';
 import { StudyProps } from '../components/studies/Study';
 import { useAuth } from 'react-oidc-context';
-import RefreshButton from '../components/common/RefreshButton';
+import RefreshButton from '../components/common/AppBarButton';
 import SaveButton from '../components/common/SaveButton';
 import SortButton from '../components/common/SortButton';
 
