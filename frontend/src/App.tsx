@@ -12,6 +12,7 @@ import OidcLogin from './pages/OidcLogin';
 import OidcLogout from './pages/OidcLogout';
 import Studies from './pages/Studies';
 import SuccessfulVisit from './pages/SuccessfulVisit';
+import OIDCCallback from './components/common/OidcCallback';
 
 const App = () => {
   return (
@@ -21,7 +22,7 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<Landing />} />
-            <Route path='/oidc-login' element={<OidcLogin />} />
+            <Route path='/oidc-login' element={<OIDCCallback />} />
             <Route path='/oidc-logout' element={<OidcLogout />} />
             <Route path='/studies' element={<Studies />} />
             <Route path='/measuring' element={<Measuring />} />
