@@ -1,7 +1,7 @@
 import DateRange from '../components/studies/DateRangeSelector';
 
 export async function fetchStudies(dateRange: DateRange) {
-  const url = `http://devel.mafildb.ics.muni.cz:8000/json?start=${dateRange.start}&end=${dateRange.end}&level=STUDY&force_pacs`;
+  const url = `https://pacs-api.devel.mafildb.ics.muni.cz/json?start=${dateRange.start}&end=${dateRange.end}&level=STUDY&force_pacs`;
 
   try {
     const resp = await fetch(
@@ -26,7 +26,7 @@ export async function fetchStudies(dateRange: DateRange) {
 }
 
 export async function fetchSeries(accessionNumber: string) {
-  const url = `http://devel.mafildb.ics.muni.cz:8000/json?accession_number=${accessionNumber}&level=SERIES`;
+  const url = `https://pacs-api.devel.mafildb.ics.muni.cz/json?accession_number=${accessionNumber}&level=SERIES`;
 
   try {
     const resp = await fetch(
