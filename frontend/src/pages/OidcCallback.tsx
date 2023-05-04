@@ -1,4 +1,5 @@
 // OIDCCallback.tsx
+import React from "react";
 import { Container } from "@mui/material";
 import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
