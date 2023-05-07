@@ -8,10 +8,6 @@ import InfoItem from "./InfoItem";
 function LoginButton() {
   const auth = useAuth();
 
-  const handleLogin = async () => {
-    window.location.href = "http://localhost:4000/api/login";
-  };
-
   switch (auth.activeNavigator) {
     case "signinSilent":
       return <Box>Signing you in...</Box>;
@@ -31,7 +27,7 @@ function LoginButton() {
     return (
       <React.Fragment>
         <InfoItem label="Measuring operator" text={auth.user.profile.name} />
-        <RedButton text='Log out' onClick={handleLogin} />
+        <RedButton text='Log out' onClick={() => void auth.signoutRedirect()} />
       </React.Fragment>
     );
   }
@@ -39,9 +35,10 @@ function LoginButton() {
   return (
     <React.Fragment>
       <InfoItem label="Measuring operator" text="Not yet logged in" />
-      <BlueButton text='Log in' onClick={handleLogin} />
+      <BlueButton text='Log in' onClick={() => void auth.signinRedirect()} />
     </React.Fragment>
   );
 }
 
 export default LoginButton;
+
