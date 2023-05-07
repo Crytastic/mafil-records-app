@@ -3,45 +3,29 @@ import React from "react";
 import { Container } from "@mui/material";
 import { useEffect } from "react";
 import { useAuth } from "react-oidc-context";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LoadingBox from "../components/common/LoadingBox";
-
-export function useUserManager() {
-  const auth = useAuth();
-  // @ts-ignore: Access the private _userManager instance
-  const userManager = auth._userManager;
-
-  return userManager;
-}
 
 function OIDCCallback() {
   const auth = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
 
   useEffect(() => {
-    const processAccessToken = async () => {
-      const userManager = useUserManager();
-      const urlSearchParams = new URLSearchParams(location.search);
-      const accessToken = urlSearchParams.get("access_token");
-
-      if (accessToken) {
-        try {
-          console.log(accessToken)
-          const user = await userManager._loadUser(accessToken, false);
-          userManager.events.load(user);
-          navigate("/studies"); // Redirect to studies page if user is loaded
-        } catch (error) {
-          console.error("Error processing access token:", error);
-        }
+    const handleUserLoaded = () => {
+      if (auth.user && auth.user.profile) {
+        navigate("/studies");
       } else {
-        // Redirect to the login page if the access_token is not present
         navigate("/");
       }
     };
 
-    processAccessToken();
-  }, [auth, history, location]);
+    auth.events.addUserLoaded(handleUserLoaded);
+
+    return () => {
+      // Clean up the event listener when the component is unmounted
+      auth.events.removeUserLoaded(handleUserLoaded);
+    };
+  }, [auth, navigate]);
 
   return (
     <Container>
@@ -51,3 +35,4 @@ function OIDCCallback() {
 }
 
 export default OIDCCallback;
+
