@@ -14,6 +14,7 @@ import { useAuth } from 'react-oidc-context';
 import RefreshButton from '../components/common/AppBarButton';
 import SaveButton from '../components/common/SaveButton';
 import SortButton from '../components/common/SortButton';
+import { withAuthentication } from '../utils/WithAuthentication';
 
 function Measuring() {
   const auth = useAuth();
@@ -180,4 +181,5 @@ function Measuring() {
   );
 }
 
-export default Measuring;
+const ProtectedMeasuring = withAuthentication(Measuring);
+export default ProtectedMeasuring;

@@ -6,6 +6,7 @@ import { ResizableSidebar } from '../components/global/ResizableSidebar';
 import { SidebarProvider } from '../contexts/SidebarContext';
 import { BlueButton } from '../components/common/Buttons';
 import LoginButton from '../components/common/LoginButton';
+import { withAuthentication } from '../utils/WithAuthentication';
 
 function SuccessfulVisit() {
   const [open, setOpen] = React.useState(true);
@@ -49,4 +50,5 @@ function SuccessfulVisit() {
   );
 }
 
-export default SuccessfulVisit;
+const ProtectedMeasuring = withAuthentication(SuccessfulVisit);
+export default ProtectedMeasuring;

@@ -10,6 +10,7 @@ import { SidebarProvider } from '../contexts/SidebarContext';
 import { fetchStudies } from '../utils/Fetchers';
 import LoginButton from '../components/common/LoginButton';
 import RefreshButton from '../components/common/AppBarButton';
+import { withAuthentication } from '../utils/WithAuthentication';
 
 function Studies() {
   const [open, setOpen] = React.useState(true);
@@ -108,4 +109,5 @@ function Studies() {
   );
 }
 
-export default Studies;
+const ProtectedMeasuring = withAuthentication(Studies);
+export default ProtectedMeasuring;
