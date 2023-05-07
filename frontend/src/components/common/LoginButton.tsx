@@ -1,42 +1,46 @@
-import { Box } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 import { useAuth } from "react-oidc-context";
 
+import { useNavigate } from "react-router-dom";
 import { BlueButton, RedButton } from "./Buttons";
 import InfoItem from "./InfoItem";
-import oidcConfig from "../../oidcConfig";
+import { SmallLoadingBox } from "./LoadingBox";
 
 function LoginButton() {
   const auth = useAuth();
+  const navigate = useNavigate();
 
   function handleLogin() {
     auth.signinRedirect();
   }
 
   function handleLogout() {
-    auth.signoutRedirect()
+    auth.signoutSilent();
+    navigate('/oidc-logout');
   }
 
   switch (auth.activeNavigator) {
+    case "signinRedirect":
     case "signinSilent":
-      return <Box>Signing you in...</Box>;
+      return <SmallLoadingBox loadingMessage={"Signing in..."} />;
     case "signoutRedirect":
-      return <Box>Signing you out...</Box>;
+    case "signoutSilent":
+      return <SmallLoadingBox loadingMessage={"Signing out..."} />;
   }
 
   if (auth.isLoading) {
-    return <Box>Loading...</Box>;
+    return <SmallLoadingBox loadingMessage={"Loading..."} />;
   }
 
   if (auth.error) {
-    return <Box>Oops... {auth.error.message}</Box>;
+    return <SmallLoadingBox loadingMessage={"Error..."} />;
   }
 
   if (auth.user) {
     return (
       <React.Fragment>
         <InfoItem label="Measuring operator" text={auth.user.profile.name} />
-        <RedButton text='Log out' onClick={handleLogin} />
+        <RedButton text='Log out' onClick={handleLogout} />
       </React.Fragment>
     );
   }
@@ -44,10 +48,9 @@ function LoginButton() {
   return (
     <React.Fragment>
       <InfoItem label="Measuring operator" text="Not yet logged in" />
-      <BlueButton text='Log in' onClick={handleLogout} />
+      <BlueButton text='Log in' onClick={handleLogin} />
     </React.Fragment>
   );
 }
 
 export default LoginButton;
-
