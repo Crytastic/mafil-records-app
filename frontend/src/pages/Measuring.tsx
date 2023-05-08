@@ -13,11 +13,10 @@ import { ResizableSidebar } from '../components/global/ResizableSidebar';
 import { Series, SeriesData, SeriesProps } from '../components/series/Series';
 import { StudyProps } from '../components/studies/Study';
 import { SidebarProvider } from '../contexts/SidebarContext';
-import { fetchSeries, fetchStudyData } from '../utils/Fetchers';
+import { fetchSeries } from '../utils/Fetchers';
 import { withAuthentication } from '../utils/WithAuthentication';
 import removeSeriesFromLocalStorage from '../utils/RemoveSeriesFromLocalStorage';
 import removeStudiesFromLocalStorage from '../utils/RemoveStudiesFromLocalStorage';
-import { saveSeriesData, saveStudyData } from '../utils/Savers';
 
 export interface StudyData {
   StudyInstanceUID: string;
@@ -146,17 +145,13 @@ function Measuring() {
     return localStudy ? JSON.parse(localStudy) : {};
   });
 
-  const [studyData, setStudyData] = useState<StudyData>({
-    StudyInstanceUID: props.StudyInstanceUID,
-    general_comment: '',
+  const [studyData, setStudyData] = useState<StudyData>(() => {
+    const localStudy = localStorage.getItem(`study-${props.StudyInstanceUID}`);
+    return localStudy ? JSON.parse(localStudy) : {
+      StudyInstanceUID: props.StudyInstanceUID,
+      general_comment: '',
+    };
   });
-
-  useEffect(() => {
-    (async () => {
-      const fetchedStudyData = await fetchStudyData(props.StudyInstanceUID);
-      setStudyData(fetchedStudyData);
-    })();
-  }, [props.StudyInstanceUID]);
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;

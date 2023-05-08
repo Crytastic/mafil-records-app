@@ -10,7 +10,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import React, { useEffect, useState } from 'react';
 import CommonCard, { ExpandMore } from '../common/CommonCard';
 import { MultiLineInput, MultiLineInputProps, SingleLineInput, SingleLineInputProps } from '../common/Inputs';
-import { fetchSeriesData } from '../../utils/Fetchers';
 
 export function SeriesSingleLineInput({ name, label, value, onChange }: SingleLineInputProps) {
   return (
@@ -71,6 +70,7 @@ export interface SeriesProps {
   onPaste: () => string | null; // onPaste handler passed from parent component
 }
 
+
 export interface SeriesData {
   SeriesInstanceUID: string;
   seq_state: string;
@@ -114,41 +114,28 @@ export function Series(props: SeriesProps) {
 
   const [seriesData, setSeriesData] = useState<SeriesData>(() => {
     const localSeq = localStorage.getItem(`series-${props.SeriesInstanceUID}`);
-    if (localSeq) {
-      return JSON.parse(localSeq);
-    } else {
-      (async () => {
-        const dbSeriesData = await fetchSeriesData(props.SeriesInstanceUID);
-        if (dbSeriesData) {
-          setSeriesData(dbSeriesData);
-        } else {
-          const defaultSeriesData = {
-            SeriesInstanceUID: props.SeriesInstanceUID,
-            seq_state: 'pending',
-            is_selected: false,
-            is_expanded: false,
-            measured: new Date().toISOString(),
-            last_updated: new Date().toISOString(),
-            measurement_notes: '',
-            stim_protocol: '',
-            stim_log_file: '',
-            fyzio_raw_file: '',
-            general_eeg: false,
-            general_et: false,
-            bp_ekg: false,
-            bp_resp: false,
-            bp_gsr: false,
-            bp_acc: false,
-            siemens_ekg: false,
-            siemens_resp: false,
-            siemens_gsr: false,
-            siemens_acc: false,
-          };
-          setSeriesData(defaultSeriesData);
-        }
-      })();
-    }
-    return {}; // Return an empty object initially, it will be updated once the data is fetched
+    return localSeq ? JSON.parse(localSeq) : {
+      SeriesInstanceUID: props.SeriesInstanceUID,
+      seq_state: 'pending',
+      is_selected: false,
+      is_expanded: false,
+      measured: new Date().toISOString(),
+      last_updated: new Date().toISOString(),
+      measurement_notes: '',
+      stim_protocol: '',
+      stim_log_file: '',
+      fyzio_raw_file: '',
+      general_eeg: false,
+      general_et: false,
+      bp_ekg: false,
+      bp_resp: false,
+      bp_gsr: false,
+      bp_acc: false,
+      siemens_ekg: false,
+      siemens_resp: false,
+      siemens_gsr: false,
+      siemens_acc: false,
+    };
   });
 
   useEffect(() => {

@@ -129,17 +129,11 @@ app.post('/api/series', async (req, res) => {
   }
 });
 
-app.get('/api/series/:SeriesInstanceUID', async (req, res) => {
-  const { SeriesInstanceUID } = req.params;
-
+app.get('/api/series/:seriesInstanceUID', async (req, res) => {
+  const { seriesInstanceUID } = req.params;
   try {
-    const { rows } = await pool.query('SELECT * FROM seriesdt WHERE SeriesInstanceUID = $1', [SeriesInstanceUID]);
-
-    if (rows.length === 0) {
-      res.status(404).json({ error: 'Series not found' });
-    } else {
-      res.status(200).json(rows[0]);
-    }
+    const { rows } = await pool.query('SELECT series_data FROM seriesdt WHERE series_instance_uid = $1', [seriesInstanceUID]);
+    res.status(200).json(rows[0]?.series_data ?? null);
   } catch (err) {
     console.error(err);
     res.status(500).send();
