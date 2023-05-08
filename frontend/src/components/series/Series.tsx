@@ -70,6 +70,29 @@ export interface SeriesProps {
   onPaste: () => string | null; // onPaste handler passed from parent component
 }
 
+
+export interface SeriesData {
+  seq_state: string;
+  is_selected: boolean;
+  is_expanded: boolean;
+  measured: string;
+  last_updated: string;
+  measurement_notes: string;
+  stim_protocol: string;
+  stim_log_file: string;
+  fyzio_raw_file: string;
+  general_eeg: boolean;
+  general_et: boolean;
+  bp_ekg: boolean;
+  bp_resp: boolean;
+  bp_gsr: boolean;
+  bp_acc: boolean;
+  siemens_ekg: boolean;
+  siemens_resp: boolean;
+  siemens_gsr: boolean;
+  siemens_acc: boolean;
+}
+
 export function Series(props: SeriesProps) {
   type SeriesStateEnum = 'successful' | 'failed' | 'pending';
 
@@ -88,7 +111,7 @@ export function Series(props: SeriesProps) {
     )
   }
 
-  const [seriesData, setSeriesData] = useState(() => {
+  const [seriesData, setSeriesData] = useState<SeriesData>(() => {
     const localSeq = localStorage.getItem(`series-${props.SeriesInstanceUID}`);
     return localSeq ? JSON.parse(localSeq) : {
       seq_state: 'pending',

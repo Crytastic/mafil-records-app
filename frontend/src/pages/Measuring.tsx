@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import ListItems from '../components/common/ListItems';
-import CommonAppBar from '../components/global/AppBarContent';
-import { ResizableSidebar } from '../components/global/ResizableSidebar';
-import { Series, SeriesProps } from '../components/series/Series';
-import { SidebarProvider } from '../contexts/SidebarContext';
-import { fetchSeries } from '../utils/Fetchers';
 import { Box, Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from 'react-oidc-context';
+import RefreshButton from '../components/common/AppBarButton';
 import { BlueButton, RedButton } from '../components/common/Buttons';
 import InfoItem from '../components/common/InfoItem';
 import { MultiLineInput } from '../components/common/Inputs';
-import { StudyProps } from '../components/studies/Study';
-import { useAuth } from 'react-oidc-context';
-import RefreshButton from '../components/common/AppBarButton';
+import ListItems from '../components/common/ListItems';
 import SaveButton from '../components/common/SaveButton';
 import SortButton from '../components/common/SortButton';
+import CommonAppBar from '../components/global/AppBarContent';
+import { ResizableSidebar } from '../components/global/ResizableSidebar';
+import { Series, SeriesData, SeriesProps } from '../components/series/Series';
+import { StudyProps } from '../components/studies/Study';
+import { SidebarProvider } from '../contexts/SidebarContext';
+import { fetchSeries } from '../utils/Fetchers';
 import { withAuthentication } from '../utils/WithAuthentication';
 
 function Measuring() {
@@ -22,8 +22,17 @@ function Measuring() {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [seriesJson, setSeriesJson] = useState<SeriesProps[]>([]);
   const [selectedSeqId, setSelectedSeqId] = React.useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [savingSeries, setSavingSeries] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
+
+  async function saveSeries() {
+    setSavingSeries(true);
+
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
+    setSavingSeries(false);
+  }
 
   async function fetchData() {
     setLoading(true);
@@ -142,7 +151,7 @@ function Measuring() {
           content={
             <React.Fragment>
               <SortButton sortOrder={sortOrder} onClick={toggleSortOrder} />
-              <SaveButton />
+              <SaveButton savingSeries={savingSeries} onClick={saveSeries} />
               <RefreshButton onClick={handleRefresh} />
             </React.Fragment>
           }
