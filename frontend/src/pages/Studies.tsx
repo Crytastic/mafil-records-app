@@ -109,5 +109,5 @@ function Studies() {
   );
 }
 
-const ProtectedMeasuring = withAuthentication(Studies);
-export default ProtectedMeasuring;
+const ProtectedStudies = withAuthentication(Studies);
+export default ProtectedStudies;
