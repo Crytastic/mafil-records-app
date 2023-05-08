@@ -1,4 +1,4 @@
-async function saveSeriesData(StudyInstanceUID: string): Promise<boolean> {
+export async function saveSeriesData(StudyInstanceUID: string): Promise<boolean> {
   let success = false;
 
   try {
@@ -27,7 +27,7 @@ async function saveSeriesData(StudyInstanceUID: string): Promise<boolean> {
   return success;
 }
 
-async function saveStudyData(StudyInstanceUID: string): Promise<boolean> {
+export async function saveStudyData(StudyInstanceUID: string): Promise<boolean> {
   let success = false;
 
   try {
