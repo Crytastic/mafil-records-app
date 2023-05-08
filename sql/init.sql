@@ -18,3 +18,8 @@ CREATE TABLE IF NOT EXISTS seriesdt (
   SiemensGSR BOOLEAN DEFAULT false,
   SiemensAcc BOOLEAN DEFAULT false
 );
+
+CREATE TABLE IF NOT EXISTS studiesdt (
+  StudyInstanceUID: VARCHAR(255) PRIMARY KEY,
+  GeneralComment: TEXT,
+);
