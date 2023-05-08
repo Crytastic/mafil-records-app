@@ -24,6 +24,40 @@ app.get("/api", (req, res) => {
   res.send(`Backend API accessible`);
 });
 
+app.get('/api/study', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM studiesdt');
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+app.post('/api/study', async (req, res) => {
+  const studyData = req.body;
+  console.log('Saving study data to the database:', studyData);
+
+  try {
+    await pool.query(
+      `INSERT INTO studiesdt (StudyInstanceUID, GeneralComment)
+        VALUES ($1, $2)
+        ON CONFLICT (StudyInstanceUID)
+        DO UPDATE SET
+          GeneralComment = $2`,
+      [
+        studyData.StudyInstanceUID,
+        studyData.GeneralComment,
+      ]
+    );
+    res.status(200).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+
 app.get('/api/series', async (req, res) => {
   try {
     const { rows } = await pool.query('SELECT * FROM seriesdt');
@@ -93,11 +127,6 @@ app.post('/api/series', async (req, res) => {
     console.error(err);
     res.status(500).send();
   }
-});
-
-app.post('/api/series', async (req, res) => {
-  console.log('Saving series data to database:', req.body);
-  res.status(200).send();
 });
 
 app.get('/api/series/:seriesInstanceUID', async (req, res) => {

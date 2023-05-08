@@ -15,6 +15,13 @@ import { StudyProps } from '../components/studies/Study';
 import { SidebarProvider } from '../contexts/SidebarContext';
 import { fetchSeries } from '../utils/Fetchers';
 import { withAuthentication } from '../utils/WithAuthentication';
+import removeSeriesFromLocalStorage from '../utils/RemoveSeriesFromLocalStorage';
+import removeStudiesFromLocalStorage from '../utils/RemoveStudiesFromLocalStorage';
+
+export interface StudyData {
+  StudyInstanceUID: string;
+  general_comment: string;
+}
 
 function Measuring() {
   const auth = useAuth();
@@ -26,32 +33,12 @@ function Measuring() {
   const [savingSeries, setSavingSeries] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  async function saveSeries() {
+  async function saveRecords(): Promise<boolean> {
     setSavingSeries(true);
-
-    try {
-      const seriesKeys = Object.keys(localStorage).filter((key) => key.startsWith('series-'));
-      const seriesDataArray = seriesKeys.map((key) => JSON.parse(localStorage.getItem(key) || '{}'));
-      console.log(seriesDataArray);
-
-      const response = await fetch('/api/series', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(seriesDataArray),
-      });
-
-      if (response.ok) {
-        console.log('Series data saved to the database');
-      } else {
-        console.error('Failed to save series data to the database');
-      }
-    } catch (error) {
-      console.error('Error saving series data:', error);
-    }
-
+    const seriesSuccess = await saveSeriesData(props.StudyInstanceUID);
+    const studySuccess = await saveStudyData(props.StudyInstanceUID);
     setSavingSeries(false);
+    return seriesSuccess && studySuccess;
   }
 
   async function fetchData() {
@@ -96,6 +83,22 @@ function Measuring() {
   function handleRefresh() {
     fetchData();
   };
+
+  async function handleFinishStudy() {
+    const saveSuccess = await saveRecords();
+    if (saveSuccess) {
+      removeSeriesFromLocalStorage();
+      removeStudiesFromLocalStorage();
+    }
+  }
+
+  async function handleBackToStudies() {
+    const saveSuccess = await saveRecords();
+    if (saveSuccess) {
+      removeSeriesFromLocalStorage();
+      removeStudiesFromLocalStorage();
+    }
+  }
 
   const handleSeriesCopy = (seqId: string) => {
     setSelectedSeqId(seqId);
@@ -142,9 +145,10 @@ function Measuring() {
     return localStudy ? JSON.parse(localStudy) : {};
   });
 
-  const [studyData, setStudyData] = useState(() => {
+  const [studyData, setStudyData] = useState<StudyData>(() => {
     const localStudy = localStorage.getItem(`study-${props.StudyInstanceUID}`);
     return localStudy ? JSON.parse(localStudy) : {
+      StudyInstanceUID: props.StudyInstanceUID,
       general_comment: '',
     };
   });
@@ -171,7 +175,7 @@ function Measuring() {
           content={
             <React.Fragment>
               <SortButton sortOrder={sortOrder} onClick={toggleSortOrder} />
-              <SaveButton savingSeries={savingSeries} onClick={saveSeries} />
+              <SaveButton savingSeries={savingSeries} onClick={saveRecords} />
               <RefreshButton onClick={handleRefresh} />
             </React.Fragment>
           }
@@ -192,8 +196,8 @@ function Measuring() {
                 onChange={handleTextChange}
               />
               <Box gap={2} display='flex' flexDirection="row" flexWrap='wrap' justifyContent="space-between">
-                <BlueButton text="Finish study" path="/success" />
-                <RedButton text="Back to studies" path="/studies" />
+                <BlueButton text="Finish study" path="/success" onClick={handleFinishStudy} />
+                <RedButton text="Back to studies" path="/studies" onClick={handleBackToStudies} />
               </Box>
               <Divider sx={{ my: 3 }} />
             </React.Fragment>
