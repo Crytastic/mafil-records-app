@@ -72,6 +72,7 @@ export interface SeriesProps {
 
 
 export interface SeriesData {
+  SeriesInstanceUID: string;
   seq_state: string;
   is_selected: boolean;
   is_expanded: boolean;
@@ -114,11 +115,12 @@ export function Series(props: SeriesProps) {
   const [seriesData, setSeriesData] = useState<SeriesData>(() => {
     const localSeq = localStorage.getItem(`series-${props.SeriesInstanceUID}`);
     return localSeq ? JSON.parse(localSeq) : {
+      SeriesInstanceUID: props.SeriesInstanceUID,
       seq_state: 'pending',
       is_selected: false,
       is_expanded: false,
-      measured: new Date().toLocaleTimeString(),
-      last_updated: new Date().toLocaleTimeString(),
+      measured: new Date().toISOString(),
+      last_updated: new Date().toISOString(),
       measurement_notes: '',
       stim_protocol: '',
       stim_log_file: '',
@@ -144,7 +146,7 @@ export function Series(props: SeriesProps) {
     setSeriesData({
       ...seriesData,
       [event.target.name]: event.target.checked,
-      last_updated: new Date().toLocaleTimeString()
+      last_updated: new Date().toISOString()
     });
   };
 
@@ -153,7 +155,7 @@ export function Series(props: SeriesProps) {
     setSeriesData({
       ...seriesData,
       [name]: value,
-      last_updated: new Date().toLocaleTimeString()
+      last_updated: new Date().toISOString()
     });
   };
 
@@ -161,7 +163,7 @@ export function Series(props: SeriesProps) {
     setSeriesData({
       ...seriesData,
       seq_state: event.target.value as SeriesStateEnum,
-      last_updated: new Date().toLocaleTimeString()
+      last_updated: new Date().toISOString()
     });
   }
 
@@ -189,7 +191,7 @@ export function Series(props: SeriesProps) {
       setSeriesData({
         ...seriesData,
         measurement_notes: copy.measurement_notes,
-        last_updated: new Date().toLocaleTimeString(),
+        last_updated: new Date().toISOString(),
         stim_protocol: copy.stim_protocol,
         stim_log_file: copy.stim_log_file,
         fyzio_raw_file: copy.fyzio_raw_file,
