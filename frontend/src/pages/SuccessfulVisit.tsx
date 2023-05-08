@@ -50,5 +50,5 @@ function SuccessfulVisit() {
   );
 }
 
-const ProtectedMeasuring = withAuthentication(SuccessfulVisit);
-export default ProtectedMeasuring;
+const ProtectedSuccessfulVisit = withAuthentication(SuccessfulVisit);
+export default ProtectedSuccessfulVisit

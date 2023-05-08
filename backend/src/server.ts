@@ -1,6 +1,7 @@
+require('dotenv').config();
 const express = require("express");
-import { Issuer } from "openid-client";
-import oidcConfig from "./oidcConfig";
+const { Pool } = require('pg');
+const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 4000;
 
@@ -14,37 +15,39 @@ app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
 
-// Initialize the OpenID Connect client
-const initOpenIDClient = async () => {
-  const oidcIssuer = await Issuer.discover(oidcConfig.authority);
-  const client = new oidcIssuer.Client({
-    client_id: oidcConfig.client_id,
-    client_secret: oidcConfig.client_secret,
-    redirect_uris: [oidcConfig.redirect_uri],
-    response_types: [oidcConfig.response_type],
-    scope: oidcConfig.scope,
-  });
-  return client;
-};
+const connectionString = process.env.DATABASE_URL;
 
-// Backend route to check its accessible
-app.get('/api', (req, res) => {
-  res.send('Backend server is running and accessible');
+const pool = new Pool({
+  connectionString,
 });
 
-// OIDC login route
-app.get("/api/login", async (req, res) => {
-  const client = await initOpenIDClient();
-  const authorizationUrl = client.authorizationUrl({
-    redirect_uri: oidcConfig.redirect_uri,
-  });
-  res.redirect(authorizationUrl);
+app.use(cors());
+app.use(express.json());
+
+app.post('/api/series', async (req, res) => {
+  const { seriesInstanceUID, seriesData } = req.body;
+  try {
+    await pool.query(
+      'INSERT INTO series (series_instance_uid, series_data) VALUES ($1, $2) ON CONFLICT (series_instance_uid) DO UPDATE SET series_data = $2',
+      [seriesInstanceUID, JSON.stringify(seriesData)]
+    );
+    res.status(201).send();
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 });
 
-app.get("/api/callback", async (req, res) => {
-  const client = await initOpenIDClient();
-  const params = client.callbackParams(req);
-  const tokenSet = await client.callback(oidcConfig.redirect_uri, params);
-  // You can store the tokenSet in a session or a cookie for later use
-  res.redirect(`/oidc-login?access_token=${tokenSet.access_token}`);
+app.get('/api/series/:seriesInstanceUID', async (req, res) => {
+  const { seriesInstanceUID } = req.params;
+  try {
+    const { rows } = await pool.query('SELECT series_data FROM series WHERE series_instance_uid = $1', [seriesInstanceUID]);
+    res.status(200).json(rows[0]?.series_data ?? null);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
 });
+
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
