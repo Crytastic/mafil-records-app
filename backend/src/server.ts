@@ -24,6 +24,16 @@ app.get("/api", (req, res) => {
   res.send(`Backend API accessible`);
 });
 
+app.get('/api/series', async (req, res) => {
+  try {
+    const { rows } = await pool.query('SELECT * FROM seriesdt');
+    res.status(200).json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
 app.post('/api/series', async (req, res) => {
   const seriesDataArray = req.body;
   console.log('Saving series data to the database:', seriesDataArray);
@@ -35,7 +45,26 @@ app.post('/api/series', async (req, res) => {
           `INSERT INTO seriesdt (SeriesInstanceUID, SeqState, Measured, LastUpdated, MeasurementNotes,
             StimProtocol, StimLogFile, FyzioRawFile, GeneralEEG, GeneralET, BPEKG, BPResp, BPGSR, BPAcc,
             SiemensEKG, SiemensResp, SiemensGSR, SiemensAcc)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
+          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
+          ON CONFLICT (SeriesInstanceUID)
+          DO UPDATE SET
+            SeqState = $2,
+            Measured = $3,
+            LastUpdated = $4,
+            MeasurementNotes = $5,
+            StimProtocol = $6,
+            StimLogFile = $7,
+            FyzioRawFile = $8,
+            GeneralEEG = $9,
+            GeneralET = $10,
+            BPEKG = $11,
+            BPResp = $12,
+            BPGSR = $13,
+            BPAcc = $14,
+            SiemensEKG = $15,
+            SiemensResp = $16,
+            SiemensGSR = $17,
+            SiemensAcc = $18`,
           [
             seriesData.SeriesInstanceUID,
             seriesData.seq_state,
