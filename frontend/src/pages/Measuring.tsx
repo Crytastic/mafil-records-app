@@ -29,7 +29,27 @@ function Measuring() {
   async function saveSeries() {
     setSavingSeries(true);
 
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      const seriesKeys = Object.keys(localStorage).filter((key) => key.startsWith('series-'));
+      const seriesDataArray = seriesKeys.map((key) => JSON.parse(localStorage.getItem(key) || '{}'));
+      console.log(seriesDataArray);
+
+      const response = await fetch('/api/series', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(seriesDataArray),
+      });
+
+      if (response.ok) {
+        console.log('Series data saved to the database');
+      } else {
+        console.error('Failed to save series data to the database');
+      }
+    } catch (error) {
+      console.error('Error saving series data:', error);
+    }
 
     setSavingSeries(false);
   }
