@@ -20,6 +20,6 @@ CREATE TABLE IF NOT EXISTS seriesdt (
 );
 
 CREATE TABLE IF NOT EXISTS studiesdt (
-  StudyInstanceUID: VARCHAR(255) PRIMARY KEY,
-  GeneralComment: TEXT,
+  StudyInstanceUID VARCHAR(255) PRIMARY KEY,
+  GeneralComment TEXT
 );

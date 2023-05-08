@@ -17,6 +17,7 @@ import { fetchSeries } from '../utils/Fetchers';
 import { withAuthentication } from '../utils/WithAuthentication';
 import removeSeriesFromLocalStorage from '../utils/RemoveSeriesFromLocalStorage';
 import removeStudiesFromLocalStorage from '../utils/RemoveStudiesFromLocalStorage';
+import { saveSeriesData, saveStudyData } from '../utils/Savers';
 
 export interface StudyData {
   StudyInstanceUID: string;
