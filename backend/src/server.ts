@@ -87,31 +87,31 @@ app.post('/api/series', async (req, res) => {
     await Promise.all(
       seriesDataArray.map(async (seriesData) => {
         await pool.query(
-          `INSERT INTO seriesdt (SeriesInstanceUID, SeqState, Measured, LastUpdated, MeasurementNotes,
-            StimProtocol, StimLogFile, FyzioRawFile, GeneralEEG, GeneralET, BPEKG, BPResp, BPGSR, BPAcc,
-            SiemensEKG, SiemensResp, SiemensGSR, SiemensAcc)
+          `INSERT INTO seriesdt (series_instance_uid, seq_state, measured, last_updated, measurement_notes,
+            stim_protocol, stim_log_file, fyzio_raw_file, general_eeg, general_et, bp_ekg, bp_resp, bp_gsr, bp_acc,
+            siemens_ekg, siemens_resp, siemens_gsr, siemens_acc)
           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)
-          ON CONFLICT (SeriesInstanceUID)
+          ON CONFLICT (series_instance_uid)
           DO UPDATE SET
-            SeqState = $2,
-            Measured = $3,
-            LastUpdated = $4,
-            MeasurementNotes = $5,
-            StimProtocol = $6,
-            StimLogFile = $7,
-            FyzioRawFile = $8,
-            GeneralEEG = $9,
-            GeneralET = $10,
-            BPEKG = $11,
-            BPResp = $12,
-            BPGSR = $13,
-            BPAcc = $14,
-            SiemensEKG = $15,
-            SiemensResp = $16,
-            SiemensGSR = $17,
-            SiemensAcc = $18`,
+            seq_state = $2,
+            measured = $3,
+            last_updated = $4,
+            measurement_notes = $5,
+            stim_protocol = $6,
+            stim_log_file = $7,
+            fyzio_raw_file = $8,
+            general_eeg = $9,
+            general_et = $10,
+            bp_ekg = $11,
+            bp_resp = $12,
+            bp_gsr = $13,
+            bp_acc = $14,
+            siemens_ekg = $15,
+            siemens_resp = $16,
+            siemens_gsr = $17,
+            siemens_acc = $18`,
           [
-            seriesData.SeriesInstanceUID,
+            seriesData.series_instance_uid,
             seriesData.seq_state,
             seriesData.measured,
             seriesData.last_updated,
@@ -140,12 +140,11 @@ app.post('/api/series', async (req, res) => {
   }
 });
 
-
-app.get('/api/series/:seriesInstanceUID', async (req, res) => {
-  const { seriesInstanceUID } = req.params;
+app.get('/api/series/:series_instance_uid', async (req, res) => {
+  const { series_instance_uid } = req.params;
   try {
-    const { rows } = await pool.query('SELECT * FROM seriesdt WHERE seriesinstanceuid = $1', [seriesInstanceUID]);
-    const seriesData = rows.find(row => row.seriesinstanceuid === seriesInstanceUID);
+    const { rows } = await pool.query('SELECT * FROM seriesdt WHERE series_instance_uid = $1', [series_instance_uid]);
+    const seriesData = rows.find(row => row.series_instance_uid === series_instance_uid);
     res.status(200).json(seriesData ?? null);
   } catch (err) {
     console.error(err);

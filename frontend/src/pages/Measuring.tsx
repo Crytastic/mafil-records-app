@@ -13,49 +13,16 @@ import { ResizableSidebar } from '../components/global/ResizableSidebar';
 import { Series, SeriesData, SeriesProps } from '../components/series/Series';
 import { StudyProps } from '../components/studies/Study';
 import { SidebarProvider } from '../contexts/SidebarContext';
-import { fetchSeries } from '../utils/Fetchers';
+import { fetchSeries } from '../utils/PACSFetchers';
 import { withAuthentication } from '../utils/WithAuthentication';
 import removeSeriesFromLocalStorage from '../utils/RemoveSeriesFromLocalStorage';
 import removeStudiesFromLocalStorage from '../utils/RemoveStudiesFromLocalStorage';
 import { saveSeriesData, saveStudyData } from '../utils/Savers';
+import { getStudyData } from '../utils/DatabaseFetchers';
 
 export interface StudyData {
   study_instance_uid: string;
   general_comment: string;
-}
-
-export async function getStudyData(study_instance_uid: string) {
-  // First, try to get the data from localStorage
-  let studyData = localStorage.getItem(`study-${study_instance_uid}`);
-  if (studyData) {
-    console.log(`Loading data from local storage. Return ${studyData}`);
-    return JSON.parse(studyData);
-  }
-
-  // If not in localStorage, try to get the data from the backend server
-  const response = await fetch(
-    `/api/study/${study_instance_uid}`,
-    {
-      method: 'GET',
-      mode: 'cors',
-    });
-  if (response.ok) {
-    studyData = await response.json();
-    if (studyData !== null) {
-      console.log("Loading data from database. Return", studyData);
-      return studyData;
-    }
-  }
-
-  // If the data is not available in both localStorage and backend server, or the response is null, use default values
-  console.log(`Using default values. Return`, {
-    study_instance_uid: study_instance_uid,
-    general_comment: '',
-  });
-  return {
-    study_instance_uid: study_instance_uid,
-    general_comment: '',
-  };
 }
 
 function Measuring() {

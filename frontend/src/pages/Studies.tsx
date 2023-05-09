@@ -7,7 +7,7 @@ import { ResizableSidebar } from '../components/global/ResizableSidebar';
 import { DateRangeSelector, formatDateToISOString } from '../components/studies/DateRangeSelector';
 import { Study, StudyProps } from '../components/studies/Study';
 import { SidebarProvider } from '../contexts/SidebarContext';
-import { fetchStudies } from '../utils/Fetchers';
+import { fetchStudies } from '../utils/PACSFetchers';
 import LoginButton from '../components/common/LoginButton';
 import RefreshButton from '../components/common/AppBarButton';
 import { withAuthentication } from '../utils/WithAuthentication';
