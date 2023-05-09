@@ -40,13 +40,13 @@ app.post('/api/study', async (req, res) => {
 
   try {
     await pool.query(
-      `INSERT INTO studiesdt (StudyInstanceUID, GeneralComment)
+      `INSERT INTO studiesdt (study_instance_uid, general_comment)
         VALUES ($1, $2)
-        ON CONFLICT (StudyInstanceUID)
+        ON CONFLICT (study_instance_uid)
         DO UPDATE SET
-          GeneralComment = $2`,
+          general_comment = $2`,
       [
-        studyData.StudyInstanceUID,
+        studyData.study_instance_uid,
         studyData.general_comment,
       ]
     );
@@ -57,11 +57,11 @@ app.post('/api/study', async (req, res) => {
   }
 });
 
-app.get('/api/study/:studyInstanceUID', async (req, res) => {
-  const { studyInstanceUID } = req.params;
+app.get('/api/study/:study_instance_uid', async (req, res) => {
+  const { study_instance_uid } = req.params;
   try {
-    const { rows } = await pool.query('SELECT * FROM studiesdt WHERE studyinstanceuid = $1', [studyInstanceUID]);
-    const studyData = rows.find(row => row.studyinstanceuid === studyInstanceUID);
+    const { rows } = await pool.query('SELECT * FROM studiesdt WHERE study_instance_uid = $1', [study_instance_uid]);
+    const studyData = rows.find(row => row.study_instance_uid === study_instance_uid);
     res.status(200).json(studyData ?? null);
   } catch (err) {
     console.error(err);
