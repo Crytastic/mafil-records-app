@@ -1,7 +1,7 @@
 import { Box, Divider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useAuth } from 'react-oidc-context';
-import RefreshButton from '../components/common/AppBarButton';
+import RefreshButton from '../components/common/RefreshButton';
 import { BlueButton, RedButton } from '../components/common/Buttons';
 import InfoItem from '../components/common/InfoItem';
 import { MultiLineInput } from '../components/common/Inputs';
@@ -32,15 +32,21 @@ function Measuring() {
   const [seriesJson, setSeriesJson] = useState<SeriesProps[]>([]);
   const [selectedSeqId, setSelectedSeqId] = React.useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [savingSeries, setSavingSeries] = useState<boolean>(false);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'failed'>('idle');
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   async function saveRecords(): Promise<boolean> {
-    setSavingSeries(true);
+    setSaveStatus('saving');
     const seriesSuccess = await saveSeriesData(props.StudyInstanceUID);
     const studySuccess = await saveStudyData(props.StudyInstanceUID);
-    setSavingSeries(false);
-    return seriesSuccess && studySuccess;
+
+    if (seriesSuccess && studySuccess) {
+      setSaveStatus('success');
+      return true;
+    }
+
+    setSaveStatus('failed');
+    return false;
   }
 
   async function fetchData() {
@@ -60,6 +66,17 @@ function Measuring() {
     }
     setLoading(false);
   }
+
+  // Every 30 seconds, save records from local storage to database
+  useEffect(() => {
+    const interval = setInterval(() => {
+      saveRecords();
+    }, 20 * 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -182,8 +199,8 @@ function Measuring() {
           content={
             <React.Fragment>
               <SortButton sortOrder={sortOrder} onClick={toggleSortOrder} />
-              <SaveButton savingSeries={savingSeries} onClick={saveRecords} />
-              <RefreshButton onClick={handleRefresh} />
+              <SaveButton saveStatus={saveStatus} onClick={saveRecords} />
+              <RefreshButton onClick={handleRefresh} tooltipTitle='Re-fetch series for current study' />
             </React.Fragment>
           }
         />

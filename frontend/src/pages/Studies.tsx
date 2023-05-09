@@ -9,7 +9,7 @@ import { Study, StudyProps } from '../components/studies/Study';
 import { SidebarProvider } from '../contexts/SidebarContext';
 import { fetchStudies } from '../utils/PACSFetchers';
 import LoginButton from '../components/common/LoginButton';
-import RefreshButton from '../components/common/AppBarButton';
+import RefreshButton from '../components/common/RefreshButton';
 import { withAuthentication } from '../utils/WithAuthentication';
 
 function Studies() {
@@ -80,7 +80,7 @@ function Studies() {
             toggleDrawer={toggleDrawer}
             pageTitle='Choosing a study'
             content={
-              <RefreshButton onClick={handleRefresh} />
+              <RefreshButton onClick={handleRefresh} tooltipTitle='Fetch studies for the chosen timeframe' />
             }
           />
           <ResizableSidebar
