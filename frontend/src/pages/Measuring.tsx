@@ -20,8 +20,42 @@ import removeStudiesFromLocalStorage from '../utils/RemoveStudiesFromLocalStorag
 import { saveSeriesData, saveStudyData } from '../utils/Savers';
 
 export interface StudyData {
-  StudyInstanceUID: string;
+  study_instance_uid: string;
   general_comment: string;
+}
+
+export async function getStudyData(study_instance_uid: string) {
+  // First, try to get the data from localStorage
+  let studyData = localStorage.getItem(`study-${study_instance_uid}`);
+  if (studyData) {
+    console.log(`Loading data from local storage. Return ${studyData}`);
+    return JSON.parse(studyData);
+  }
+
+  // If not in localStorage, try to get the data from the backend server
+  const response = await fetch(
+    `/api/study/${study_instance_uid}`,
+    {
+      method: 'GET',
+      mode: 'cors',
+    });
+  if (response.ok) {
+    studyData = await response.json();
+    if (studyData !== null) {
+      console.log("Loading data from database. Return", studyData);
+      return studyData;
+    }
+  }
+
+  // If the data is not available in both localStorage and backend server, or the response is null, use default values
+  console.log(`Using default values. Return`, {
+    study_instance_uid: study_instance_uid,
+    general_comment: '',
+  });
+  return {
+    study_instance_uid: study_instance_uid,
+    general_comment: '',
+  };
 }
 
 function Measuring() {
@@ -146,13 +180,18 @@ function Measuring() {
     return localStudy ? JSON.parse(localStudy) : {};
   });
 
-  const [studyData, setStudyData] = useState<StudyData>(() => {
-    const localStudy = localStorage.getItem(`study-${props.StudyInstanceUID}`);
-    return localStudy ? JSON.parse(localStudy) : {
-      StudyInstanceUID: props.StudyInstanceUID,
-      general_comment: '',
-    };
+  const [studyData, setStudyData] = useState<StudyData>({
+    study_instance_uid: props.StudyInstanceUID,
+    general_comment: '',
   });
+
+  useEffect(() => {
+    (async () => {
+      console.log(`useEffect called with ${props.StudyInstanceUID}`)
+      const fetchedStudyData = await getStudyData(props.StudyInstanceUID);
+      setStudyData(fetchedStudyData);
+    })();
+  }, [props.StudyInstanceUID]);
 
   const handleTextChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = event.target;
