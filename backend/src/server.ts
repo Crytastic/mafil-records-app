@@ -47,7 +47,7 @@ app.post('/api/study', async (req, res) => {
           GeneralComment = $2`,
       [
         studyData.StudyInstanceUID,
-        studyData.GeneralComment,
+        studyData.general_comment,
       ]
     );
     res.status(200).send();
