@@ -58,6 +58,17 @@ app.post('/api/study', async (req, res) => {
 });
 
 
+app.get('/api/study/:studyInstanceUID', async (req, res) => {
+  const { studyInstanceUID } = req.params;
+  try {
+    const { rows } = await pool.query('SELECT generalcomment FROM studiesdt WHERE studyinstanceuid = $1', [studyInstanceUID]);
+    res.status(200).json(rows[0]?.generalcomment ?? null);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
 app.get('/api/series', async (req, res) => {
   try {
     const { rows } = await pool.query('SELECT * FROM seriesdt');
@@ -129,11 +140,13 @@ app.post('/api/series', async (req, res) => {
   }
 });
 
+
 app.get('/api/series/:seriesInstanceUID', async (req, res) => {
   const { seriesInstanceUID } = req.params;
   try {
-    const { rows } = await pool.query('SELECT series_data FROM seriesdt WHERE series_instance_uid = $1', [seriesInstanceUID]);
-    res.status(200).json(rows[0]?.series_data ?? null);
+    const { rows } = await pool.query('SELECT * FROM seriesdt WHERE seriesinstanceuid = $1', [seriesInstanceUID]);
+    const seriesData = rows.find(row => row.seriesinstanceuid === seriesInstanceUID);
+    res.status(200).json(seriesData ?? null);
   } catch (err) {
     console.error(err);
     res.status(500).send();
