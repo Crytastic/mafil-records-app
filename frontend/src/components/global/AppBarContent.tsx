@@ -8,7 +8,7 @@ import { useLocation } from 'react-router-dom';
 import SidebarContext from "../../contexts/SidebarContext";
 import Logo from '../common/Logo';
 import AppBar from './AppBar';
-import RefreshButton from '../common/AppBarButton';
+import RefreshButton from '../common/RefreshButton';
 import SaveButton from '../common/SaveButton';
 import SortButton from '../common/SortButton';
 import { ContentCutTwoTone } from '@mui/icons-material';
