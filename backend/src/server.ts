@@ -57,12 +57,12 @@ app.post('/api/study', async (req, res) => {
   }
 });
 
-
 app.get('/api/study/:studyInstanceUID', async (req, res) => {
   const { studyInstanceUID } = req.params;
   try {
-    const { rows } = await pool.query('SELECT generalcomment FROM studiesdt WHERE studyinstanceuid = $1', [studyInstanceUID]);
-    res.status(200).json(rows[0]?.generalcomment ?? null);
+    const { rows } = await pool.query('SELECT * FROM studiesdt WHERE studyinstanceuid = $1', [studyInstanceUID]);
+    const studyData = rows.find(row => row.studyinstanceuid === studyInstanceUID);
+    res.status(200).json(studyData ?? null);
   } catch (err) {
     console.error(err);
     res.status(500).send();
