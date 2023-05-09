@@ -33,6 +33,7 @@ export async function saveStudyData(StudyInstanceUID: string): Promise<boolean> 
   try {
     const studyDataString = localStorage.getItem(`study-${StudyInstanceUID}`);
     const studyData = studyDataString ? JSON.parse(studyDataString) : {};
+    console.log(studyData);    
 
     const response = await fetch('/api/study', {
       method: 'POST',
