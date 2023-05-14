@@ -77,8 +77,8 @@ export interface SeriesData {
   seq_state: string;
   is_selected: boolean;
   is_expanded: boolean;
-  measured: string;
-  last_updated: string;
+  measured: Date;
+  last_updated: Date;
   measurement_notes: string;
   stim_protocol: string;
   stim_log_file: string;
@@ -119,8 +119,8 @@ export function Series(props: SeriesProps) {
     seq_state: 'pending',
     is_selected: false,
     is_expanded: false,
-    measured: new Date().toISOString(),
-    last_updated: new Date().toISOString(),
+    measured: new Date(),
+    last_updated: new Date(),
     measurement_notes: '',
     stim_protocol: '',
     stim_log_file: '',
@@ -154,7 +154,7 @@ export function Series(props: SeriesProps) {
     setSeriesData({
       ...seriesData,
       [event.target.name]: event.target.checked,
-      last_updated: new Date().toISOString()
+      last_updated: new Date(),
     });
   };
 
@@ -163,7 +163,7 @@ export function Series(props: SeriesProps) {
     setSeriesData({
       ...seriesData,
       [name]: value,
-      last_updated: new Date().toISOString()
+      last_updated: new Date(),
     });
   };
 
@@ -171,7 +171,7 @@ export function Series(props: SeriesProps) {
     setSeriesData({
       ...seriesData,
       seq_state: event.target.value as SeriesStateEnum,
-      last_updated: new Date().toISOString()
+      last_updated: new Date(),
     });
   }
 
@@ -199,7 +199,7 @@ export function Series(props: SeriesProps) {
       setSeriesData({
         ...seriesData,
         measurement_notes: copy.measurement_notes,
-        last_updated: new Date().toISOString(),
+        last_updated: new Date(),
         stim_protocol: copy.stim_protocol,
         stim_log_file: copy.stim_log_file,
         fyzio_raw_file: copy.fyzio_raw_file,
@@ -254,8 +254,8 @@ export function Series(props: SeriesProps) {
           </Box>
 
           <Box color={'grey'} justifyContent='flex-start' fontWeight={'lighter'} fontSize={12}>
-            <Box>Measured: {seriesData.measured}</Box>
-            <Box>Last updated: {seriesData.last_updated}</Box>
+            <Box>Measured: {seriesData.measured.toLocaleString()}</Box>
+            <Box>Last updated: {seriesData.last_updated.toLocaleString()}</Box>
             <Box>Number of instances: {props.NumberOfSeriesRelatedInstances}</Box>
           </Box>
 
@@ -299,7 +299,7 @@ export function Series(props: SeriesProps) {
           <Box display={'flex'} flexDirection={'row'} flexWrap={'wrap'}>
             <SeriesSingleLineInput label='Stim. protocol' name='stim_protocol' value={seriesData.stim_protocol} onChange={handleTextChange} />
             <SeriesSingleLineInput label='Stim. log file' name='stim_log_file' value={seriesData.stim_log_file} onChange={handleTextChange} />
-            <SeriesSingleLineInput label='Fyzio raw file (for Siemens)' name='fyzio_raw_file' value={seriesData.fyzio_raw_file} onChange={handleTextChange} />
+            <SeriesSingleLineInput label='Fyzio raw file (for BP)' name='fyzio_raw_file' value={seriesData.fyzio_raw_file} onChange={handleTextChange} />
             <SeriesMultiLineInput label='Measurement notes' name='measurement_notes' value={seriesData.measurement_notes} onChange={handleTextChange} />
             <Box m={1}>
               <Box
