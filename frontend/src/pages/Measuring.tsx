@@ -214,7 +214,7 @@ function Measuring() {
               <InfoItem label="Study UID" text={props.StudyInstanceUID} />
               <InfoItem label="Patient name" text={props.PatientName} />
               <MultiLineInput
-                label="General comment to visit"
+                label="General comment to study"
                 name="general_comment"
                 value={studyData.general_comment}
                 onChange={handleTextChange}

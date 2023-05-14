@@ -50,13 +50,7 @@ export function Study(props: StudyProps) {
             <Attribute title='Visit ID' text={AccessionNumber} />
 
             <Box color={'grey'} justifyContent='flex-start' fontWeight={'lighter'} fontSize={12}>
-              <Box>Date of visit: {StudyDate.toISOString()}</Box>
-              <Box>Last updated: {StudyDate.toISOString()} 12:00 </Box>
-            </Box>
-
-            <Box color={'grey'} justifyContent='flex-start' fontWeight={'lighter'} fontSize={12}>
-              <Box>Study UID: {StudyInstanceUID}</Box>
-              <Box>Study date: {StudyDate.toISOString()} 12:00</Box>
+              <Box>Date of visit: {StudyDate.toLocaleDateString()}</Box>
             </Box>
 
           </Box>
@@ -65,3 +59,4 @@ export function Study(props: StudyProps) {
     </Link >
   )
 }
+
