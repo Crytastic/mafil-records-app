@@ -33,6 +33,7 @@ function Measuring() {
   const [selectedSeqId, setSelectedSeqId] = React.useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'failed'>('idle');
+  const [fetchStatus, setFetchStatus] = useState<'idle' | 'saving' | 'success' | 'failed'>('idle');
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   async function saveRecords(): Promise<boolean> {
@@ -51,6 +52,7 @@ function Measuring() {
 
   async function fetchData() {
     setLoading(true);
+    setFetchStatus('saving');
     const currentStudyString = localStorage.getItem('currentStudy');
     if (currentStudyString) {
       try {
@@ -59,8 +61,10 @@ function Measuring() {
         // Sort the series by series number, highest (newly added) first
         json.sort((a: SeriesProps, b: SeriesProps) => a.SeriesNumber - b.SeriesNumber);
         setFetchError(null);
+        setFetchStatus('success');
         setSeriesJson(json);
       } catch (error) {
+        setFetchStatus('failed');
         setFetchError('Fetching series failed, check internet connection and try again. If problem persists, contact your system administrator.');
       }
     }
@@ -200,7 +204,7 @@ function Measuring() {
             <React.Fragment>
               <SortButton sortOrder={sortOrder} onClick={toggleSortOrder} />
               <SaveButton saveStatus={saveStatus} onClick={saveRecords} />
-              <RefreshButton onClick={handleRefresh} tooltipTitle='Re-fetch series for current study' />
+              <RefreshButton fetchStatus={fetchStatus} onClick={handleRefresh} tooltipTitle='Re-fetch series for current study' />
             </React.Fragment>
           }
         />

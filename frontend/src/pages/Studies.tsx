@@ -11,6 +11,7 @@ import { fetchStudies } from '../utils/PACSFetchers';
 import LoginButton from '../components/common/LoginButton';
 import RefreshButton from '../components/common/RefreshButton';
 import { withAuthentication } from '../utils/WithAuthentication';
+import { BlueButton } from '../components/common/Buttons';
 
 function Studies() {
   const [open, setOpen] = React.useState(true);
@@ -18,6 +19,7 @@ function Studies() {
     setOpen(!open);
   };
   const [loading, setLoading] = useState(true);
+  const [fetchStatus, setFetchStatus] = useState<'idle' | 'saving' | 'success' | 'failed'>('idle');
   const [studiesJson, setStudiesJson] = useState<StudyProps[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -31,13 +33,16 @@ function Studies() {
 
   async function fetchData() {
     setLoading(true);
+    setFetchStatus('saving');
     try {
       const json = await fetchStudies(dateRange);
       // Sort the studies by date, newest first
       json.sort((a: { StudyDate: Date; }, b: { StudyDate: Date; }) => new Date(b.StudyDate).getTime() - new Date(a.StudyDate).getTime());
       setStudiesJson(json);
       setFetchError(null);
+      setFetchStatus('success');
     } catch (error) {
+      setFetchStatus('failed');
       setFetchError('Fetching studies failed, check internet connection and try again. If problem persists, contact your system administrator.');
     } finally {
       setLoading(false);
@@ -80,7 +85,7 @@ function Studies() {
             toggleDrawer={toggleDrawer}
             pageTitle='Choosing a study'
             content={
-              <RefreshButton onClick={handleRefresh} tooltipTitle='Fetch studies for the chosen timeframe' />
+              <RefreshButton fetchStatus={fetchStatus} onClick={handleRefresh} tooltipTitle='Fetch studies for the chosen timeframe' />
             }
           />
           <ResizableSidebar
@@ -94,6 +99,7 @@ function Studies() {
                   setDateRange={setDateRange}
                   fetchData={fetchData}
                 />
+                {localStorage.getItem('currentStudy') && <BlueButton text="Open last accessed study" path="/measuring" />}
               </React.Fragment>
             }
           />
