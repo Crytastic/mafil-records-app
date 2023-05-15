@@ -29,9 +29,7 @@ function RefreshButton({ onClick, fetchStatus, tooltipTitle }: RefreshButtonProp
   return (
     <Tooltip title={tooltipTitle}>
       <IconButton size="large" color="inherit" onClick={onClick}>
-        <Badge badgeContent={0} color="error">
-          <RefreshIcon />
-        </Badge>
+        {icon}
       </IconButton>
     </Tooltip>
   )
