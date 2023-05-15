@@ -10,7 +10,7 @@ import SaveButton from '../components/common/SaveButton';
 import SortButton from '../components/common/SortButton';
 import CommonAppBar from '../components/global/AppBarContent';
 import { ResizableSidebar } from '../components/global/ResizableSidebar';
-import { Series, SeriesData, SeriesProps } from '../components/series/Series';
+import { Series, SeriesProps } from '../components/series/Series';
 import { StudyProps } from '../components/studies/Study';
 import { SidebarProvider } from '../contexts/SidebarContext';
 import { fetchSeries } from '../utils/PACSFetchers';
@@ -212,26 +212,23 @@ function Measuring() {
         <ResizableSidebar
           open={open}
           toggleDrawer={toggleDrawer}
-          content={
-            <React.Fragment>
-              <InfoItem label="Measuring operator" text={auth.user ? auth.user.profile.name : ''} />
-              <InfoItem label="Visit ID" text={props.AccessionNumber} />
-              <InfoItem label="Study UID" text={props.StudyInstanceUID} />
-              <InfoItem label="Patient name" text={props.PatientName} />
-              <MultiLineInput
-                label="General comment to study"
-                name="general_comment"
-                value={studyData.general_comment}
-                onChange={handleTextChange}
-              />
-              <Box gap={2} display='flex' flexDirection="row" flexWrap='wrap' justifyContent="space-between">
-                <BlueButton text="Finish study" path="/success" onClick={handleFinishStudy} />
-                <RedButton text="Back to studies" path="/studies" onClick={handleBackToStudies} />
-              </Box>
-              <Divider sx={{ my: 3 }} />
-            </React.Fragment>
-          }
-        />
+        >
+          <InfoItem label="Measuring operator" text={auth.user ? auth.user.profile.name : ''} />
+          <InfoItem label="Visit ID" text={props.AccessionNumber} />
+          <InfoItem label="Study UID" text={props.StudyInstanceUID} />
+          <InfoItem label="Patient name" text={props.PatientName} />
+          <MultiLineInput
+            label="General comment to study"
+            name="general_comment"
+            value={studyData.general_comment}
+            onChange={handleTextChange}
+          />
+          <Box gap={2} display='flex' flexDirection="row" flexWrap='wrap' justifyContent="space-between">
+            <BlueButton text="Finish study" path="/success" onClick={handleFinishStudy} />
+            <RedButton text="Back to studies" path="/studies" onClick={handleBackToStudies} />
+          </Box>
+          <Divider sx={{ my: 3 }} />
+        </ResizableSidebar>
         <ListItems
           loading={loading}
           list={listSeries()}

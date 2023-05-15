@@ -4,15 +4,15 @@ import React, { useRef, useState } from "react";
 import "./ResizableSidebar.css";
 
 import SidebarContext from "../../contexts/SidebarContext";
-import { SidebarContent } from "./SidebarContent";
+import SidebarContent from "./SidebarContent";
 
 interface ResizableSidebarProps {
   open: boolean;
   toggleDrawer: () => void;
-  content?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSidebarProps) {
+export function ResizableSidebar({ open, toggleDrawer, children }: ResizableSidebarProps) {
   const sidebarRef = useRef<HTMLDivElement | null>(null);
   const { sidebarWidth, setSidebarWidth } = React.useContext(SidebarContext);
   const [isResizing, setIsResizing] = useState(false);
@@ -100,17 +100,17 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
   }, [resizeMouse, stopResizing, resizeTouch]);
 
   return (
-    <Box className="app-container">
+    <Box>
       <Box
         ref={sidebarRef}
-        className="app-sidebar"
+        className="sidebar"
         sx={{
           width: open ? (isResizing ? sidebarWidth : "auto") : 0,
           minWidth: open ? sidebarWidth : 0,
           overflowX: "hidden",
         }}
       >
-        <Box className="app-sidebar-content">
+        <Box className="sidebar-content">
           <Toolbar
             sx={{
               display: 'flex',
@@ -124,11 +124,12 @@ export function ResizableSidebar({ open, toggleDrawer, content }: ResizableSideb
             </IconButton>
           </Toolbar>
           <Divider />
-          <SidebarContent content={content} />
+          <SidebarContent>
+            {children}
+          </SidebarContent>
         </Box>
-        <Box className="app-sidebar-resizer" onMouseDown={startResizing} onTouchStart={startResizing} />
+        <Box className="sidebar-resizer" onMouseDown={startResizing} onTouchStart={startResizing} />
       </Box>
-      <Box className="app-frame" />
     </Box>
   );
 }

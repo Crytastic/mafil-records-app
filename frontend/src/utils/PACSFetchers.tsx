@@ -9,7 +9,7 @@ export async function fetchStudies(dateRange: DateRange) {
       {
         method: 'GET',
         headers: {
-          'Authorization': 'Token c07d70fd9f56bc470a83c28bcd0a4718ff198570'
+          'Authorization': `Token ${process.env.REACT_APP_PACS_TOKEN}`
         },
         mode: 'cors',
       });
@@ -34,7 +34,7 @@ export async function fetchSeries(accessionNumber: string) {
       {
         method: 'GET',
         headers: {
-          'Authorization': 'Token c07d70fd9f56bc470a83c28bcd0a4718ff198570'
+          'Authorization': `Token ${process.env.REACT_APP_PACS_TOKEN}`
         },
         mode: 'cors',
       });

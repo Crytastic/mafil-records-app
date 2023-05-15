@@ -18,10 +18,6 @@ const ListItems: React.FC<ListItemsProps> = ({ loading, list, loadingMessage, er
     <Box
       component="main"
       sx={{
-        backgroundColor: (theme: any) =>
-          theme.palette.mode === 'light'
-            ? theme.palette.grey[100]
-            : theme.palette.grey[900],
         flexGrow: 1,
         overflow: 'auto',
         height: '100vh',
