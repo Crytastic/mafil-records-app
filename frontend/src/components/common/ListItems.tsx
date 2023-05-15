@@ -31,7 +31,10 @@ const ListItems: React.FC<ListItemsProps> = ({ loading, list, loadingMessage, er
       {loading ? (
         <LoadingBox loadingMessage={loadingMessage} />
       ) : errorMessage ? (
-        <Message title='Error' text={errorMessage} />
+        <Box flexDirection={'column'}>
+          <Message title='Error' text={errorMessage} />
+          {list}
+        </Box>
       ) : (
         <Box flexDirection={'column'}>
           {list}

@@ -51,7 +51,6 @@ function Measuring() {
   }
 
   async function fetchData() {
-    setLoading(true);
     setFetchStatus('saving');
     const currentStudyString = localStorage.getItem('currentStudy');
     if (currentStudyString) {
@@ -71,11 +70,13 @@ function Measuring() {
     setLoading(false);
   }
 
-  // Every 30 seconds, save records from local storage to database
   useEffect(() => {
+    // Every 30 seconds, save records from local storage to database
+    // Every 30 seconds, fetch series from PACS-API
     const interval = setInterval(() => {
       saveRecords();
-    }, 20 * 1000);
+      fetchData();
+    }, 30 * 1000);
 
     return () => {
       clearInterval(interval);
