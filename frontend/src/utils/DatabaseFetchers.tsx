@@ -19,7 +19,7 @@ export async function getStudyData(study_instance_uid: string) {
     }
   }
 
-  // If the data is not available in both localStorage and backend server, or the response is null, use default values
+  // If the data is not available in both localStorage and backend server, use default values
   return {
     study_instance_uid: study_instance_uid,
     general_comment: '',
@@ -47,7 +47,7 @@ export async function getSeriesData(seriesInstanceUID: string) {
     }
   }
 
-  // If the data is not available in both localStorage and backend server, or the response is null, use default values
+  // If the data is not available in both localStorage and backend server, use default values
   return {
     series_instance_uid: seriesInstanceUID,
     seq_state: 'pending',

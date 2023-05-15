@@ -1,19 +1,26 @@
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
+import MuiAppBar, { AppBarProps } from '@mui/material/AppBar';
 import { styled } from '@mui/material/styles';
 
-interface AppBarProps extends MuiAppBarProps {
+interface StyledAppBarProps extends AppBarProps {
   open?: boolean;
   sidebarWidth: number;
 }
 
+function calculateWidth(sidebarOpen: boolean | undefined, sidebarWidth: number) {
+  if (sidebarOpen) {
+    return {
+      marginLeft: sidebarWidth,
+      width: `calc(100% - ${sidebarWidth}px)`,
+    }
+  }
+  return {};
+}
+
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open' && prop !== 'sidebarWidth',
-})<AppBarProps>(({ theme, open, sidebarWidth }) => ({
+})<StyledAppBarProps>(({ theme, open, sidebarWidth }) => ({
   zIndex: theme.zIndex.drawer + 1,
-  ...(open && {
-    marginLeft: sidebarWidth,
-    width: `calc(100% - ${sidebarWidth}px)`,
-  }),
+  ...calculateWidth(open, sidebarWidth),
 }));
 
 export default AppBar;

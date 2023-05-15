@@ -2,21 +2,25 @@ import { Box } from '@mui/material';
 import React from 'react';
 
 interface SidebarContentProps {
-  content?: React.ReactNode;
+  children?: React.ReactNode;
 }
 
-export function SidebarContent({ content }: SidebarContentProps) {
-  return <Box
-    gap={2}
-    p={2}
-    display="flex"
-    flexDirection="column"
-    justifyContent="flex-start"
-    sx={{
-      height: '100vh',
-      overflow: 'auto',
-    }}
-  >
-    {content}
-  </Box >;
+function SidebarContent({ children }: SidebarContentProps) {
+  return (
+    <Box
+      gap={2}
+      p={2}
+      display="flex"
+      flexDirection="column"
+      justifyContent="flex-start"
+      sx={{
+        height: '100vh',
+        overflow: 'auto',
+      }}
+    >
+      {children}
+    </Box>
+  );
 }
+
+export default SidebarContent;

@@ -4,7 +4,6 @@ export async function saveSeriesData(StudyInstanceUID: string): Promise<boolean>
   try {
     const seriesKeys = Object.keys(localStorage).filter((key) => key.startsWith(`series-${StudyInstanceUID}`));
     const seriesDataArray = seriesKeys.map((key) => JSON.parse(localStorage.getItem(key) || '{}'));
-    console.log(seriesDataArray);
 
     const response = await fetch('/api/series', {
       method: 'POST',
@@ -15,7 +14,6 @@ export async function saveSeriesData(StudyInstanceUID: string): Promise<boolean>
     });
 
     if (response.ok) {
-      console.log('Series data saved to the database');
       success = true;
     } else {
       console.error('Failed to save series data to the database');
@@ -32,19 +30,17 @@ export async function saveStudyData(StudyInstanceUID: string): Promise<boolean> 
 
   try {
     const studyDataString = localStorage.getItem(`study-${StudyInstanceUID}`);
-    const studyData = studyDataString ? JSON.parse(studyDataString) : {};
-    console.log(studyData);    
+    const studyDataArray = studyDataString ? JSON.parse(studyDataString) : {};
 
     const response = await fetch('/api/study', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(studyData),
+      body: JSON.stringify(studyDataArray),
     });
 
     if (response.ok) {
-      console.log('Study data saved to the database');
       success = true;
     } else {
       console.error('Failed to save study data to the database');

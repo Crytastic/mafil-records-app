@@ -91,18 +91,15 @@ function Studies() {
           <ResizableSidebar
             open={open}
             toggleDrawer={toggleDrawer}
-            content={
-              <React.Fragment>
-                <LoginButton />
-                <DateRangeSelector
-                  dateRange={dateRange}
-                  setDateRange={setDateRange}
-                  fetchData={fetchData}
-                />
-                {localStorage.getItem('currentStudy') && <BlueButton text="Open last accessed study" path="/measuring" />}
-              </React.Fragment>
-            }
-          />
+          >
+            <LoginButton />
+            <DateRangeSelector
+              dateRange={dateRange}
+              setDateRange={setDateRange}
+              fetchData={fetchData}
+            />
+            {localStorage.getItem('currentStudy') && <BlueButton text="Open last accessed study" path="/measuring" />}
+          </ResizableSidebar>
           <ListItems
             loading={loading}
             list={studies}

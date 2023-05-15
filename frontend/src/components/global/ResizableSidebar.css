@@ -1,49 +1,27 @@
-.app-container {
-  min-height: 100vh;
-  padding-top: 0rem;
-  display: flex;
-  flex-direction: row;
+.sidebar-frame {
+  flex-direction: column;
+  z-index: 1;
 }
 
-.app-sidebar {
+.sidebar {
   flex-grow: 0;
   flex-shrink: 0;
   max-width: 150px;
   display: flex;
-  border-right: #e9e9e9 1px solid;
-  flex-direction: row;
-  background: #ffffff;
-  box-shadow: -8px 2px 22px -7px rgba(0, 0, 0, 0.25);
-  border-radius: 0px 0px 0px 0px;
+  border-right: #ececec 1px solid;
   z-index: 2;
 }
 
-.app-frame {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background: white;
-  height: 100vh;
-  max-height: 100%;
-  box-shadow: 8px 2px 32px -2px rgba(0, 0, 0, 0.25);
-  border-radius: 0px 0px 0px 0px;
-  z-index: 1;
-}
-
-.app-sidebar .app-sidebar-content {
+.sidebar .sidebar-content {
   flex: 1;
 }
 
-.app-sidebar .app-sidebar-resizer {
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: 8px;
-  justify-self: flex-end;
+.sidebar .sidebar-resizer {
+  flex-basis: 9px;
   cursor: col-resize;
-  resize: horizontal;
 }
 
-.app-sidebar .app-sidebar-resizer:hover {
-  width: 3px;
-  background: #c1c3c5b4;
+.sidebar .sidebar-resizer:hover {
+  width: 4px;
+  background: #d4d4d4b4;
 }

@@ -1,17 +1,10 @@
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Box, IconButton, Toolbar } from '@mui/material';
 import React, { useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 import SidebarContext from "../../contexts/SidebarContext";
 import Logo from '../common/Logo';
 import AppBar from './AppBar';
-import RefreshButton from '../common/RefreshButton';
-import SaveButton from '../common/SaveButton';
-import SortButton from '../common/SortButton';
-import { ContentCutTwoTone } from '@mui/icons-material';
 
 interface AppBarContentProps {
   open: boolean;
@@ -56,7 +49,6 @@ function AppBarContent({ open, pageTitle, content, toggleDrawer }: AppBarContent
         <IconButton
           edge="start"
           color="inherit"
-          aria-label="open drawer"
           onClick={toggleDrawer}
           sx={{
             marginRight: '36px',

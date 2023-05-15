@@ -41,11 +41,11 @@ export const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-interface AnyProps {
+interface CommonCardProps {
   children?: ReactNode
 }
 
-function CommonCard({ children }: AnyProps) {
+function CommonCard({ children }: CommonCardProps) {
   return (
     <Card
       sx={{
