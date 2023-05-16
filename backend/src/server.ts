@@ -4,6 +4,8 @@ const cors = require('cors');
 const app = express();
 const port = process.env.PORT || 4000;
 
+import fetch from 'node-fetch';
+
 app.use(express.json());
 app.use(cors());
 
@@ -164,7 +166,7 @@ app.get('/api/pacs/studies', async (req, res) => {
           'Authorization': `Token ${process.env.REACT_APP_PACS_TOKEN}`
         },
       });
-    const json = await resp.json();
+    const json: any = await resp.json();
     const parsedVisits = json.map((visit) => {
       const parsedDate = new Date(visit.StudyDate.substr(0, 4), parseInt(visit.StudyDate.substr(4, 2)) - 1, visit.StudyDate.substr(6, 2));
       return { ...visit, StudyDate: parsedDate };
