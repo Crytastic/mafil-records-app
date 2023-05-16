@@ -14,6 +14,9 @@ const pool = new Pool({
   connectionString,
 });
 
+// Accept unauthorized to get around misconfigured testing PACS-API
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
@@ -155,7 +158,6 @@ app.get('/api/series/:series_instance_uid', async (req, res) => {
 app.get('/api/pacs/studies', async (req, res) => {
   const { start, end } = req.query;
   const url = `https://pacs-api.devel.mafildb.ics.muni.cz/json?start=${start}&end=${end}&level=STUDY`;
-  console.log(url);
 
   try {
     const resp = await fetch(
@@ -163,15 +165,11 @@ app.get('/api/pacs/studies', async (req, res) => {
       {
         method: 'GET',
         headers: {
-          'Authorization': `Token ${process.env.REACT_APP_PACS_TOKEN}`
+          'Authorization': `Token c07d70fd9f56bc470a83c28bcd0a4718ff198570`,
         },
       });
     const json: any = await resp.json();
-    const parsedVisits = json.map((visit) => {
-      const parsedDate = new Date(visit.StudyDate.substr(0, 4), parseInt(visit.StudyDate.substr(4, 2)) - 1, visit.StudyDate.substr(6, 2));
-      return { ...visit, StudyDate: parsedDate };
-    });
-    res.status(200).json(parsedVisits);
+    res.status(200).json(json);
   } catch (err) {
     console.error(err);
     res.status(500).send();
@@ -181,7 +179,6 @@ app.get('/api/pacs/studies', async (req, res) => {
 app.get('/api/pacs/series', async (req, res) => {
   const { accession_number } = req.query;
   const url = `https://pacs-api.devel.mafildb.ics.muni.cz/json?accession_number=${accession_number}&level=SERIES`;
-  console.log(url);
 
   try {
     const resp = await fetch(
@@ -189,7 +186,7 @@ app.get('/api/pacs/series', async (req, res) => {
       {
         method: 'GET',
         headers: {
-          'Authorization': `Token ${process.env.REACT_APP_PACS_TOKEN}`
+          'Authorization': `Token c07d70fd9f56bc470a83c28bcd0a4718ff198570`,
         },
       });
     const json = await resp.json();

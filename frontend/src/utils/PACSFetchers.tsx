@@ -10,7 +10,11 @@ export async function fetchStudies(dateRange: DateRange) {
         method: 'GET',
         mode: 'cors',
       });
-    const parsedVisits = await resp.json();
+    const visits = await resp.json();
+    const parsedVisits = visits.map((visit: any) => {
+      const parsedDate = new Date(visit.StudyDate.substr(0, 4), parseInt(visit.StudyDate.substr(4, 2)) - 1, visit.StudyDate.substr(6, 2));
+      return { ...visit, StudyDate: parsedDate };
+    });
     return parsedVisits;
   } catch (err) {
     throw err;
