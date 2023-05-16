@@ -1,7 +1,7 @@
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import ContentPasteIcon from '@mui/icons-material/ContentPaste';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { IconButton, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { IconButton, MenuItem, Select, SelectChangeEvent, Tooltip } from '@mui/material';
 import Box from '@mui/material/Box';
 import CardActions from '@mui/material/CardActions';
 import Checkbox from '@mui/material/Checkbox';
@@ -261,12 +261,16 @@ export function Series(props: SeriesProps) {
 
           <Box display={'flex'} justifyContent='flex-start' flexDirection={'row'}>
             <CardActions disableSpacing>
-              <IconButton size='large' onClick={handleSeriesCopy}>
-                <ContentCopyIcon />
-              </IconButton>
-              <IconButton size='large' onClick={handleSeriesPaste}>
-                <ContentPasteIcon />
-              </IconButton>
+              <Tooltip title={'Select this measurement for copying of records'}>
+                <IconButton size='large' onClick={handleSeriesCopy}>
+                  <ContentCopyIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={'Paste records from the selected measurement into this one'}>
+                <IconButton size='large' onClick={handleSeriesPaste}>
+                  <ContentPasteIcon />
+                </IconButton>
+              </Tooltip>
             </CardActions>
           </Box>
           <Box minWidth={140} sx={{
