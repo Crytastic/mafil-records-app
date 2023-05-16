@@ -43,7 +43,7 @@ function Studies() {
       setFetchStatus('success');
     } catch (error) {
       setFetchStatus('failed');
-      setFetchError('Fetching studies failed, check internet connection and try again. If problem persists, contact your system administrator.');
+      setFetchError('Fetching studies failed, check internet connection and make sure you are connected through MUNI VPN. Then try again. It is also possible the date range is too wide to fetch in a reasonable amount of time. If problem persists, contact your system administrator.');
     } finally {
       setLoading(false);
     }
