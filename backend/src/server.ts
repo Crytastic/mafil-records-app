@@ -151,3 +151,49 @@ app.get('/api/series/:series_instance_uid', async (req, res) => {
     res.status(500).send();
   }
 });
+
+app.get('/api/pacs/studies', async (req, res) => {
+  const { start, end } = req.query;
+  const url = `https://pacs-api.devel.mafildb.ics.muni.cz/json?start=${start}&end=${end}&level=STUDY`;
+
+  try {
+    const resp = await fetch(
+      url,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${process.env.REACT_APP_PACS_TOKEN}`
+        },
+      });
+    const json = await resp.json();
+    const parsedVisits = json.map((visit) => {
+      const parsedDate = new Date(visit.StudyDate.substr(0, 4), parseInt(visit.StudyDate.substr(4, 2)) - 1, visit.StudyDate.substr(6, 2));
+      return { ...visit, StudyDate: parsedDate };
+    });
+    res.status(200).json(parsedVisits);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
+
+app.get('/api/pacs/series', async (req, res) => {
+  const { accession_number } = req.query;
+  const url = `https://pacs-api.devel.mafildb.ics.muni.cz/json?accession_number=${accession_number}&level=SERIES`;
+
+  try {
+    const resp = await fetch(
+      url,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Token ${process.env.REACT_APP_PACS_TOKEN}`
+        },
+      });
+    const json = await resp.json();
+    res.status(200).json(json[0].series);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send();
+  }
+});
