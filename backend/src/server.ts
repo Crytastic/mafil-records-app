@@ -36,7 +36,6 @@ app.get('/api/study', async (req, res) => {
 
 app.post('/api/study', async (req, res) => {
   const studyData = req.body;
-  console.log('Saving study data to the database:', studyData);
 
   try {
     await pool.query(
@@ -81,7 +80,6 @@ app.get('/api/series', async (req, res) => {
 
 app.post('/api/series', async (req, res) => {
   const seriesDataArray = req.body;
-  console.log('Saving series data to the database:', seriesDataArray);
 
   try {
     await Promise.all(
@@ -155,6 +153,7 @@ app.get('/api/series/:series_instance_uid', async (req, res) => {
 app.get('/api/pacs/studies', async (req, res) => {
   const { start, end } = req.query;
   const url = `https://pacs-api.devel.mafildb.ics.muni.cz/json?start=${start}&end=${end}&level=STUDY`;
+  console.log(url);
 
   try {
     const resp = await fetch(
@@ -180,6 +179,7 @@ app.get('/api/pacs/studies', async (req, res) => {
 app.get('/api/pacs/series', async (req, res) => {
   const { accession_number } = req.query;
   const url = `https://pacs-api.devel.mafildb.ics.muni.cz/json?accession_number=${accession_number}&level=SERIES`;
+  console.log(url);
 
   try {
     const resp = await fetch(
