@@ -71,10 +71,8 @@ function Measuring() {
   }
 
   useEffect(() => {
-    // Every 30 seconds, save records from local storage to database
     // Every 30 seconds, fetch series from PACS-API
     const interval = setInterval(() => {
-      saveRecords();
       fetchData();
     }, 30 * 1000);
 
