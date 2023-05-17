@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Toolbar, useTheme } from '@mui/material';
 import React from 'react';
 import Message from '../components/common/Message';
 import CommonAppBar from '../components/global/AppBarContent';
@@ -9,6 +9,7 @@ import LoginButton from '../components/common/LoginButton';
 import { withAuthentication } from '../utils/WithAuthentication';
 
 function SuccessfulVisit() {
+  const theme = useTheme();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -29,13 +30,15 @@ function SuccessfulVisit() {
           <BlueButton text='Start visit' path='/studies' />
         </ResizableSidebar>
         <Box
+          component="main"
           sx={{
             flexGrow: 1,
-            height: '100vh',
             overflow: 'auto',
+            height: '100vh',
           }}
         >
-          <Message title='Visit successful' text='Visit has been successfully saved to the database. You may log out or choose another visit.' />
+          <Toolbar sx={{ minHeight: theme.mixins.toolbar.minHeight }} />
+          <Message title='Study saved successfully' text='Study has been successfully saved to the database. You may log out or choose another visit.' />
         </Box>
       </React.Fragment >
     </SidebarProvider>
